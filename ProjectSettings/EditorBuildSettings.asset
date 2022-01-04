@@ -5,15 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: Assets/TheGame/Scenes/Main.unity
-    guid: de75f76d6a6c87545b326cee5b64ea7e
   - enabled: 1
-    path: Assets/TheGame/Scenes/Cube_Oculus.unity
-    guid: 7a7bf95029d9e6841ac93d2192204486
+    path: Assets/TheGame/Scenes/Cube_SreamVR.unity
+    guid: fc8ae3754d59d1543ba02c4dd4d29529
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d367a92b0d4cf114c826faa81e847686, type: 2}
     Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: 06b947aecd64d04419eebef1f634e8e0, type: 2}

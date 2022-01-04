@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.ma_test.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "C:\\Users\\ru35qac\\Desktop\\UnityProjects\\MA_Project\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "C:\\Users\\ru35qac\\Desktop\\MA_Project-main\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
           "name": "MA_Test [Testing]"
