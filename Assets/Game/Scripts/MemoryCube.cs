@@ -10,7 +10,7 @@ public class MemoryCube : MonoBehaviour
 
     private void Awake()
     {
-        transform.position = pos.transform.position;
+      //  transform.position = pos.transform.position;
     }
 
     private void Update()
