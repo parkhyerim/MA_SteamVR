@@ -33,12 +33,13 @@ public class MemoryCard : MonoBehaviour
 
     private void OnSelectEnter()
     {
-       // Debug.Log("selected");
+       Debug.Log("selected");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        
+        if(other.name == "RightHand")
+            Debug.Log("trigger");
     }
 
     public void SelectCard()
