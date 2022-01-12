@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR.InteractionSystem;
 
 public class MCGameManager : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class MCGameManager : MonoBehaviour
         {
            //Debug.Log("Trigger Up");
         }
+
+     
     }
     public void CubeClicked(MemoryCube cube)
     {
@@ -59,5 +62,10 @@ public class MCGameManager : MonoBehaviour
         }     
     }
 
+
+    void OnPointerClick()
+    {
+        Debug.Log("pointer clikced");
+    }
 
 }
