@@ -5,21 +5,44 @@ using Valve.VR.InteractionSystem;
 
 public class MCGameManager : MonoBehaviour
 {
+    public AudioSource audioSource;
+
+    public AudioClip clipCardForward;
+    public AudioClip clipCardBackward;
+    public AudioClip clipCardMatch;
+    public AudioClip clipCardUnmatch;
+
+    //public GameObject[] allCubes;
+    //public List<Vector3> allPositionsOfReck = new List<Vector3>();
+    public GameObject[] allPlaceholder;
     public MemoryCube firstSelectedCube;
     public MemoryCube secondSelectedCube;
+    public MemoryCube[] allCube;
     public Placeholder[] placeholderList;
-    public int[] idList = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    
+    //public int[] idList = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
     private void Awake()
     {
-        System.Random ran = new System.Random();
 
-        // Debug.Log(idList[3]);
-        for (int i = 0; i < placeholderList.Length; i++)
+        foreach (MemoryCube cube in allCube)
         {
-           // int id = idList[i];
-           // placeholderList[i].identifier = id;
+            
         }
+        
+        for(int i = 0; i < allCube.Length; i++)
+        {
+            allCube[i].transform.position = allPlaceholder[i].transform.position;
+        }
+
+      //  System.Random ran = new System.Random();
+
+        //// Debug.Log(idList[3]);
+        //for (int i = 0; i < placeholderList.Length; i++)
+        //{
+        //   // int id = idList[i];
+        //   // placeholderList[i].identifier = id;
+        //}
     }
 
     private void Update()
