@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class MemoryCardGameManager : MonoBehaviour
 {
@@ -11,10 +12,33 @@ public class MemoryCardGameManager : MonoBehaviour
     public AudioClip clipCardMatch;
     public AudioClip clipCardUnmatch;
 
+    public GameObject[] allCards;
+    public List<Vector3> allPositionsOfCards = new List<Vector3>(); 
+
     public MemoryCard firstSelectedCard;
     public MemoryCard secondSelectedCard;
 
     private bool canClick = true;
+
+
+    private void Awake()
+    {
+        // Get all card positions and save in list
+        foreach(GameObject card in allCards)
+        {
+            allPositionsOfCards.Add(card.transform.position);
+        }
+
+        // Randomize positions
+        System.Random randomNumber = new System.Random();
+        allPositionsOfCards = allPositionsOfCards.OrderBy(position => randomNumber.Next()).ToList();
+    
+        // Assign new position
+        for(int i = 0; i < allCards.Length; i++)
+        {
+            allCards[i].transform.position = allPositionsOfCards[i];
+        }    
+    }
 
     public void CardClicked(MemoryCard card)
     {

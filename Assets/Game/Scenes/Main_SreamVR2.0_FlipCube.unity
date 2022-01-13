@@ -3318,6 +3318,27 @@ MonoBehaviour:
   clipCardBackward: {fileID: 8300000, guid: 5ada0045560bd6f46a0acdda6ac0ea22, type: 3}
   clipCardMatch: {fileID: 8300000, guid: b8755d5167de604458ae85b189fce30c, type: 3}
   clipCardUnmatch: {fileID: 8300000, guid: 79adc02fad7501744a19884553cf5193, type: 3}
+  allCards:
+  - {fileID: 4109195129671627897}
+  - {fileID: 4109195129426358806}
+  - {fileID: 4109195129241100899}
+  - {fileID: 4109195128289042364}
+  - {fileID: 4109195129567005971}
+  - {fileID: 4109195129442308691}
+  - {fileID: 4109195129842838756}
+  - {fileID: 4109195129707708159}
+  - {fileID: 4109195129448225473}
+  - {fileID: 4109195128256667742}
+  - {fileID: 4109195128236396907}
+  - {fileID: 4109195127899738802}
+  - {fileID: 4109195128089560368}
+  - {fileID: 4109195128342409162}
+  - {fileID: 4109195129202746320}
+  - {fileID: 4109195128533167517}
+  - {fileID: 4109195129883060717}
+  - {fileID: 4109195128363426202}
+  - {fileID: 4109195128801979822}
+  - {fileID: 4109195128684901190}
   firstSelectedCard: {fileID: 0}
   secondSelectedCard: {fileID: 0}
 --- !u!114 &906977043 stripped
