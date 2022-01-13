@@ -6,7 +6,6 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class MemoryCard : MonoBehaviour
 {
-
     //public XRSimpleInteractable simpleInteractable = null;
 
     public int identifier;
@@ -47,6 +46,4 @@ public class MemoryCard : MonoBehaviour
         Debug.Log("Clciked");
         FindObjectOfType<MemoryCardGameManager>().CardClicked(this);
     }
-
-
 }
