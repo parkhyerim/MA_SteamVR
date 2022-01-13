@@ -8,7 +8,7 @@ using Valve.VR.Extras;
 public class SceneHandler : MonoBehaviour
 {
     public SteamVR_LaserPointer[] laserPointer;
-    public MemoryCard mc;
+    public MemoryCard memoryCard;
     private GameObject cardObject;
 
     private void Awake()
@@ -25,51 +25,26 @@ public class SceneHandler : MonoBehaviour
 
     public void PointerClick(object sender, PointerEventArgs e)
     {
-
         if(e.target.tag == "MemoryCard")
         {
-            Debug.Log(e.target.gameObject);
+           // Debug.Log(e.target.gameObject);
             cardObject = e.target.gameObject;
-           mc = cardObject.GetComponent<MemoryCard>();
-            FindObjectOfType<MemoryCardGameManager>().CardClicked(mc);
+            memoryCard = cardObject.GetComponent<MemoryCard>();
+            FindObjectOfType<MemoryCardGameManager>().CardClicked(memoryCard);
         }
-        //if(e.target.name == "Table")
-        //{
-        //   // Debug.Log("Table was click");
-        //}else if(e.target.tag == "MemoryCard")
-        //{
-        //    Debug.Log("MemoryCard was click");
-        //}
     }
 
     public void PointerInside(object sender, PointerEventArgs e)
     {
-        if (e.target.name == "Table")
-        {
-           // Debug.Log("Table was entered");
-        }
-        else if (e.target.tag == "MemoryCard")
-        {
-           // SelectMemoryCard(e.target.gameObject);
-            Debug.Log("palceholder was entered");
-        }
     }
 
     public void PointerOutside(object sender, PointerEventArgs e)
     {
-        if (e.target.name == "Table")
-        {
-           // Debug.Log("Table was exited");
-        }
-        else if (e.target.name == "placeholder")
-        {
-            Debug.Log("palceholder was entered");
-        }
+        //if (e.target.name == "Table")
+        //{
+        //}
+        //else if (e.target.name == "placeholder")
+        //{
+        //}
     }
-
-    private void SelectMemoryCard(MemoryCard mc)
-    {
-        FindObjectOfType<MemoryCardGameManager>().CardClicked(mc);
-    }
-
 }
