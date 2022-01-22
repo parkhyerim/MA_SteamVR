@@ -13,6 +13,7 @@ public class BystamderAvatar : MonoBehaviour
     public bool isPresenceSetting;
     public bool isMixedSetting;
     public bool isAvatarSetting;
+    public GameObject bystanderAvatar;
 
     private float bystanderRotationEulerY;
     private float bystanderRotationOffset = 0;
@@ -30,7 +31,7 @@ public class BystamderAvatar : MonoBehaviour
 
     private void Awake()
     {
-
+       // bystanderAvatar.SetActive(true);
     }
 
     // Start is called before the first frame update
@@ -46,6 +47,8 @@ public class BystamderAvatar : MonoBehaviour
 
         //eulerY = bystanderTracker.transform.eulerAngles.y;
         newRotation = new Vector3(0, 0, 0);
+
+        bystanderAvatar.SetActive(false);
       
         if(infoBubble != null)
         {
@@ -56,7 +59,7 @@ public class BystamderAvatar : MonoBehaviour
         bystanderRotationEulerY = bystanderTracker.transform.eulerAngles.y;
         bystanderRotationOffset = bystanderRotationEulerY - 0f;
         //Debug.Log(rotationEulerY);
-        Debug.Log(bystanderRotationOffset);
+        //Debug.Log(bystanderRotationOffset);
     }
 
     // Update is called once per frame
@@ -70,63 +73,205 @@ public class BystamderAvatar : MonoBehaviour
         if (sitToLeft)
         {
             // The bystander is turning to the right
-            if (bystanderRotationEulerY >= 30 && bystanderRotationEulerY < 110)
+            // critical zone
+            if (bystanderRotationEulerY >= 60 && bystanderRotationEulerY < 110)
             {
                 infoText.text = "The bystander is turning to the right \n at a " + bystanderRotationEulerY + "-degree angle.";
+                //  Debug.Log(bystanderRotationEulerY);
 
+                if (isPresenceSetting)
+                {
+                    frontImage.enabled = true;
+                    backImage.enabled = false;
+                }
 
-                Debug.Log(bystanderRotationEulerY);
+                if (isAvatarSetting)
+                {
+                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    bystanderAvatar.SetActive(true);
+                    
 
-                frontImage.enabled = true;
-                backImage.enabled = false;
+                    // fully fade in (1) the image with the duration of 2
+                    // bystandreImage.CrossFadeAlpha(1, 1.0f, false);
+                    // transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0); // towards the front seat
+                    // transform.localEulerAngles = new Vector3(0, 0, 0); // against the front seat
+
+                }
+
+                if (isMixedSetting)
+                {
+                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    bystanderAvatar.SetActive(true);
+
+                    frontImage.enabled = false;
+                    backImage.enabled = false;
+                }
+
 
                 //if (infoBubble != null)
                 //    infoText.text = "Bystander's direnction: " + rotationEulerY;
-                transform.localEulerAngles = new Vector3(0, 0, 0);
-                // fully fade in (1) the image with the duration of 2
-                //  bystandreImage.CrossFadeAlpha(1, 1.0f, false);
+
             }
-            else if(bystanderRotationEulerY >= 260f && bystanderRotationEulerY < 360f)
+            else if(bystanderRotationEulerY >= 30 && bystanderRotationEulerY < 60)
             {
                 infoText.text = "The bystander is turning to the left at a " + bystanderRotationEulerY + "-degree angle.";
 
-                backImage.enabled = true;
-                frontImage.enabled = false;
+                if (isPresenceSetting)
+                {
+                    backImage.enabled = true;
+                    frontImage.enabled = false;
+                }
 
-                transform.localEulerAngles = new Vector3(0, 180, 0);
-                //   bystandreImage.CrossFadeAlpha(0, 1.0f, false);
+                if (isAvatarSetting)
+                {
+                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    //transform.localEulerAngles = new Vector3(0, 180, 0); // towards the front seat
+                    // bystandreImage.CrossFadeAlpha(1, 1.0f, false);
+                    bystanderAvatar.SetActive(true);
+                }
 
+                if (isMixedSetting)
+                {
+                    bystanderAvatar.SetActive(false);
+                    backImage.enabled = false;
+                    frontImage.enabled = true;
+                }
             }
-            else 
+            else if (bystanderRotationEulerY < 30 && bystanderRotationEulerY >= 0)
             {
-                infoText.text = "The bystander is turning to the left at a " + bystanderRotationEulerY + "-degree angle.";
-                backImage.enabled = false;
-                frontImage.enabled = false;
-            }
-        }
-        else
-        {
-            if(bystanderRotationEulerY < 330 && bystanderRotationEulerY > 240)
-            {
-             //   Debug.Log("The bystander is turning to the left \n at a " + rotationEulerY + "-degree angle.");
-                transform.localEulerAngles = new Vector3(0, 0, 0);
+                if (isPresenceSetting)
+                {
+                    backImage.enabled = false;
+                    frontImage.enabled = false;
+                }
 
-                // fully fade in (1) the image with the duration of 2
-               // bystandreImage.CrossFadeAlpha(1, 1.0f, false);
-                backImage.gameObject.SetActive(false);
-                frontImage.gameObject.SetActive(true);
-                //if (infoBubble != null)
-                //    infoText.text = "Bystander's direnction: " + rotationEulerY;
+                if (isAvatarSetting)
+                {
+                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    // bystandreImage.CrossFadeAlpha(0, 1.0f, false);
+                    bystanderAvatar.SetActive(false);
+                }
+
+                if (isMixedSetting)
+                {
+                    bystanderAvatar.SetActive(false);
+                    backImage.enabled = true;
+                    frontImage.enabled = false;
+                }
             }
             else
             {
-                //Invoke("TurnBackwards", 3);
-               // Debug.Log("The bystander is turning to the right at a " + rotationEulerY + "-degree angle.");
-                transform.localEulerAngles = new Vector3(0, 180, 0);
-                // fade out to nothing (0) the image with a duration of 2
-              //  bystandreImage.CrossFadeAlpha(0, 1.0f, false);
-                backImage.gameObject.SetActive(true);
-                frontImage.gameObject.SetActive(false);
+                if (isPresenceSetting)
+                {
+                    backImage.enabled = false;
+                    frontImage.enabled = false;
+                }
+
+                if (isAvatarSetting)
+                {
+                    bystanderAvatar.SetActive(false);
+                }
+
+                if (isMixedSetting)
+                {
+                    bystanderAvatar.SetActive(false);
+                    backImage.enabled = false;
+                    frontImage.enabled = false;
+                }
+            }
+        }
+        // To the right side of the VR user
+        else
+        {
+            
+            // critical zone
+            if(bystanderRotationEulerY <= 300 && bystanderRotationEulerY > 250)
+            {
+                if (isPresenceSetting)
+                {
+                    backImage.enabled = false;
+                    frontImage.enabled = true;
+                }
+
+                if (isAvatarSetting)
+                {
+                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                   // Debug.Log(bystanderRotationEulerY);
+                    bystanderAvatar.SetActive(true);
+                }
+
+                if (isMixedSetting)
+                {
+                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    bystanderAvatar.SetActive(true);
+
+                    frontImage.enabled = false;
+                    backImage.enabled = false;
+                }
+            }
+            // pheriperal zone
+            else if(bystanderRotationEulerY <= 330 && bystanderRotationEulerY > 300)
+            {
+                if (isPresenceSetting)
+                {
+                    backImage.enabled = true;
+                    frontImage.enabled = false;
+                }
+
+                if (isAvatarSetting)
+                {
+                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    bystanderAvatar.SetActive(true);
+                }
+
+                if (isMixedSetting)
+                {
+                    bystanderAvatar.SetActive(false);
+                    backImage.enabled = false;
+                    frontImage.enabled = true;
+                }
+            }
+            else if(bystanderRotationEulerY <= 360 && bystanderRotationEulerY > 300)
+            {
+                if (isPresenceSetting)
+                {
+                    backImage.enabled = false;
+                    frontImage.enabled = false;
+                }
+
+                if (isAvatarSetting)
+                {
+                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    bystanderAvatar.SetActive(false);
+                }
+
+                if (isMixedSetting)
+                {
+                    bystanderAvatar.SetActive(false);
+                    backImage.enabled = true;
+                    frontImage.enabled = false;
+                }
+            }
+            else
+            {
+                if (isPresenceSetting)
+                {
+                    backImage.enabled = false;
+                    frontImage.enabled = false;
+                }
+
+                if (isAvatarSetting)
+                {
+                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    bystanderAvatar.SetActive(false);
+                }
+
+                if (isMixedSetting)
+                {
+                    bystanderAvatar.SetActive(false);
+                    backImage.enabled = false;
+                    frontImage.enabled = false;
+                }
             }
         }
 
