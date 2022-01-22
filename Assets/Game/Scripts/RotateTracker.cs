@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class RotateTracker : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+
+    public float speed = 2;
 
     // Update is called once per frame
     void Update()
     {
-        
+        transform.Rotate(0, Input.GetAxis("Horizontal") * speed * Time.deltaTime, 0);
     }
 }

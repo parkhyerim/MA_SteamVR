@@ -22,8 +22,8 @@ public class BystamderAvatar : MonoBehaviour
     private Quaternion myRotation;
     private Vector3 newRotation;
 
-    public Transform infoBubble;
-    private Text infoText;
+  //  public Transform infoBubble;
+   // private Text infoText;
 
     /*
      * awareness information: presence, (location), orientation 
@@ -50,11 +50,11 @@ public class BystamderAvatar : MonoBehaviour
 
         bystanderAvatar.SetActive(false);
       
-        if(infoBubble != null)
-        {
-            infoText = GetComponentInChildren<Text>();
-            infoText.text = "Bystander Rotation:";
-        }
+        //if(infoBubble != null)
+        //{
+        //    infoText = GetComponentInChildren<Text>();
+        //    infoText.text = "Bystander Rotation:";
+        //}
 
         bystanderRotationEulerY = bystanderTracker.transform.eulerAngles.y;
         bystanderRotationOffset = bystanderRotationEulerY - 0f;
@@ -72,11 +72,12 @@ public class BystamderAvatar : MonoBehaviour
         // The bystander is sitting to the left of the VR Player.
         if (sitToLeft)
         {
+           // infoText.text = bystanderRotationEulerY.ToString();
+
             // The bystander is turning to the right
             // critical zone
             if (bystanderRotationEulerY >= 60 && bystanderRotationEulerY < 110)
             {
-                infoText.text = "The bystander is turning to the right \n at a " + bystanderRotationEulerY + "-degree angle.";
                 //  Debug.Log(bystanderRotationEulerY);
 
                 if (isPresenceSetting)
@@ -114,7 +115,6 @@ public class BystamderAvatar : MonoBehaviour
             }
             else if(bystanderRotationEulerY >= 30 && bystanderRotationEulerY < 60)
             {
-                infoText.text = "The bystander is turning to the left at a " + bystanderRotationEulerY + "-degree angle.";
 
                 if (isPresenceSetting)
                 {
@@ -276,12 +276,12 @@ public class BystamderAvatar : MonoBehaviour
         }
 
 
-        if (infoBubble != null)
-        {
-            infoText.text = "Bystander's direnction: " + bystanderRotationEulerY;
-            infoBubble.LookAt(Camera.main.transform.position);
-            infoBubble.Rotate(0, 180f, 0);
-        }
+        //if (infoBubble != null)
+        //{
+        //   // infoText.text = bystanderRotationEulerY.ToString();
+        //    infoBubble.LookAt(Camera.main.transform.position);
+        //    infoBubble.Rotate(0, 180f, 0);
+        //}
     }
 
     public void TurnBackwards()
