@@ -16,6 +16,9 @@ public class BystamderAvatar : MonoBehaviour
     public GameObject bystanderAvatar;
     public GameObject presenceAnimojiBoard;
     public Transform FovPos;
+    public GameObject guidePos;
+    public GameObject originalPos;
+    public GameObject transPos;
 
     public bool isSeated;
     public bool isFov;
@@ -76,9 +79,11 @@ public class BystamderAvatar : MonoBehaviour
         // transform.localEulerAngles = new Vector3(0, -1 * eulerY, 0);
         transform.position = bystanderTracker.transform.position;
 
-        Debug.Log(Camera.main.transform.eulerAngles.y);
+       // Debug.Log(Camera.main.transform.eulerAngles.y);
 
-
+        transPos.transform.position = new Vector3((originalPos.transform.position.x + bystanderTracker.transform.position.x)/2, (originalPos.transform.position.y + bystanderTracker.transform.position.y)/2, (originalPos.transform.position.z - bystanderTracker.transform.position.z)/2);
+        Debug.Log("originalPos: "+ originalPos.transform.position + "   tracker: " + bystanderTracker.transform.position);
+        Debug.Log("transPos: " + transPos.transform.position);
         // The bystander is sitting to the left of the VR Player.
         if (sitToLeft)
         {
@@ -143,9 +148,12 @@ public class BystamderAvatar : MonoBehaviour
                 {
                     transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
                     bystanderAvatar.SetActive(true);
+ 
+                    // presenceAnimojiBoard.transform.position = new Vector3(Camera.main.transform.position.x - 0.4f, presenceAnimojiBoard.transform.position.y - 0.2f, presenceAnimojiBoard.transform.position.z);
+                    
 
-                    presenceAnimojiBoard.transform.position = new Vector3(Camera.main.transform.position.x - 0.4f, presenceAnimojiBoard.transform.position.y - 0.2f, presenceAnimojiBoard.transform.position.z);
-
+                   // presenceAnimojiBoard.transform.position = guidePos.transform.position;
+                    presenceAnimojiBoard.transform.position = transPos.transform.position;
                     Debug.Log("Panel:" + presenceAnimojiBoard.transform.position + "  Camera: " + Camera.main.transform.position);
                     frontImage.enabled = true;
                     backImage.enabled = false;
@@ -184,6 +192,7 @@ public class BystamderAvatar : MonoBehaviour
                 if (isMixedSetting)
                 {
                     bystanderAvatar.SetActive(false);
+                    presenceAnimojiBoard.transform.position = originalPos.transform.position;
                     backImage.enabled = false;
                     frontImage.enabled = true;
                 }
@@ -211,6 +220,7 @@ public class BystamderAvatar : MonoBehaviour
                 if (isMixedSetting)
                 {
                     bystanderAvatar.SetActive(false);
+                    presenceAnimojiBoard.transform.position = originalPos.transform.position;
                     backImage.enabled = true;
                     frontImage.enabled = false;
                 }
@@ -231,6 +241,7 @@ public class BystamderAvatar : MonoBehaviour
                 if (isMixedSetting)
                 {
                     bystanderAvatar.SetActive(false);
+                    presenceAnimojiBoard.transform.position = originalPos.transform.position;
                     backImage.enabled = false;
                     frontImage.enabled = false;
                 }
