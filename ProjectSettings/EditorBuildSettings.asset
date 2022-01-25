@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Game/Scenes/MainScene_SreamVR2.0_OPENXR_FlipCube Merge.unity
-    guid: b3148eb2bf0b75343a5828321f20521d
+    path: Assets/Game/Scenes/MainScene_SreamVR2.0_OPENXR_FlipCube Merge 2.unity
+    guid: ce90e7ddcbad99d4481d1ce6017e2104
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d367a92b0d4cf114c826faa81e847686, type: 2}
     Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: 06b947aecd64d04419eebef1f634e8e0, type: 2}
