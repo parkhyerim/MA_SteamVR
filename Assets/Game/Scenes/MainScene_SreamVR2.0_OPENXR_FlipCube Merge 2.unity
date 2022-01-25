@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &13165406
 Transform:
   m_ObjectHideFlags: 0
@@ -848,7 +848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37c2cf88f7c59f4c8cf5d3812568143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 5
+  index: 3
   origin: {fileID: 0}
 --- !u!4 &202137950
 Transform:
@@ -1181,7 +1181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2454652953705386829, guid: 424cf52182051594da880fafafe45bb0, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2454652953705386829, guid: 424cf52182051594da880fafafe45bb0, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1732,7 +1732,7 @@ RectTransform:
   - {fileID: 1979556559}
   - {fileID: 374783415}
   m_Father: {fileID: 1996327232}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: -40, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2488,10 +2488,15 @@ MonoBehaviour:
   frontImage: {fileID: 0}
   backImage: {fileID: 0}
   sitToLeft: 0
-  isPresenceSetting: 0
+  isPresencePPSetting: 0
   isMixedSetting: 0
   isAvatarSetting: 0
   bystanderAvatar: {fileID: 0}
+  presenceAnimojiBoard: {fileID: 0}
+  FovPos: {fileID: 0}
+  isSeated: 0
+  isFov: 0
+  isSeatedAndFov: 0
 --- !u!1001 &518156991
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4707,10 +4712,15 @@ MonoBehaviour:
   frontImage: {fileID: 492032527}
   backImage: {fileID: 220415886}
   sitToLeft: 1
-  isPresenceSetting: 0
+  isPresencePPSetting: 0
   isMixedSetting: 0
   isAvatarSetting: 1
   bystanderAvatar: {fileID: 2101755741847965763}
+  presenceAnimojiBoard: {fileID: 326435063}
+  FovPos: {fileID: 1162701382}
+  isSeated: 0
+  isFov: 0
+  isSeatedAndFov: 1
 --- !u!4 &995297014
 Transform:
   m_ObjectHideFlags: 0
@@ -4836,6 +4846,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pos: {fileID: 0}
   identifier: 9
+--- !u!1 &1162701381
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1162701382}
+  m_Layer: 0
+  m_Name: inFoV
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1162701382
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162701381}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.8, y: 0, z: 1.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1996327232}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1171769451
 GameObject:
   m_ObjectHideFlags: 0
@@ -6140,10 +6180,15 @@ MonoBehaviour:
   frontImage: {fileID: 1401731131}
   backImage: {fileID: 1715460138}
   sitToLeft: 1
-  isPresenceSetting: 0
+  isPresencePPSetting: 0
   isMixedSetting: 0
   isAvatarSetting: 1
   bystanderAvatar: {fileID: 2207856534390599402}
+  presenceAnimojiBoard: {fileID: 0}
+  FovPos: {fileID: 0}
+  isSeated: 0
+  isFov: 0
+  isSeatedAndFov: 0
 --- !u!4 &1661567234
 Transform:
   m_ObjectHideFlags: 0
@@ -8605,6 +8650,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1162701382}
   - {fileID: 326435064}
   - {fileID: 837383520}
   m_Father: {fileID: 1996263156}
@@ -15380,10 +15426,15 @@ MonoBehaviour:
   frontImage: {fileID: 1983949685}
   backImage: {fileID: 708005704}
   sitToLeft: 1
-  isPresenceSetting: 0
+  isPresencePPSetting: 0
   isMixedSetting: 1
   isAvatarSetting: 0
   bystanderAvatar: {fileID: 3050217240593658542}
+  presenceAnimojiBoard: {fileID: 0}
+  FovPos: {fileID: 0}
+  isSeated: 0
+  isFov: 0
+  isSeatedAndFov: 0
 --- !u!4 &2780380935429303479
 Transform:
   m_ObjectHideFlags: 0
@@ -30578,7 +30629,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2101755741847965763}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.5, z: 0}
+  m_LocalPosition: {x: 0, y: -1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1372181328}
