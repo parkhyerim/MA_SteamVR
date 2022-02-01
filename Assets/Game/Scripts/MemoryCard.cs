@@ -11,6 +11,8 @@ public class MemoryCard : MonoBehaviour
     public int identifier;
     public float targetHeight = 10f;
     public float targetRotation = 0;
+    private bool isGameStart;
+    public bool IsGameStart { get => isGameStart; set => isGameStart = value; }
 
     private void Awake()
     {
@@ -24,9 +26,12 @@ public class MemoryCard : MonoBehaviour
         //   transform.position = new Vector3(transform.position.x, transform.position.y, 0);
 
 
-        // Rotate
-        Quaternion rotationValue = Quaternion.Euler(0, targetRotation, 0);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rotationValue, 10 * Time.deltaTime);
+        if (IsGameStart) {
+            // Rotate
+            Quaternion rotationValue = Quaternion.Euler(0, targetRotation, 0);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotationValue, 10 * Time.deltaTime);
+        }
+      
     }
 
 

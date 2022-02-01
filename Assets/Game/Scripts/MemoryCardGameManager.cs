@@ -12,73 +12,124 @@ public class MemoryCardGameManager : MonoBehaviour
     public AudioClip clipCardMatch;
     public AudioClip clipCardUnmatch;
 
-    public GameObject[] allCards;
-    public List<Vector3> allPositionsOfCards = new List<Vector3>(); 
+    public MemoryCard[] allCards;
+    public List<Vector3> allPositionsOfCards = new List<Vector3>();
+    public Vector3 AngleOfCards = new Vector3();
 
     public MemoryCard firstSelectedCard;
     public MemoryCard secondSelectedCard;
-
+    private MemoryCard mc = new MemoryCard();
+    
     private bool canClick = true;
-    private bool isFront;
+    [SerializeField]
+    private bool isFront = false;
 
-    public float showCardsInSeconds = 5f;
+    public float showCardsInSeconds = 10f;
     public float warmUpInSeconds = 5f;
     private float startToShowTimer; // time to show Card images
     private float hideTimer; // time to turn backwards again
 
     private void Awake()
     {
+       
         // Get all card positions and save in list
-        foreach(GameObject card in allCards)
+        foreach(MemoryCard card in allCards)
         {
             allPositionsOfCards.Add(card.transform.position);
+            
+         
+           
+           // Debug.Log(card.name + " " + card.transform.position + " " + card.transform.localEulerAngles);
         }
 
-        // Randomize positions
+        AngleOfCards = allCards[0].transform.localEulerAngles;
+        Debug.Log(AngleOfCards);
+        // Randomize the positions of the cards
         System.Random randomNumber = new System.Random();
         allPositionsOfCards = allPositionsOfCards.OrderBy(position => randomNumber.Next()).ToList();
     
-        // Assign new position
+        // Assign a new position
         for(int i = 0; i < allCards.Length; i++)
         {
             allCards[i].transform.position = allPositionsOfCards[i];
         }
 
+        //
         startToShowTimer = Time.time + warmUpInSeconds;
-        hideTimer = Time.time + showCardsInSeconds;
+        hideTimer = startToShowTimer + showCardsInSeconds;
+        Debug.Log(startToShowTimer + " " + hideTimer);
+
     }
 
     private void Update()
     {
         //Debug.Log("starttimer: " + startToShowTimer + "  time: " + Time.time);
         // check the current time to see whether it's time for hiding cards
-        if(Time.time >= startToShowTimer)
-        {
-            if (!isFront)
-            {
-               // ShowCards();
-            }
-          
-        }
 
-        if (Time.time >= hideTimer && isFront == true)
+      
+        if (Time.time >= startToShowTimer && Time.time <= hideTimer )
         {
+            //  Debug.Log(Time.time + " startToShow:" + startToShowTimer + " hideTimer: "+ hideTimer);
            // ShowCards();
+            if (isFront == false) {
+                ShowCards();
+                isFront = true;
+            }
         }
+        
+
+
     }
 
     public void ShowCards()
     {
-            float targetRotation = 0;
-            Quaternion rotationValue = Quaternion.Euler(0, targetRotation, 0);
-            for (int i = 0; i < allCards.Length; i++)
-            {
-                allCards[i].transform.rotation = Quaternion.Lerp(transform.rotation, rotationValue, 10 * Time.deltaTime);
-                
-              allCards[i].transform.rotation = rotationValue;
-                Debug.Log(allCards[i].transform.rotation);
-            }
-        isFront = true;
+       
+        Debug.Log("showCard called");
+        Vector3 frontAngles = new Vector3(0, 0, 0);
+
+        foreach(MemoryCard card in allCards) {
+            card.transform.localEulerAngles = frontAngles;
+        }
+        //for (int i = 0; i < allCards.Length; i++) {
+        //    //allCards[i].transform.localEulerAngles = frontAngles;
+
+        //    allCards[i].transform.Rotate(frontAngles);
+
+        //    Debug.Log(allCards[i].transform.localEulerAngles);
+
+
+        //}
+
+        Invoke("HideCards", 10);
+
+
+
+        //float targetRotation = 0;
+        //Quaternion rotationValue = Quaternion.Euler(0, targetRotation, 0);
+        //for (int i = 0; i < allCards.Length; i++) {
+        //    allCards[i].transform.rotation = Quaternion.Lerp(transform.rotation, rotationValue, 10 * Time.deltaTime);
+
+        //    allCards[i].transform.rotation = rotationValue;
+        //    Debug.Log(allCards[i].transform.rotation);
+        //}
+
+    }
+
+    public void HideCards() {
+        
+        Debug.Log("HideCards is called");
+        Vector3 backAngles = new Vector3(0, 180, 0);
+        //for (int i = 0; i < allCards.Length; i++) {
+        //    allCards[i].transform.localEulerAngles = backAngles;
+            
+        //}
+        foreach(MemoryCard card in allCards) {
+            card.IsGameStart = true;
+            card.transform.localEulerAngles = backAngles;
+        }
+        //isFront = false;
+        //mc.IsGameStart = true;
+        
     }
 
  
@@ -137,5 +188,9 @@ public class MemoryCardGameManager : MonoBehaviour
         audioSource.PlayOneShot(clipCardBackward);
 
         canClick = true;
+    }
+
+    public void StartGame() {
+
     }
 }

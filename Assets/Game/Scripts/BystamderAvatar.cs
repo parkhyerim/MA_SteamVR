@@ -82,8 +82,8 @@ public class BystamderAvatar : MonoBehaviour
        // Debug.Log(Camera.main.transform.eulerAngles.y);
 
         transPos.transform.position = new Vector3((originalPos.transform.position.x + bystanderTracker.transform.position.x)/2, (originalPos.transform.position.y + bystanderTracker.transform.position.y)/2, (originalPos.transform.position.z - bystanderTracker.transform.position.z)/2);
-        Debug.Log("originalPos: "+ originalPos.transform.position + "   tracker: " + bystanderTracker.transform.position);
-        Debug.Log("transPos: " + transPos.transform.position);
+       // Debug.Log("originalPos: "+ originalPos.transform.position + "   tracker: " + bystanderTracker.transform.position);
+       // Debug.Log("transPos: " + transPos.transform.position);
         // The bystander is sitting to the left of the VR Player.
         if (sitToLeft)
         {
