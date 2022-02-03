@@ -18,7 +18,7 @@ public class MemoryCardGameManager : MonoBehaviour
 
     public MemoryCard firstSelectedCard;
     public MemoryCard secondSelectedCard;
-    private MemoryCard mc = new MemoryCard();
+    //private MemoryCard mc = new MemoryCard();
     
     private bool canClick = true;
     [SerializeField]
@@ -28,6 +28,8 @@ public class MemoryCardGameManager : MonoBehaviour
     public float warmUpInSeconds = 5f;
     private float startToShowTimer; // time to show Card images
     private float hideTimer; // time to turn backwards again
+
+    public RotateTracker rt;
 
     private void Awake()
     {
@@ -129,9 +131,12 @@ public class MemoryCardGameManager : MonoBehaviour
         }
         //isFront = false;
         //mc.IsGameStart = true;
-        
+        Invoke("BystanderStart", 3f);
     }
 
+    public void BystanderStart() {
+        rt.isHeading = true;
+    }
  
 
     public void CardClicked(MemoryCard card)

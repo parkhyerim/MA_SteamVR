@@ -358,69 +358,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3c82e07b9a14fe3958806045dbb5693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Live: 0
+  m_Live: 1
   m_Actor: {fileID: 2301219283279089122}
   m_LiveLink:
-    m_Active: 0
+    m_Active: 1
     Channels: 13
   m_Pose:
     BlendShapes:
-      BrowDownLeft: 0.15436457
-      BrowDownRight: 0.17091845
-      BrowInnerUp: 0.10639302
+      BrowDownLeft: 0.13405576
+      BrowDownRight: 0.13474494
+      BrowInnerUp: 0.4374295
       BrowOuterUpLeft: 0
       BrowOuterUpRight: 0
-      CheekPuff: 0.22585736
-      CheekSquintLeft: 0.09298837
-      CheekSquintRight: 0.071032934
-      EyeBlinkLeft: 0.47128555
-      EyeBlinkRight: 0.5595499
-      EyeLookDownLeft: 0.46189013
-      EyeLookDownRight: 0.4566389
-      EyeLookInLeft: 0
-      EyeLookInRight: 0.34589306
-      EyeLookOutLeft: 0.23052019
+      CheekPuff: 0.095156595
+      CheekSquintLeft: 0.26536906
+      CheekSquintRight: 0.22179893
+      EyeBlinkLeft: 0
+      EyeBlinkRight: 0
+      EyeLookDownLeft: 0.014787554
+      EyeLookDownRight: 0.015060175
+      EyeLookInLeft: 0.1302175
+      EyeLookInRight: 0.006833943
+      EyeLookOutLeft: 0
       EyeLookOutRight: 0
       EyeLookUpLeft: 0
       EyeLookUpRight: 0
-      EyeSquintLeft: 0.10609828
-      EyeSquintRight: 0.1061123
-      EyeWideLeft: 0
-      EyeWideRight: 0
-      JawForward: 0.024648646
-      JawLeft: 0.04637527
-      JawOpen: 0.05623152
+      EyeSquintLeft: 0.3328337
+      EyeSquintRight: 0.33317742
+      EyeWideLeft: 0.19386093
+      EyeWideRight: 0.18991613
+      JawForward: 0.10641921
+      JawLeft: 0.051412284
+      JawOpen: 0.056622162
       JawRight: 0
-      MouthClose: 0.07004138
-      MouthDimpleLeft: 0.021810982
-      MouthDimpleRight: 0.019701907
-      MouthFrownLeft: 0.08886369
-      MouthFrownRight: 0.022201315
-      MouthFunnel: 0.13391674
-      MouthLeft: 0.002455297
-      MouthLowerDownLeft: 0.041575693
-      MouthLowerDownRight: 0.035739616
-      MouthPressLeft: 0.14985326
-      MouthPressRight: 0.19460037
-      MouthPucker: 0.5798668
-      MouthRight: 0
-      MouthRollLower: 0.06828828
-      MouthRollUpper: 0.023082957
-      MouthShrugLower: 0.29905438
-      MouthShrugUpper: 0.2203674
-      MouthSmileLeft: 0
-      MouthSmileRight: 0
-      MouthStretchLeft: 0.10679434
-      MouthStretchRight: 0.083769955
-      MouthUpperUpLeft: 0.031637266
-      MouthUpperUpRight: 0.02572302
-      NoseSneerLeft: 0.19917358
-      NoseSneerRight: 0.14378627
-      TongueOut: 0.0000000035822416
-    HeadPosition: {x: 0.10938085, y: -0.27220103, z: -0.4113849}
-    HeadOrientation: {x: 0.30451953, y: -0.116008624, z: 0.23135382, w: -0.91667074}
-    LeftEyeOrientation: {x: -0.13824557, y: 0.10442663, z: 0.014659815, w: -0.98476815}
-    RightEyeOrientation: {x: -0.14026043, y: 0.069651306, z: 0.009891862, w: -0.98761225}
+      MouthClose: 0.06136234
+      MouthDimpleLeft: 0.09206785
+      MouthDimpleRight: 0.08487349
+      MouthFrownLeft: 0
+      MouthFrownRight: 0
+      MouthFunnel: 0.1280008
+      MouthLeft: 0
+      MouthLowerDownLeft: 0.11382392
+      MouthLowerDownRight: 0.11382674
+      MouthPressLeft: 0.11543673
+      MouthPressRight: 0.12273121
+      MouthPucker: 0.14298065
+      MouthRight: 0.0076193972
+      MouthRollLower: 0.13052183
+      MouthRollUpper: 0.058914054
+      MouthShrugLower: 0.267107
+      MouthShrugUpper: 0.22730555
+      MouthSmileLeft: 0.027501846
+      MouthSmileRight: 0.021239355
+      MouthStretchLeft: 0.269215
+      MouthStretchRight: 0.23475312
+      MouthUpperUpLeft: 0.045465454
+      MouthUpperUpRight: 0.04139683
+      NoseSneerLeft: 0.16813838
+      NoseSneerRight: 0.13585429
+      TongueOut: 0.0000069860052
+    HeadPosition: {x: 0.021503493, y: -0.0020474244, z: -0.20753445}
+    HeadOrientation: {x: 0.044606067, y: -0.120570995, z: 0.045790225, w: -0.99064434}
+    LeftEyeOrientation: {x: -0.004599843, y: 0.0020872853, z: 0.000009601308, w: -0.99998724}
+    RightEyeOrientation: {x: -0.004513014, y: -0.03976178, z: -0.00017958935, w: -0.999199}
 --- !u!4 &82044124
 Transform:
   m_ObjectHideFlags: 0
@@ -843,7 +843,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202137948}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d37c2cf88f7c59f4c8cf5d3812568143, type: 3}
   m_Name: 
@@ -872,12 +872,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202137948}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e082207f971a01a4bad15446dcd58fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 15
+  isForInteraction: 1
+  isGoing: 0
+  isGoingOrigin: 0
+  isHeading: 0
 --- !u!1 &220415884
 GameObject:
   m_ObjectHideFlags: 0
@@ -2515,22 +2519,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderTracker: {fileID: 202137948}
-  bystandreImage: {fileID: 2006506243}
   frontImage: {fileID: 0}
   backImage: {fileID: 0}
-  sitToLeft: 0
-  isPresencePPSetting: 0
-  isMixedSetting: 0
-  isAvatarSetting: 0
   bystanderAvatar: {fileID: 0}
   presenceAnimojiBoard: {fileID: 0}
   FovPos: {fileID: 0}
   guidePos: {fileID: 0}
   originalPos: {fileID: 0}
-  transPos: {fileID: 0}
+  middlePos: {fileID: 0}
+  sitToLeft: 0
+  isPresenceSetting: 0
+  isMixedSetting: 0
+  isAvatarSetting: 0
   isSeated: 0
   isFov: 0
   isSeatedAndFov: 0
+  timeToReachTarget: 0
+  currentMovementTime: 0
 --- !u!1001 &518156991
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4566,31 +4571,34 @@ MonoBehaviour:
   clipCardMatch: {fileID: 8300000, guid: b8755d5167de604458ae85b189fce30c, type: 3}
   clipCardUnmatch: {fileID: 8300000, guid: 79adc02fad7501744a19884553cf5193, type: 3}
   allCards:
-  - {fileID: 4109195129671627897}
-  - {fileID: 4109195129426358806}
-  - {fileID: 4109195129241100899}
-  - {fileID: 4109195128289042364}
-  - {fileID: 4109195129567005971}
-  - {fileID: 4109195129442308691}
-  - {fileID: 4109195129842838756}
-  - {fileID: 4109195129707708159}
-  - {fileID: 4109195129448225473}
-  - {fileID: 4109195128256667742}
-  - {fileID: 4109195128236396907}
-  - {fileID: 4109195127899738802}
-  - {fileID: 4109195128089560368}
-  - {fileID: 4109195128342409162}
-  - {fileID: 4109195129202746320}
-  - {fileID: 4109195128533167517}
-  - {fileID: 4109195129883060717}
-  - {fileID: 4109195128363426202}
-  - {fileID: 4109195128801979822}
-  - {fileID: 4109195128684901190}
+  - {fileID: 4109195129671627898}
+  - {fileID: 4109195129426358807}
+  - {fileID: 4109195129241100900}
+  - {fileID: 4109195128289042365}
+  - {fileID: 4109195129567005972}
+  - {fileID: 4109195129442308692}
+  - {fileID: 4109195129842838757}
+  - {fileID: 4109195129707708160}
+  - {fileID: 4109195129448225474}
+  - {fileID: 4109195128256667743}
+  - {fileID: 4109195128236396908}
+  - {fileID: 4109195127899738803}
+  - {fileID: 4109195128089560369}
+  - {fileID: 4109195128342409163}
+  - {fileID: 4109195129202746321}
+  - {fileID: 4109195128533167518}
+  - {fileID: 4109195129883060718}
+  - {fileID: 4109195128363426203}
+  - {fileID: 4109195128801979823}
+  - {fileID: 4109195128684901191}
   allPositionsOfCards: []
+  AngleOfCards: {x: 0, y: 0, z: 0}
   firstSelectedCard: {fileID: 0}
   secondSelectedCard: {fileID: 0}
+  isFront: 0
   showCardsInSeconds: 5
   warmUpInSeconds: 5
+  rt: {fileID: 202137951}
 --- !u!114 &906977043 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4889784658962910715, guid: 424cf52182051594da880fafafe45bb0, type: 3}
@@ -4777,22 +4785,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderTracker: {fileID: 202137948}
-  bystandreImage: {fileID: 2006506243}
-  frontImage: {fileID: 492032527}
-  backImage: {fileID: 220415886}
-  sitToLeft: 1
-  isPresencePPSetting: 0
-  isMixedSetting: 1
-  isAvatarSetting: 0
+  frontImage: {fileID: 1609408056}
+  backImage: {fileID: 428763760}
   bystanderAvatar: {fileID: 2101755741847965763}
-  presenceAnimojiBoard: {fileID: 326435063}
-  FovPos: {fileID: 1162701382}
-  guidePos: {fileID: 1883298888}
-  originalPos: {fileID: 588149036}
-  transPos: {fileID: 399642669}
+  presenceAnimojiBoard: {fileID: 2321244900447995938}
+  FovPos: {fileID: 1537809272}
+  guidePos: {fileID: 1512761169}
+  originalPos: {fileID: 1689116527}
+  middlePos: {fileID: 399642669}
+  sitToLeft: 1
+  isPresenceSetting: 0
+  isMixedSetting: 0
+  isAvatarSetting: 1
   isSeated: 0
   isFov: 0
-  isSeatedAndFov: 0
+  isSeatedAndFov: 1
+  timeToReachTarget: 5
+  currentMovementTime: 0
 --- !u!4 &995297014
 Transform:
   m_ObjectHideFlags: 0
@@ -5627,6 +5636,81 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pos: {fileID: 0}
   identifier: 2
+--- !u!1 &1512761169
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1512761170}
+  - component: {fileID: 1512761172}
+  - component: {fileID: 1512761171}
+  m_Layer: 5
+  m_Name: GuidingPosition (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1512761170
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512761169}
+  m_LocalRotation: {x: -0, y: -0.3420201, z: -0, w: 0.9396927}
+  m_LocalPosition: {x: 0, y: 0, z: 0.564232}
+  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
+  m_Children: []
+  m_Father: {fileID: 3114112697205463859}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.3149414, y: -0.041}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1512761171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512761169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: f91208dbf519c4849b40f1acc26ad148, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1512761172
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512761169}
+  m_CullTransparentMesh: 1
 --- !u!1 &1514508614
 GameObject:
   m_ObjectHideFlags: 0
@@ -5737,6 +5821,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pos: {fileID: 0}
   identifier: 6
+--- !u!1 &1537809271
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1537809272}
+  m_Layer: 0
+  m_Name: inFoV (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1537809272
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537809271}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1, y: 0, z: 1.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3114112697205463859}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1548770225
 GameObject:
   m_ObjectHideFlags: 0
@@ -6248,22 +6362,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderTracker: {fileID: 202137948}
-  bystandreImage: {fileID: 2006506243}
   frontImage: {fileID: 1401731131}
   backImage: {fileID: 1715460138}
-  sitToLeft: 1
-  isPresencePPSetting: 0
-  isMixedSetting: 0
-  isAvatarSetting: 1
   bystanderAvatar: {fileID: 2207856534390599402}
   presenceAnimojiBoard: {fileID: 0}
   FovPos: {fileID: 0}
   guidePos: {fileID: 0}
   originalPos: {fileID: 0}
-  transPos: {fileID: 0}
+  middlePos: {fileID: 0}
+  sitToLeft: 1
+  isPresenceSetting: 0
+  isMixedSetting: 0
+  isAvatarSetting: 1
   isSeated: 0
   isFov: 0
   isSeatedAndFov: 0
+  timeToReachTarget: 0
+  currentMovementTime: 0
 --- !u!4 &1661567234
 Transform:
   m_ObjectHideFlags: 0
@@ -6279,6 +6394,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1689116527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1689116528}
+  m_Layer: 5
+  m_Name: originalPos (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1689116528
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689116527}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2454652954034266459}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1694855729
 GameObject:
   m_ObjectHideFlags: 0
@@ -8360,7 +8510,7 @@ GameObject:
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1996138310
 GameObject:
   m_ObjectHideFlags: 0
@@ -14770,62 +14920,62 @@ MonoBehaviour:
   m_Mapper: {fileID: 11400000, guid: 4f2198c100b55e347b6ee725ef5f4e0f, type: 2}
   m_EnabledChannels: 9
   m_BlendShapes:
-    BrowDownLeft: 0.15436457
-    BrowDownRight: 0.17091845
-    BrowInnerUp: 0.10639302
+    BrowDownLeft: 0.13405576
+    BrowDownRight: 0.13474494
+    BrowInnerUp: 0.4374295
     BrowOuterUpLeft: 0
     BrowOuterUpRight: 0
-    CheekPuff: 0.22585736
-    CheekSquintLeft: 0.09298837
-    CheekSquintRight: 0.071032934
-    EyeBlinkLeft: 0.47128555
-    EyeBlinkRight: 0.5595499
-    EyeLookDownLeft: 0.46189013
-    EyeLookDownRight: 0.4566389
-    EyeLookInLeft: 0
-    EyeLookInRight: 0.34589306
-    EyeLookOutLeft: 0.23052019
+    CheekPuff: 0.095156595
+    CheekSquintLeft: 0.26536906
+    CheekSquintRight: 0.22179893
+    EyeBlinkLeft: 0
+    EyeBlinkRight: 0
+    EyeLookDownLeft: 0.014787554
+    EyeLookDownRight: 0.015060175
+    EyeLookInLeft: 0.1302175
+    EyeLookInRight: 0.006833943
+    EyeLookOutLeft: 0
     EyeLookOutRight: 0
     EyeLookUpLeft: 0
     EyeLookUpRight: 0
-    EyeSquintLeft: 0.10609828
-    EyeSquintRight: 0.1061123
-    EyeWideLeft: 0
-    EyeWideRight: 0
-    JawForward: 0.024648646
-    JawLeft: 0.04637527
-    JawOpen: 0.05623152
+    EyeSquintLeft: 0.3328337
+    EyeSquintRight: 0.33317742
+    EyeWideLeft: 0.19386093
+    EyeWideRight: 0.18991613
+    JawForward: 0.10641921
+    JawLeft: 0.051412284
+    JawOpen: 0.056622162
     JawRight: 0
-    MouthClose: 0.07004138
-    MouthDimpleLeft: 0.021810982
-    MouthDimpleRight: 0.019701907
-    MouthFrownLeft: 0.08886369
-    MouthFrownRight: 0.022201315
-    MouthFunnel: 0.13391674
-    MouthLeft: 0.002455297
-    MouthLowerDownLeft: 0.041575693
-    MouthLowerDownRight: 0.035739616
-    MouthPressLeft: 0.14985326
-    MouthPressRight: 0.19460037
-    MouthPucker: 0.5798668
-    MouthRight: 0
-    MouthRollLower: 0.06828828
-    MouthRollUpper: 0.023082957
-    MouthShrugLower: 0.29905438
-    MouthShrugUpper: 0.2203674
-    MouthSmileLeft: 0
-    MouthSmileRight: 0
-    MouthStretchLeft: 0.10679434
-    MouthStretchRight: 0.083769955
-    MouthUpperUpLeft: 0.031637266
-    MouthUpperUpRight: 0.02572302
-    NoseSneerLeft: 0.19917358
-    NoseSneerRight: 0.14378627
-    TongueOut: 0.0000000035822416
+    MouthClose: 0.06136234
+    MouthDimpleLeft: 0.09206785
+    MouthDimpleRight: 0.08487349
+    MouthFrownLeft: 0
+    MouthFrownRight: 0
+    MouthFunnel: 0.1280008
+    MouthLeft: 0
+    MouthLowerDownLeft: 0.11382392
+    MouthLowerDownRight: 0.11382674
+    MouthPressLeft: 0.11543673
+    MouthPressRight: 0.12273121
+    MouthPucker: 0.14298065
+    MouthRight: 0.0076193972
+    MouthRollLower: 0.13052183
+    MouthRollUpper: 0.058914054
+    MouthShrugLower: 0.267107
+    MouthShrugUpper: 0.22730555
+    MouthSmileLeft: 0.027501846
+    MouthSmileRight: 0.021239355
+    MouthStretchLeft: 0.269215
+    MouthStretchRight: 0.23475312
+    MouthUpperUpLeft: 0.045465454
+    MouthUpperUpRight: 0.04139683
+    NoseSneerLeft: 0.16813838
+    NoseSneerRight: 0.13585429
+    TongueOut: 0.0000069860052
   m_HeadPosition: {x: 0, y: 0, z: 0}
-  m_HeadOrientation: {x: 329.69452, y: 24.176792, z: 325.0317}
-  m_LeftEyeOrientation: {x: 15.617737, y: 347.42218, z: 356.5625}
-  m_RightEyeOrientation: {x: 16.001818, y: 351.60428, z: 357.67014}
+  m_HeadOrientation: {x: 355.56458, y: 14.105072, z: 354.15805}
+  m_LeftEyeOrientation: {x: 0.5271016, y: 359.7608, z: -0.0022005227}
+  m_RightEyeOrientation: {x: 0.5159278, y: 4.5577974, z: 0.041127548}
   m_BlendShapesEnabled: 1
   m_HeadPositionEnabled: 0
   m_HeadOrientationEnabled: 1
@@ -15107,13 +15257,14 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2321244900447995938}
   m_LocalRotation: {x: 0, y: -0.3420201, z: 0, w: 0.9396927}
-  m_LocalPosition: {x: 0, y: 0, z: 0.6}
+  m_LocalPosition: {x: 0, y: 0, z: 0.8}
   m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_Children:
+  - {fileID: 1689116528}
   - {fileID: 7110351361727075971}
   - {fileID: 3273529806536674807}
   m_Father: {fileID: 3114112697205463859}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -40, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -15629,22 +15780,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderTracker: {fileID: 202137948}
-  bystandreImage: {fileID: 2006506243}
   frontImage: {fileID: 1983949685}
   backImage: {fileID: 708005704}
-  sitToLeft: 1
-  isPresencePPSetting: 0
-  isMixedSetting: 1
-  isAvatarSetting: 0
   bystanderAvatar: {fileID: 3050217240593658542}
   presenceAnimojiBoard: {fileID: 0}
   FovPos: {fileID: 0}
   guidePos: {fileID: 0}
   originalPos: {fileID: 0}
-  transPos: {fileID: 0}
+  middlePos: {fileID: 0}
+  sitToLeft: 1
+  isPresenceSetting: 0
+  isMixedSetting: 1
+  isAvatarSetting: 0
   isSeated: 0
   isFov: 0
   isSeatedAndFov: 0
+  timeToReachTarget: 0
+  currentMovementTime: 0
 --- !u!4 &2780380935429303479
 Transform:
   m_ObjectHideFlags: 0
@@ -16689,6 +16841,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1537809272}
+  - {fileID: 1512761170}
   - {fileID: 2454652954034266459}
   m_Father: {fileID: 3114112696346037895}
   m_RootOrder: 0
@@ -16838,7 +16992,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &3114112697428339912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17718,7 +17872,7 @@ RectTransform:
   - {fileID: 1609408054}
   - {fileID: 428763762}
   m_Father: {fileID: 2454652954034266459}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -18021,7 +18175,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 462110720233417092}
-  m_LocalRotation: {x: -0.004173478, y: -0.06748574, z: -0.019869873, w: 0.99751365}
+  m_LocalRotation: {x: -0.14030986, y: 0.03931617, z: 0.0059388294, w: 0.9893089}
   m_LocalPosition: {x: 0.03273677, y: 0.07959301, z: 0.07338554}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
@@ -25274,50 +25428,50 @@ SkinnedMeshRenderer:
   - 0
   - 0
   - 0
-  - 91.852905
-  - 47.128555
-  - 10.609828
+  - 2.984773
+  - 13.0217495
+  - 33.28337
+  - 19.386093
+  - 0.6833943
+  - 33.31774
+  - 18.991613
+  - 10.641921
+  - 5.1412287
   - 0
-  - 90.5443
-  - 10.61123
+  - 5.662216
+  - 6.1362343
+  - 12.800079
+  - 14.298065
   - 0
-  - 2.4648645
-  - 4.637527
-  - 0
-  - 5.6231523
-  - 7.004138
-  - 13.391674
-  - 57.986683
-  - 0.2455297
-  - 0
-  - 0
-  - 0
-  - 8.88637
-  - 2.2201314
-  - 2.1810982
-  - 1.9701908
-  - 10.679434
-  - 8.376995
-  - 6.8288283
-  - 2.3082957
-  - 29.905437
-  - 22.03674
-  - 14.985326
-  - 19.460037
-  - 4.1575694
-  - 3.5739615
-  - 3.1637266
-  - 2.5723019
-  - 15.436457
-  - 17.091845
-  - 10.639301
+  - 0.7619397
+  - 2.7501845
+  - 2.1239355
   - 0
   - 0
-  - 22.585735
-  - 9.298838
-  - 7.1032934
-  - 19.917358
-  - 14.378627
+  - 9.206785
+  - 8.487349
+  - 26.9215
+  - 23.475311
+  - 13.052183
+  - 5.8914056
+  - 26.710701
+  - 22.730555
+  - 11.5436735
+  - 12.273121
+  - 11.382392
+  - 11.382673
+  - 4.5465455
+  - 4.1396832
+  - 13.405577
+  - 13.474494
+  - 43.74295
+  - 0
+  - 0
+  - 9.515659
+  - 26.536905
+  - 22.179893
+  - 16.813839
+  - 13.585429
   - 0
   - 0
   - 0
@@ -26833,7 +26987,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3265508157099634148}
-  m_LocalRotation: {x: -0.30451956, y: 0.11600868, z: -0.23135372, w: 0.9166708}
+  m_LocalRotation: {x: -0.053361624, y: -0.000000059604645, z: -0.00000011920929, w: 0.9985753}
   m_LocalPosition: {x: 6.217249e-14, y: 0.0907951, z: -0.00000002607704}
   m_LocalScale: {x: 0.9999999, y: 1.0000011, z: 0.9999989}
   m_Children:
@@ -27157,50 +27311,50 @@ SkinnedMeshRenderer:
   - 0
   - 0
   - 0
-  - 91.852905
-  - 47.128555
-  - 10.609828
+  - 2.984773
+  - 13.0217495
+  - 33.28337
+  - 19.386093
+  - 0.6833943
+  - 33.31774
+  - 18.991613
+  - 10.641921
+  - 5.1412287
   - 0
-  - 90.5443
-  - 10.61123
+  - 5.662216
+  - 6.1362343
+  - 12.800079
+  - 14.298065
   - 0
-  - 2.4648645
-  - 4.637527
-  - 0
-  - 5.6231523
-  - 7.004138
-  - 13.391674
-  - 57.986683
-  - 0.2455297
-  - 0
-  - 0
-  - 0
-  - 8.88637
-  - 2.2201314
-  - 2.1810982
-  - 1.9701908
-  - 10.679434
-  - 8.376995
-  - 6.8288283
-  - 2.3082957
-  - 29.905437
-  - 22.03674
-  - 14.985326
-  - 19.460037
-  - 4.1575694
-  - 3.5739615
-  - 3.1637266
-  - 2.5723019
-  - 15.436457
-  - 17.091845
-  - 10.639301
+  - 0.7619397
+  - 2.7501845
+  - 2.1239355
   - 0
   - 0
-  - 22.585735
-  - 9.298838
-  - 7.1032934
-  - 19.917358
-  - 14.378627
+  - 9.206785
+  - 8.487349
+  - 26.9215
+  - 23.475311
+  - 13.052183
+  - 5.8914056
+  - 26.710701
+  - 22.730555
+  - 11.5436735
+  - 12.273121
+  - 11.382392
+  - 11.382673
+  - 4.5465455
+  - 4.1396832
+  - 13.405577
+  - 13.474494
+  - 43.74295
+  - 0
+  - 0
+  - 9.515659
+  - 26.536905
+  - 22.179893
+  - 16.813839
+  - 13.585429
   - 0
   - 0
   - 0
@@ -28730,7 +28884,7 @@ RectTransform:
   m_Children:
   - {fileID: 7912909469605165615}
   m_Father: {fileID: 2454652954034266459}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -31501,7 +31655,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8426418937400547069}
-  m_LocalRotation: {x: -0.005755407, y: -0.10120475, z: -0.029621223, w: 0.9944079}
+  m_LocalRotation: {x: 0.14033817, y: 0.002063976, z: 0.00031194475, w: -0.99010146}
   m_LocalPosition: {x: -0.033310317, y: 0.07965034, z: 0.073377386}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
