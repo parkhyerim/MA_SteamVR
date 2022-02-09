@@ -114,7 +114,7 @@ public class BystamderAvatar : MonoBehaviour
                         // transform.Rotate(0f, bystanderTracker.transform.rotation.y, 0f);
                         //transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY + 60, 0);
                         transform.Rotate(new Vector3(0, bystanderRotationEulerY + 60, 0));
-                        Debug.Log("Avatar Y: " + transform.localEulerAngles.y);
+                       // Debug.Log("Avatar Y: " + transform.localEulerAngles.y);
                     }
 
                     if (isSeatedAndFov)
@@ -144,11 +144,11 @@ public class BystamderAvatar : MonoBehaviour
 
                 if (isMixedSetting)
                 {
-                    Debug.Log("isMixed Critica: " + Camera.main.transform.eulerAngles.y);
+                  //  Debug.Log("isMixed Critica: " + Camera.main.transform.eulerAngles.y);
                     // presenceAnimojiBoard.transform.position = new Vector3(Camera.main.transform.position.x - 0.4f, presenceAnimojiBoard.transform.position.y - 0.2f, presenceAnimojiBoard.transform.position.z);
                     
                     if (Camera.main.transform.eulerAngles.y >= 320 || (Camera.main.transform.eulerAngles.y > 0 && Camera.main.transform.eulerAngles.y <= 90)) {
-                        Debug.Log("camera: 320");
+                       // Debug.Log("camera: 320");
                         bystanderAvatar.SetActive(false);
 
 
@@ -199,7 +199,7 @@ public class BystamderAvatar : MonoBehaviour
                         transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
                         //transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY + 60, 0);
                         transform.Rotate(new Vector3(0, bystanderRotationEulerY + 60, 0));
-                        Debug.Log("Avatar Y: " + transform.localEulerAngles);
+                      //  Debug.Log("Avatar Y: " + transform.localEulerAngles);
                     }
 
                     //if (isSeatedAndFov) {

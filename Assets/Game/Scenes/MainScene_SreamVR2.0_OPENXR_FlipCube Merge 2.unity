@@ -877,11 +877,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e082207f971a01a4bad15446dcd58fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
-  isForInteraction: 1
-  isGoing: 0
-  isGoingOrigin: 0
-  isHeading: 0
+  rotateSpeed: 20
+  doInteraction: 1
+  isHeadingTo30: 0
+  isHeadingToFrontseat: 0
+  isHeadingToPlayer: 0
 --- !u!1 &220415884
 GameObject:
   m_ObjectHideFlags: 0
@@ -18301,7 +18301,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 462110720233417092}
-  m_LocalRotation: {x: -0.12594724, y: 0.03939817, z: 0.005368007, w: 0.9912398}
+  m_LocalRotation: {x: -0.13888475, y: 0.03932469, z: 0.0058821947, w: 0.98951}
   m_LocalPosition: {x: 0.03273677, y: 0.07959301, z: 0.07338554}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
@@ -31781,7 +31781,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8426418937400547069}
-  m_LocalRotation: {x: 0.12596405, y: 0.0020682828, z: 0.00028197825, w: -0.99203265}
+  m_LocalRotation: {x: 0.1389119, y: 0.002064423, z: 0.00030897153, w: -0.99030256}
   m_LocalPosition: {x: -0.033310317, y: 0.07965034, z: 0.073377386}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
