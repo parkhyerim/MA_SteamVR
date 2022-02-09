@@ -878,7 +878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 20
-  doInteraction: 1
+  doInteraction: 0
   isHeadingTo30: 0
   isHeadingToFrontseat: 0
   isHeadingToPlayer: 0
@@ -2213,7 +2213,7 @@ GameObject:
   m_Layer: 0
   m_Name: TransitionPosition
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2519,23 +2519,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderTracker: {fileID: 202137948}
-  frontImage: {fileID: 0}
-  backImage: {fileID: 0}
   bystanderAvatar: {fileID: 0}
   presenceAnimojiBoard: {fileID: 0}
+  frontImage: {fileID: 0}
+  backImage: {fileID: 0}
   FovPos: {fileID: 0}
   guidePos: {fileID: 0}
   originalPos: {fileID: 0}
   middlePos: {fileID: 0}
-  sitToLeft: 0
-  isPresenceSetting: 0
-  isMixedSetting: 0
-  isAvatarSetting: 0
-  isSeated: 0
-  isFov: 0
-  isSeatedAndFov: 0
   timeToReachTarget: 0
   currentMovementTime: 0
+  sitToLeft: 0
+  isAnimojiSetting: 0
+  isAvatarSetting: 0
+  isMixedSetting: 0
+  isSeated: 0
+  isInFOV: 0
+  isSeatedAndFov: 0
 --- !u!1001 &518156991
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4785,23 +4785,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderTracker: {fileID: 202137948}
-  frontImage: {fileID: 1609408056}
-  backImage: {fileID: 428763760}
   bystanderAvatar: {fileID: 2101755741847965763}
   presenceAnimojiBoard: {fileID: 2321244900447995938}
+  frontImage: {fileID: 1609408056}
+  backImage: {fileID: 428763760}
   FovPos: {fileID: 1175379520}
   guidePos: {fileID: 1512761169}
   originalPos: {fileID: 1689116527}
   middlePos: {fileID: 399642669}
-  sitToLeft: 1
-  isPresenceSetting: 0
-  isMixedSetting: 0
-  isAvatarSetting: 1
-  isSeated: 0
-  isFov: 1
-  isSeatedAndFov: 0
   timeToReachTarget: 5
   currentMovementTime: 0
+  sitToLeft: 1
+  isAnimojiSetting: 0
+  isAvatarSetting: 1
+  isMixedSetting: 0
+  isSeated: 0
+  isInFOV: 1
+  isSeatedAndFov: 0
 --- !u!4 &995297014
 Transform:
   m_ObjectHideFlags: 0
@@ -6393,23 +6393,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderTracker: {fileID: 202137948}
-  frontImage: {fileID: 1401731131}
-  backImage: {fileID: 1715460138}
   bystanderAvatar: {fileID: 2207856534390599402}
   presenceAnimojiBoard: {fileID: 0}
+  frontImage: {fileID: 1401731131}
+  backImage: {fileID: 1715460138}
   FovPos: {fileID: 0}
   guidePos: {fileID: 0}
   originalPos: {fileID: 0}
   middlePos: {fileID: 0}
-  sitToLeft: 1
-  isPresenceSetting: 0
-  isMixedSetting: 0
-  isAvatarSetting: 1
-  isSeated: 0
-  isFov: 0
-  isSeatedAndFov: 0
   timeToReachTarget: 0
   currentMovementTime: 0
+  sitToLeft: 1
+  isAnimojiSetting: 0
+  isAvatarSetting: 1
+  isMixedSetting: 0
+  isSeated: 0
+  isInFOV: 0
+  isSeatedAndFov: 0
 --- !u!4 &1661567234
 Transform:
   m_ObjectHideFlags: 0
@@ -6679,7 +6679,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1737252988
 Transform:
   m_ObjectHideFlags: 0
@@ -15906,23 +15906,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderTracker: {fileID: 202137948}
-  frontImage: {fileID: 1983949685}
-  backImage: {fileID: 708005704}
   bystanderAvatar: {fileID: 3050217240593658542}
   presenceAnimojiBoard: {fileID: 0}
+  frontImage: {fileID: 1983949685}
+  backImage: {fileID: 708005704}
   FovPos: {fileID: 0}
   guidePos: {fileID: 0}
   originalPos: {fileID: 0}
   middlePos: {fileID: 0}
-  sitToLeft: 1
-  isPresenceSetting: 0
-  isMixedSetting: 1
-  isAvatarSetting: 0
-  isSeated: 0
-  isFov: 0
-  isSeatedAndFov: 0
   timeToReachTarget: 0
   currentMovementTime: 0
+  sitToLeft: 1
+  isAnimojiSetting: 0
+  isAvatarSetting: 0
+  isMixedSetting: 1
+  isSeated: 0
+  isInFOV: 0
+  isSeatedAndFov: 0
 --- !u!4 &2780380935429303479
 Transform:
   m_ObjectHideFlags: 0
@@ -18301,7 +18301,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 462110720233417092}
-  m_LocalRotation: {x: -0.13888475, y: 0.03932469, z: 0.0058821947, w: 0.98951}
+  m_LocalRotation: {x: -0.14030845, y: 0.03931618, z: 0.005938774, w: 0.9893091}
   m_LocalPosition: {x: 0.03273677, y: 0.07959301, z: 0.07338554}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
@@ -31781,7 +31781,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8426418937400547069}
-  m_LocalRotation: {x: 0.1389119, y: 0.002064423, z: 0.00030897153, w: -0.99030256}
+  m_LocalRotation: {x: 0.14033677, y: 0.0020639761, z: 0.0003119418, w: -0.99010164}
   m_LocalPosition: {x: -0.033310317, y: 0.07965034, z: 0.073377386}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []

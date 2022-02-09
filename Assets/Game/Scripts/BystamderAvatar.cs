@@ -71,7 +71,6 @@ public class BystamderAvatar : MonoBehaviour
     void Update()
     {
         transform.position = bystanderTracker.transform.position;   // sync the avatar's postion with the tracker's position
-        // Debug.Log(Camera.main.transform.eulerAngles);
         bystanderRotationEulerY = bystanderTracker.transform.eulerAngles.y;
         
         middlePos.transform.position = new Vector3(
@@ -87,24 +86,22 @@ public class BystamderAvatar : MonoBehaviour
 
             // The bystander is heading towards the VR user
             if (bystanderRotationEulerY >= 60 && bystanderRotationEulerY <= 100) // critical zone: 30-0 degrees to the VR user
-            {
+            {              
                 if (isAnimojiSetting)
                 {
+                    // SetAnimoji("critical");
                     frontImage.enabled = true;
                     backImage.enabled = false;
                     frontImage.transform.localScale = new Vector2(1.5f, 1.5f);
-                   // frontImage.GetComponent<RectTransform>().rect.Set(0, 0, 100, 300);
                 }
-
-                if (isAvatarSetting)
+                else if (isAvatarSetting)
                 {                
                     if (isInFOV)
                     {
+                       // bystanderAvatar.SetActive(true);
                         transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
-                        // transform.Rotate(0f, bystanderTracker.transform.rotation.y, 0f);
-                        //transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY + 60, 0);
-                        transform.Rotate(new Vector3(0, bystanderRotationEulerY + 60, 0));
-                       // Debug.Log("Avatar Y: " + transform.localEulerAngles.y);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderRotationEulerY + 60), 0);
+                       // Debug.Log("Avatar Y axis: " + + bystanderRotationEulerY + "   " + bystanderAvatar.transform.eulerAngles.y);
                     }
 
                     if (isSeatedAndFov)
@@ -131,8 +128,7 @@ public class BystamderAvatar : MonoBehaviour
                     // transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0); // towards the front seat
                     // transform.localEulerAngles = new Vector3(0, 0, 0); // against the front seat
                 }
-
-                if (isMixedSetting)
+                else if (isMixedSetting)
                 {
                   //  Debug.Log("isMixed Critica: " + Camera.main.transform.eulerAngles.y);
                     // presenceAnimojiBoard.transform.position = new Vector3(Camera.main.transform.position.x - 0.4f, presenceAnimojiBoard.transform.position.y - 0.2f, presenceAnimojiBoard.transform.position.z);
@@ -157,7 +153,6 @@ public class BystamderAvatar : MonoBehaviour
                         backImage.enabled = false;
 
                     } else if(Camera.main.transform.eulerAngles.y <320 && Camera.main.transform.eulerAngles.y >= 250) {
-                        Debug.Log("camera: less 320");
                         bystanderAvatar.SetActive(true);
                         transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
 
@@ -187,9 +182,7 @@ public class BystamderAvatar : MonoBehaviour
                     if (isInFOV) 
                     {
                         transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
-                        //transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY + 60, 0);
-                        transform.Rotate(new Vector3(0, bystanderRotationEulerY + 60, 0));
-                      //  Debug.Log("Avatar Y: " + transform.localEulerAngles);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderRotationEulerY + 60), 0);
                     }
 
                     //if (isSeatedAndFov) {
@@ -227,8 +220,7 @@ public class BystamderAvatar : MonoBehaviour
                     if (isInFOV)
                     {
                         transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
-                        //transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY + 60, 0);
-                        transform.Rotate(new Vector3(0, bystanderRotationEulerY + 60, 0));
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderRotationEulerY + 60), 0);
                     }
 
                     transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
@@ -411,6 +403,15 @@ public class BystamderAvatar : MonoBehaviour
     Vector3 EulerAngles(Quaternion trs)
     {
         return trs.eulerAngles;
+    }
+
+    private void SetAnimoji(string rotationDegrees)
+    {
+      
+        frontImage.enabled = true;
+        backImage.enabled = false;
+        frontImage.transform.localScale = new Vector2(1.5f, 1.5f);
+        // frontImage.GetComponent<RectTransform>().rect.Set(0, 0, 100, 300);
     }
 
 
