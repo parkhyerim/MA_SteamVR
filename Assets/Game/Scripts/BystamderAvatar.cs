@@ -6,60 +6,55 @@ using UnityEngine.UI;
 public class BystamderAvatar : MonoBehaviour
 {
     public GameObject bystanderTracker;
+    private float bystanderRotationEulerY;  // bystander's y-axis
+    private float bystanderRotationOffset = 0;
+
+    public GameObject bystanderAvatar;
     // public RawImage bystandreImage;
+
+    // Variables for Animoji Setting
+    public GameObject presenceAnimojiBoard;
     public RawImage frontImage;
     public RawImage backImage;
-    public GameObject bystanderAvatar;
-    public GameObject presenceAnimojiBoard;
+
+    // variables for Avatar Setting
     public GameObject FovPos;
     public GameObject guidePos;
     public GameObject originalPos;
     public GameObject middlePos;
-    
-    private float bystanderRotationEulerY;
-    private float bystanderRotationOffset = 0;
 
-    private Quaternion bystanderRotation;
-    private Quaternion myRotation;
-    private Vector3 newRotation;
+    [Header("Game Time Settings")]
+    public float timeToReachTarget;
+    public float currentMovementTime = 0f;
 
+    // Settings
+    [Header("Study Settings")]
     public bool sitToLeft;  // Where is the bystander sitting?
-    public bool isPresenceSetting;
-    public bool isMixedSetting;
+    public bool isAnimojiSetting;
     public bool isAvatarSetting;
+    public bool isMixedSetting;
 
+    [Header("Avatar Sub-Settings")]
     public bool isSeated;
-    public bool isFov;
+    public bool isInFOV;
     public bool isSeatedAndFov;
     //  public Transform infoBubble;
     // private Text infoText;
-
-    /*
-     * awareness information: presence, (location), orientation 
-     */
-
-    public float timeToReachTarget;
-    public float currentMovementTime = 0f;
-    private void Awake()
-    {
-        // bystanderAvatar.SetActive(true);
-        
-    }
-
+    Vector3 newRotation;
+ 
     // Start is called before the first frame update
     void Start()
     {
-        if(!(isPresenceSetting || isMixedSetting || isAvatarSetting))
-            isPresenceSetting = true;
+        if(!(isAnimojiSetting || isMixedSetting || isAvatarSetting))
+            isAvatarSetting = true;
 
-        if (isAvatarSetting && !(isSeated || isFov || isSeatedAndFov))
-            isSeated = true;
+        if (isAvatarSetting && !(isSeated || isInFOV || isSeatedAndFov))
+            isInFOV = true;
 
         frontImage.enabled = false;
         backImage.enabled = false;
         bystanderAvatar.SetActive(false);
 
-        //eulerY = bystanderTracker.transform.eulerAngles.y;
         newRotation = new Vector3(0, 0, 0);
       
         //if(infoBubble != null)
@@ -75,30 +70,25 @@ public class BystamderAvatar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-       // Debug.Log(Camera.main.transform.eulerAngles);
+        transform.position = bystanderTracker.transform.position;   // sync the avatar's postion with the tracker's position
+        // Debug.Log(Camera.main.transform.eulerAngles);
         bystanderRotationEulerY = bystanderTracker.transform.eulerAngles.y;
         
-        transform.position = bystanderTracker.transform.position;
-
         middlePos.transform.position = new Vector3(
             (originalPos.transform.position.x + bystanderTracker.transform.position.x)/2, 
             (originalPos.transform.position.y + bystanderTracker.transform.position.y)/2, 
             (originalPos.transform.position.z + bystanderTracker.transform.position.z)/2);
        // Debug.Log("originalPos: "+ originalPos.transform.position + "   tracker: " + bystanderTracker.transform.position);
-       // Debug.Log("transPos: " + transPos.transform.position);
+
         // The bystander is sitting to the left of the VR Player.
         if (sitToLeft)
         {
             // infoText.text = bystanderRotationEulerY.ToString();
 
-            // The bystander is turning to the right
-            /*
-             * critical zone: 30-0 degrees to the VR user
-            */
-            if (bystanderRotationEulerY >= 60 && bystanderRotationEulerY <= 100) 
+            // The bystander is heading towards the VR user
+            if (bystanderRotationEulerY >= 60 && bystanderRotationEulerY <= 100) // critical zone: 30-0 degrees to the VR user
             {
-                if (isPresenceSetting)
+                if (isAnimojiSetting)
                 {
                     frontImage.enabled = true;
                     backImage.enabled = false;
@@ -108,7 +98,7 @@ public class BystamderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {                
-                    if (isFov)
+                    if (isInFOV)
                     {
                         transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
                         // transform.Rotate(0f, bystanderTracker.transform.rotation.y, 0f);
@@ -186,7 +176,7 @@ public class BystamderAvatar : MonoBehaviour
             else if(bystanderRotationEulerY >= 30 && bystanderRotationEulerY < 60)
             {
 
-                if (isPresenceSetting)
+                if (isAnimojiSetting)
                 {
                     backImage.enabled = false;
                     frontImage.enabled = true;
@@ -194,7 +184,7 @@ public class BystamderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
-                    if (isFov) 
+                    if (isInFOV) 
                     {
                         transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
                         //transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY + 60, 0);
@@ -226,7 +216,7 @@ public class BystamderAvatar : MonoBehaviour
             }
             else if (bystanderRotationEulerY < 30 && bystanderRotationEulerY >= 0)
             {
-                if (isPresenceSetting)
+                if (isAnimojiSetting)
                 {
                     backImage.enabled = true;
                     frontImage.enabled = false;
@@ -234,7 +224,7 @@ public class BystamderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
-                    if (isFov)
+                    if (isInFOV)
                     {
                         transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
                         //transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY + 60, 0);
@@ -256,7 +246,7 @@ public class BystamderAvatar : MonoBehaviour
             }
             else
             {
-                if (isPresenceSetting)
+                if (isAnimojiSetting)
                 {
                     backImage.enabled = false;
                     frontImage.enabled = false;
@@ -283,7 +273,7 @@ public class BystamderAvatar : MonoBehaviour
             // critical zone
             if(bystanderRotationEulerY <= 300 && bystanderRotationEulerY >= 260)
             {
-                if (isPresenceSetting)
+                if (isAnimojiSetting)
                 {
                     backImage.enabled = false;
                     frontImage.enabled = true;
@@ -292,7 +282,7 @@ public class BystamderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
-                    if (isFov)
+                    if (isInFOV)
                     {
                         transform.position = FovPos.transform.position;
                     }
@@ -330,7 +320,7 @@ public class BystamderAvatar : MonoBehaviour
             // pheriperal zone
             else if(bystanderRotationEulerY <= 330 && bystanderRotationEulerY > 300)
             {
-                if (isPresenceSetting)
+                if (isAnimojiSetting)
                 {
                     backImage.enabled = false;
                     frontImage.enabled = true;
@@ -338,7 +328,7 @@ public class BystamderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
-                    if (isFov || isSeatedAndFov)
+                    if (isInFOV || isSeatedAndFov)
                     {
                         transform.position = FovPos.transform.position;
                     }
@@ -357,7 +347,7 @@ public class BystamderAvatar : MonoBehaviour
             }
             else if(bystanderRotationEulerY <= 360 && bystanderRotationEulerY > 300)
             {
-                if (isPresenceSetting)
+                if (isAnimojiSetting)
                 {
                     backImage.enabled = true;
                     frontImage.enabled = false;
@@ -365,7 +355,7 @@ public class BystamderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
-                    if (isFov)
+                    if (isInFOV)
                     {
                         transform.position = FovPos.transform.position;
                     }
@@ -383,7 +373,7 @@ public class BystamderAvatar : MonoBehaviour
             }
             else
             {
-                if (isPresenceSetting)
+                if (isAnimojiSetting)
                 {
                     backImage.enabled = false;
                     frontImage.enabled = false;
