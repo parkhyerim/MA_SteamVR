@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System;
 
 public class MemoryCardGameManager : MonoBehaviour
 {
@@ -33,11 +34,14 @@ public class MemoryCardGameManager : MonoBehaviour
     public RotateTracker rt;
 
     public Text gameScoreText;
+    public Text timeText;
+
     [SerializeField]
     private int score;
 
     public GameObject matchEffectPrefab;
-
+    public GameObject matchEffectPrefab2;
+    float timer = 0.0f;
     private void Awake()
     {
        
@@ -45,8 +49,6 @@ public class MemoryCardGameManager : MonoBehaviour
         foreach(MemoryCard card in allCards)
         {
             allPositionsOfCards.Add(card.transform.position);
-            
-         
            
            // Debug.Log(card.name + " " + card.transform.position + " " + card.transform.localEulerAngles);
         }
@@ -66,9 +68,10 @@ public class MemoryCardGameManager : MonoBehaviour
         //
         startToShowTimer = Time.time + warmUpInSeconds;
         hideTimer = startToShowTimer + showCardsInSeconds;
-        Debug.Log(startToShowTimer + " " + hideTimer);
+      //  Debug.Log(startToShowTimer + " " + hideTimer);
         score = 0;
         gameScoreText.text = score.ToString() + "/20";
+        timeText.text = "";
 
     }
 
@@ -78,11 +81,15 @@ public class MemoryCardGameManager : MonoBehaviour
         // check the current time to see whether it's time for hiding cards
 
       
-        if (Time.time >= startToShowTimer && Time.time <= hideTimer )
+        if (Time.time >= startToShowTimer && Time.time <= hideTimer)
         {
+            timer += Time.deltaTime;
+            timeText.text = "remaining times: " + (showCardsInSeconds-Math.Round(timer));
+            Debug.Log(timer);
             //  Debug.Log(Time.time + " startToShow:" + startToShowTimer + " hideTimer: "+ hideTimer);
-           // ShowCards();
+            // ShowCards();
             if (isFront == false) {
+               
                 ShowCards();
                 isFront = true;
             }
@@ -92,7 +99,10 @@ public class MemoryCardGameManager : MonoBehaviour
     public void ShowCards()
     {
        
-       // Debug.Log("showCard called");
+     
+
+        // Debug.Log("showCard called");
+        
         Vector3 frontAngles = new Vector3(0, 0, 0);
 
         foreach(MemoryCard card in allCards) {
@@ -108,7 +118,7 @@ public class MemoryCardGameManager : MonoBehaviour
 
         //}
 
-        Invoke("HideCards", 10);
+        Invoke("HideCards", time: showCardsInSeconds);
 
 
 
@@ -124,8 +134,8 @@ public class MemoryCardGameManager : MonoBehaviour
     }
 
     public void HideCards() {
-        
-       // Debug.Log("HideCards is called");
+        timeText.text = "Game Start";
+        // Debug.Log("HideCards is called");
         Vector3 backAngles = new Vector3(0, 180, 0);
         //for (int i = 0; i < allCards.Length; i++) {
         //    allCards[i].transform.localEulerAngles = backAngles;
@@ -181,6 +191,8 @@ public class MemoryCardGameManager : MonoBehaviour
         {
             Instantiate(matchEffectPrefab, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
             Instantiate(matchEffectPrefab, secondSelectedCard.gameObject.transform.position, Quaternion.identity);
+            Instantiate(matchEffectPrefab2, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
+            Instantiate(matchEffectPrefab2, secondSelectedCard.gameObject.transform.position, Quaternion.identity);
             Destroy(firstSelectedCard.gameObject);
             Destroy(secondSelectedCard.gameObject);
             score += 2;
