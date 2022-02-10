@@ -48,7 +48,7 @@ public class MemoryCard : MonoBehaviour
 
     public void SelectCard()
     {
-        Debug.Log("Clciked");
+      //  Debug.Log("Clciked");
         FindObjectOfType<MemoryCardGameManager>().CardClicked(this);
     }
 }

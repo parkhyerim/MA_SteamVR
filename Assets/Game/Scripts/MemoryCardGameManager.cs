@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 
 public class MemoryCardGameManager : MonoBehaviour
@@ -31,6 +32,12 @@ public class MemoryCardGameManager : MonoBehaviour
 
     public RotateTracker rt;
 
+    public Text gameScoreText;
+    [SerializeField]
+    private int score;
+
+    public GameObject matchEffectPrefab;
+
     private void Awake()
     {
        
@@ -60,6 +67,8 @@ public class MemoryCardGameManager : MonoBehaviour
         startToShowTimer = Time.time + warmUpInSeconds;
         hideTimer = startToShowTimer + showCardsInSeconds;
         Debug.Log(startToShowTimer + " " + hideTimer);
+        score = 0;
+        gameScoreText.text = score.ToString() + "/20";
 
     }
 
@@ -78,15 +87,12 @@ public class MemoryCardGameManager : MonoBehaviour
                 isFront = true;
             }
         }
-        
-
-
     }
 
     public void ShowCards()
     {
        
-        Debug.Log("showCard called");
+       // Debug.Log("showCard called");
         Vector3 frontAngles = new Vector3(0, 0, 0);
 
         foreach(MemoryCard card in allCards) {
@@ -119,7 +125,7 @@ public class MemoryCardGameManager : MonoBehaviour
 
     public void HideCards() {
         
-        Debug.Log("HideCards is called");
+       // Debug.Log("HideCards is called");
         Vector3 backAngles = new Vector3(0, 180, 0);
         //for (int i = 0; i < allCards.Length; i++) {
         //    allCards[i].transform.localEulerAngles = backAngles;
@@ -172,9 +178,13 @@ public class MemoryCardGameManager : MonoBehaviour
     {      
         // RESULT
         if (firstSelectedCard.identifier == secondSelectedCard.identifier)
-        {          
+        {
+            Instantiate(matchEffectPrefab, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
+            Instantiate(matchEffectPrefab, secondSelectedCard.gameObject.transform.position, Quaternion.identity);
             Destroy(firstSelectedCard.gameObject);
             Destroy(secondSelectedCard.gameObject);
+            score += 2;
+            gameScoreText.text = score.ToString() + "/20";
 
             audioSource.PlayOneShot(clipCardMatch);
         }
