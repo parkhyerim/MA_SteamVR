@@ -54,7 +54,7 @@ public class MemoryCardGameManager : MonoBehaviour
         }
 
         AngleOfCards = allCards[0].transform.localEulerAngles;
-        Debug.Log(AngleOfCards);
+       // ** Debug.Log(AngleOfCards);
         // Randomize the positions of the cards
         System.Random randomNumber = new System.Random();
         allPositionsOfCards = allPositionsOfCards.OrderBy(position => randomNumber.Next()).ToList();
@@ -85,7 +85,7 @@ public class MemoryCardGameManager : MonoBehaviour
         {
             timer += Time.deltaTime;
             timeText.text = "remaining times: " + (showCardsInSeconds-Math.Round(timer));
-            Debug.Log(timer);
+            // *** Debug.Log(timer);
             //  Debug.Log(Time.time + " startToShow:" + startToShowTimer + " hideTimer: "+ hideTimer);
             // ShowCards();
             if (isFront == false) {

@@ -29,5 +29,5 @@ MonoBehaviour:
   m_Expanded: 1
   m_InterfacesExpanded: 1
   m_ClientsExpanded: 1
-  m_Port: 9000
+  m_Port: 8000
   m_AutoStartOnPlay: 1
