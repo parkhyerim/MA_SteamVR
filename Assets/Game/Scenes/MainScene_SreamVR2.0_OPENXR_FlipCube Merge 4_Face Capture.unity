@@ -377,7 +377,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &35715107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,65 +393,65 @@ MonoBehaviour:
   m_Mapper: {fileID: 11400000, guid: 4f2198c100b55e347b6ee725ef5f4e0f, type: 2}
   m_EnabledChannels: 9
   m_BlendShapes:
-    BrowDownLeft: 0
-    BrowDownRight: 0
-    BrowInnerUp: 0.24989249
-    BrowOuterUpLeft: 0.09126252
-    BrowOuterUpRight: 0.09222446
-    CheekPuff: 0.060227036
-    CheekSquintLeft: 0.06431771
-    CheekSquintRight: 0.06282376
-    EyeBlinkLeft: 0
-    EyeBlinkRight: 0
-    EyeLookDownLeft: 0.068724185
-    EyeLookDownRight: 0.06927802
-    EyeLookInLeft: 0.180257
-    EyeLookInRight: 0
+    BrowDownLeft: 0.036785968
+    BrowDownRight: 0.039747886
+    BrowInnerUp: 0.13863458
+    BrowOuterUpLeft: 0
+    BrowOuterUpRight: 0
+    CheekPuff: 0.05540487
+    CheekSquintLeft: 0.07187558
+    CheekSquintRight: 0.08528207
+    EyeBlinkLeft: 0.0692628
+    EyeBlinkRight: 0.10192836
+    EyeLookDownLeft: 0.0923059
+    EyeLookDownRight: 0.092294194
+    EyeLookInLeft: 0.009360758
+    EyeLookInRight: 0.11194561
     EyeLookOutLeft: 0
-    EyeLookOutRight: 0.05860819
+    EyeLookOutRight: 0
     EyeLookUpLeft: 0
     EyeLookUpRight: 0
-    EyeSquintLeft: 0.121882066
-    EyeSquintRight: 0.1222353
-    EyeWideLeft: 0.17239687
-    EyeWideRight: 0.17360786
-    JawForward: 0.053330842
-    JawLeft: 0.069215365
-    JawOpen: 0.03952328
+    EyeSquintLeft: 0.1694935
+    EyeSquintRight: 0.17514189
+    EyeWideLeft: 0
+    EyeWideRight: 0
+    JawForward: 0.020349907
+    JawLeft: 0.061333988
+    JawOpen: 0.048162475
     JawRight: 0
-    MouthClose: 0.046770807
-    MouthDimpleLeft: 0.029004555
-    MouthDimpleRight: 0.026035005
-    MouthFrownLeft: 0.2643799
-    MouthFrownRight: 0.25245968
-    MouthFunnel: 0.05281109
-    MouthLeft: 0.016901689
-    MouthLowerDownLeft: 0.044713352
-    MouthLowerDownRight: 0.043635815
-    MouthPressLeft: 0.050391406
-    MouthPressRight: 0.050767016
-    MouthPucker: 0.109256044
+    MouthClose: 0.062590025
+    MouthDimpleLeft: 0.024038017
+    MouthDimpleRight: 0.022114832
+    MouthFrownLeft: 0.10263573
+    MouthFrownRight: 0.09445748
+    MouthFunnel: 0.08508256
+    MouthLeft: 0.017959572
+    MouthLowerDownLeft: 0.043004338
+    MouthLowerDownRight: 0.043333136
+    MouthPressLeft: 0.036163703
+    MouthPressRight: 0.04143832
+    MouthPucker: 0.18214865
     MouthRight: 0
-    MouthRollLower: 0.07112336
-    MouthRollUpper: 0.021315958
-    MouthShrugLower: 0.21338387
-    MouthShrugUpper: 0.17946726
+    MouthRollLower: 0.057430416
+    MouthRollUpper: 0.019132053
+    MouthShrugLower: 0.13072053
+    MouthShrugUpper: 0.14007801
     MouthSmileLeft: 0
     MouthSmileRight: 0
-    MouthStretchLeft: 0.13105026
-    MouthStretchRight: 0.10676553
-    MouthUpperUpLeft: 0.014129276
-    MouthUpperUpRight: 0.014091598
-    NoseSneerLeft: 0.057675213
-    NoseSneerRight: 0.053579412
-    TongueOut: 0.00000014244517
+    MouthStretchLeft: 0.1074149
+    MouthStretchRight: 0.08827537
+    MouthUpperUpLeft: 0.015599506
+    MouthUpperUpRight: 0.014876034
+    NoseSneerLeft: 0.09374977
+    NoseSneerRight: 0.08129197
+    TongueOut: 0.0000022048243
   m_HeadPosition: {x: 0, y: 0, z: 0}
   m_HeadOrientation: {x: 5.8439846, y: 0.6283776, z: 357.37256}
-  m_LeftEyeOrientation: {x: 2.4231763, y: 2.0531237, z: 0.08684275}
-  m_RightEyeOrientation: {x: 2.3907707, y: 6.3145146, z: 0.2644779}
+  m_LeftEyeOrientation: {x: 3.2227392, y: 356.07568, z: 359.77905}
+  m_RightEyeOrientation: {x: 3.230654, y: 0.32814804, z: 0.018493205}
   m_BlendShapesEnabled: 1
   m_HeadPositionEnabled: 0
-  m_HeadOrientationEnabled: 1
+  m_HeadOrientationEnabled: 0
   m_EyeOrientationEnabled: 1
 --- !u!95 &35715108
 Animator:
@@ -592,62 +592,62 @@ MonoBehaviour:
     Channels: 9
   m_Pose:
     BlendShapes:
-      BrowDownLeft: 0
-      BrowDownRight: 0
-      BrowInnerUp: 0.24989249
-      BrowOuterUpLeft: 0.09126252
-      BrowOuterUpRight: 0.09222446
-      CheekPuff: 0.060227036
-      CheekSquintLeft: 0.06431771
-      CheekSquintRight: 0.06282376
-      EyeBlinkLeft: 0
-      EyeBlinkRight: 0
-      EyeLookDownLeft: 0.068724185
-      EyeLookDownRight: 0.06927802
-      EyeLookInLeft: 0.180257
-      EyeLookInRight: 0
+      BrowDownLeft: 0.036785968
+      BrowDownRight: 0.039747886
+      BrowInnerUp: 0.13863458
+      BrowOuterUpLeft: 0
+      BrowOuterUpRight: 0
+      CheekPuff: 0.05540487
+      CheekSquintLeft: 0.07187558
+      CheekSquintRight: 0.08528207
+      EyeBlinkLeft: 0.0692628
+      EyeBlinkRight: 0.10192836
+      EyeLookDownLeft: 0.0923059
+      EyeLookDownRight: 0.092294194
+      EyeLookInLeft: 0.009360758
+      EyeLookInRight: 0.11194561
       EyeLookOutLeft: 0
-      EyeLookOutRight: 0.05860819
+      EyeLookOutRight: 0
       EyeLookUpLeft: 0
       EyeLookUpRight: 0
-      EyeSquintLeft: 0.121882066
-      EyeSquintRight: 0.1222353
-      EyeWideLeft: 0.17239687
-      EyeWideRight: 0.17360786
-      JawForward: 0.053330842
-      JawLeft: 0.069215365
-      JawOpen: 0.03952328
+      EyeSquintLeft: 0.1694935
+      EyeSquintRight: 0.17514189
+      EyeWideLeft: 0
+      EyeWideRight: 0
+      JawForward: 0.020349907
+      JawLeft: 0.061333988
+      JawOpen: 0.048162475
       JawRight: 0
-      MouthClose: 0.046770807
-      MouthDimpleLeft: 0.029004555
-      MouthDimpleRight: 0.026035005
-      MouthFrownLeft: 0.2643799
-      MouthFrownRight: 0.25245968
-      MouthFunnel: 0.05281109
-      MouthLeft: 0.016901689
-      MouthLowerDownLeft: 0.044713352
-      MouthLowerDownRight: 0.043635815
-      MouthPressLeft: 0.050391406
-      MouthPressRight: 0.050767016
-      MouthPucker: 0.109256044
+      MouthClose: 0.062590025
+      MouthDimpleLeft: 0.024038017
+      MouthDimpleRight: 0.022114832
+      MouthFrownLeft: 0.10263573
+      MouthFrownRight: 0.09445748
+      MouthFunnel: 0.08508256
+      MouthLeft: 0.017959572
+      MouthLowerDownLeft: 0.043004338
+      MouthLowerDownRight: 0.043333136
+      MouthPressLeft: 0.036163703
+      MouthPressRight: 0.04143832
+      MouthPucker: 0.18214865
       MouthRight: 0
-      MouthRollLower: 0.07112336
-      MouthRollUpper: 0.021315958
-      MouthShrugLower: 0.21338387
-      MouthShrugUpper: 0.17946726
+      MouthRollLower: 0.057430416
+      MouthRollUpper: 0.019132053
+      MouthShrugLower: 0.13072053
+      MouthShrugUpper: 0.14007801
       MouthSmileLeft: 0
       MouthSmileRight: 0
-      MouthStretchLeft: 0.13105026
-      MouthStretchRight: 0.10676553
-      MouthUpperUpLeft: 0.014129276
-      MouthUpperUpRight: 0.014091598
-      NoseSneerLeft: 0.057675213
-      NoseSneerRight: 0.053579412
-      TongueOut: 0.00000014244517
-    HeadPosition: {x: 0.04755051, y: 0.015634619, z: -0.29783094}
-    HeadOrientation: {x: -0.050836563, y: -0.0066437293, z: 0.023175925, w: -0.99841595}
-    LeftEyeOrientation: {x: -0.0211548, y: -0.017895894, z: -0.00037872946, w: -0.999616}
-    RightEyeOrientation: {x: -0.020957265, y: -0.055016443, z: -0.0011549982, w: -0.99826485}
+      MouthStretchLeft: 0.1074149
+      MouthStretchRight: 0.08827537
+      MouthUpperUpLeft: 0.015599506
+      MouthUpperUpRight: 0.014876034
+      NoseSneerLeft: 0.09374977
+      NoseSneerRight: 0.08129197
+      TongueOut: 0.0000022048243
+    HeadPosition: {x: 0.07753852, y: -0.046870973, z: -0.30994028}
+    HeadOrientation: {x: 0.019953229, y: -0.04706973, z: 0.1271716, w: -0.9905623}
+    LeftEyeOrientation: {x: -0.028169451, y: 0.0341716, z: 0.000963541, w: -0.99901843}
+    RightEyeOrientation: {x: -0.028189387, y: -0.0028579405, z: -0.00008059595, w: -0.9995985}
 --- !u!4 &82044124
 Transform:
   m_ObjectHideFlags: 0
@@ -1136,7 +1136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 20
-  doInteraction: 1
+  doInteraction: 0
   isHeadingTo30: 0
   isHeadingToFrontseat: 0
   isHeadingToPlayer: 0
@@ -2666,7 +2666,7 @@ MonoBehaviour:
     m_UnityObject: {fileID: 366949825}
     m_Directory: Assets/Takes
     m_SceneNumber: 1
-    m_Name: Interaction
+    m_Name: Interaction6
     m_TakeNumber: 1
     m_Description: 
     m_Take: {fileID: 11400000, guid: 83f41c2c2c02ccf4cadd953300af410c, type: 2}
@@ -7223,7 +7223,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1315134023}
-  m_LocalRotation: {x: -0.12247494, y: 0.017656427, z: 0.0029422634, w: 0.99231017}
+  m_LocalRotation: {x: -0.116735004, y: -0.033672277, z: -0.0058997287, w: 0.99257463}
   m_LocalPosition: {x: -0.033310317, y: 0.07965034, z: 0.073377386}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
@@ -7350,7 +7350,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1363544497}
-  m_LocalRotation: {x: -0.122476585, y: 0.054281615, z: 0.009036039, w: 0.9909447}
+  m_LocalRotation: {x: -0.11679924, y: 0.0028161753, z: 0.0004934337, w: 0.9931514}
   m_LocalPosition: {x: 0.03273677, y: 0.07959301, z: 0.07338554}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
@@ -10410,50 +10410,50 @@ SkinnedMeshRenderer:
   - 0
   - 0
   - 0
-  - 13.8002205
-  - 18.0257
-  - 12.188207
-  - 17.239687
+  - 18.46001
+  - 7.8623557
+  - 16.94935
   - 0
-  - 12.22353
-  - 17.360786
-  - 5.333084
-  - 6.9215364
+  - 21.387398
+  - 17.514189
   - 0
-  - 3.9523282
-  - 4.6770806
-  - 5.281109
-  - 10.925605
-  - 1.6901689
+  - 2.0349908
+  - 6.133399
   - 0
-  - 0
-  - 0
-  - 26.437988
-  - 25.245968
-  - 2.9004555
-  - 2.6035006
-  - 13.105026
-  - 10.676553
-  - 7.112336
-  - 2.1315958
-  - 21.338387
-  - 17.946726
-  - 5.0391407
-  - 5.0767016
-  - 4.4713354
-  - 4.3635817
-  - 1.4129276
-  - 1.4091598
+  - 4.8162475
+  - 6.2590027
+  - 8.508256
+  - 18.214865
+  - 1.7959572
   - 0
   - 0
-  - 24.989248
-  - 9.126252
-  - 9.2224455
-  - 6.0227036
-  - 6.4317713
-  - 6.282376
-  - 5.7675214
-  - 5.357941
+  - 0
+  - 10.263573
+  - 9.445747
+  - 2.4038017
+  - 2.2114832
+  - 10.74149
+  - 8.827538
+  - 5.7430415
+  - 1.9132054
+  - 13.072053
+  - 14.007801
+  - 3.6163702
+  - 4.1438317
+  - 4.3004336
+  - 4.3333135
+  - 1.5599506
+  - 1.4876034
+  - 3.6785967
+  - 3.9747887
+  - 13.863458
+  - 0
+  - 0
+  - 5.5404873
+  - 7.187558
+  - 8.528207
+  - 9.374977
+  - 8.129197
   - 0
   - 0
   - 0
@@ -13689,50 +13689,50 @@ SkinnedMeshRenderer:
   - 0
   - 0
   - 0
-  - 13.8002205
-  - 18.0257
-  - 12.188207
-  - 17.239687
+  - 18.46001
+  - 7.8623557
+  - 16.94935
   - 0
-  - 12.22353
-  - 17.360786
-  - 5.333084
-  - 6.9215364
+  - 21.387398
+  - 17.514189
   - 0
-  - 3.9523282
-  - 4.6770806
-  - 5.281109
-  - 10.925605
-  - 1.6901689
+  - 2.0349908
+  - 6.133399
   - 0
-  - 0
-  - 0
-  - 26.437988
-  - 25.245968
-  - 2.9004555
-  - 2.6035006
-  - 13.105026
-  - 10.676553
-  - 7.112336
-  - 2.1315958
-  - 21.338387
-  - 17.946726
-  - 5.0391407
-  - 5.0767016
-  - 4.4713354
-  - 4.3635817
-  - 1.4129276
-  - 1.4091598
+  - 4.8162475
+  - 6.2590027
+  - 8.508256
+  - 18.214865
+  - 1.7959572
   - 0
   - 0
-  - 24.989248
-  - 9.126252
-  - 9.2224455
-  - 6.0227036
-  - 6.4317713
-  - 6.282376
-  - 5.7675214
-  - 5.357941
+  - 0
+  - 10.263573
+  - 9.445747
+  - 2.4038017
+  - 2.2114832
+  - 10.74149
+  - 8.827538
+  - 5.7430415
+  - 1.9132054
+  - 13.072053
+  - 14.007801
+  - 3.6163702
+  - 4.1438317
+  - 4.3004336
+  - 4.3333135
+  - 1.5599506
+  - 1.4876034
+  - 3.6785967
+  - 3.9747887
+  - 13.863458
+  - 0
+  - 0
+  - 5.5404873
+  - 7.187558
+  - 8.528207
+  - 9.374977
+  - 8.129197
   - 0
   - 0
   - 0
