@@ -198,9 +198,6 @@ public class BystanderAvatar : MonoBehaviour
                     // presenceAnimojiBoard.transform.position = new Vector3(Camera.main.transform.position.x - 0.4f, presenceAnimojiBoard.transform.position.y - 0.2f, presenceAnimojiBoard.transform.position.z);
 
                     if (mainCameraYAxis >= 320 || (mainCameraYAxis > 0 && mainCameraYAxis <= 90)) {
-                       // Debug.Log("camera: 320");
-                       
-
                         if (isInFOV)
                         {
                             bystanderAvatar.SetActive(true);
