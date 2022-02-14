@@ -150,7 +150,8 @@ public class MemoryCardGameManager : MonoBehaviour
         Invoke("BystanderStart", 3f);
     }
 
-    public void BystanderStart() {
+    public void BystanderStart()
+    {
         rt.isHeadingToPlayer = true;
     }
  

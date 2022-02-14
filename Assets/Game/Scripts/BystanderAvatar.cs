@@ -3,33 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BystamderAvatar : MonoBehaviour
+public class BystanderAvatar : MonoBehaviour
 {
     public GameObject bystanderTracker;
-    private float bystanderRotationEulerY;  // bystander's y-axis
+    public Transform tracker;
+    private float bystanderYAxis;  // bystander's euler y-axis
     private float bystanderRotationOffset = 0;
 
     public GameObject bystanderAvatar;
     // public RawImage bystandreImage;
 
+    [Header("GOs for Animoji")]
     // Variables for Animoji Setting
     public GameObject presenceAnimojiBoard;
     public RawImage frontImage;
     public RawImage backImage;
 
+    [Header("GOs for Avatar")]
     // variables for Avatar Setting
-    public GameObject FovPos;
+    public GameObject FOVPos;
     public GameObject guidePos;
     public GameObject originalPos;
     public GameObject middlePos;
     private Transform guidingPos;
 
-    [Header("Game Time Settings")]
+    [Header("Time Settings")]
     public float timeToReachTarget;
     public float currentMovementTime = 0f;
 
     // Settings
-    [Header("Study Settings")]
+    [Header("User-Study Settings")]
     public bool sitToLeft;  // Where is the bystander sitting?
     public bool isAnimojiSetting;
     public bool isAvatarSetting;
@@ -39,21 +42,23 @@ public class BystamderAvatar : MonoBehaviour
     public bool isSeated;
     public bool isInFOV;
     public bool isSeatedAndInFOV;
-    //  public Transform infoBubble;
+    // public Transform infoBubble;
     // private Text infoText;
     Vector3 newRotation;
 
-    private float cameraYAxis;
+    private float mainCameraYAxis;
     public bool isGuiding;
     public bool isguided;
  
     // Start is called before the first frame update
     void Start()
-    {
-        guidingPos = GetComponent<Transform>();
+    { 
+        guidingPos = GetComponent<Transform>(); // TODO: for what?
+
+        // Default setting: avatar setting
         if(!(isAnimojiSetting || isMixedSetting || isAvatarSetting))
             isAvatarSetting = true;
-
+        // Default setting: avatar-FOV 
         if (isAvatarSetting && !(isSeated || isInFOV || isSeatedAndInFOV))
             isInFOV = true;
 
@@ -62,35 +67,41 @@ public class BystamderAvatar : MonoBehaviour
         bystanderAvatar.SetActive(false);
 
         newRotation = new Vector3(0, 0, 0);
-      
+
         //if(infoBubble != null)
         //{
         //    infoText = GetComponentInChildren<Text>();
         //    infoText.text = "Bystander Rotation:";
         //}
 
-        bystanderRotationEulerY = bystanderTracker.transform.eulerAngles.y;
-        bystanderRotationOffset = bystanderRotationEulerY - 0f;
-        cameraYAxis = Camera.main.transform.eulerAngles.y;
+        // bystanderYAxis = bystanderTracker.transform.eulerAngles.y;
+        bystanderYAxis = tracker.eulerAngles.y;
+        bystanderRotationOffset = bystanderYAxis - 0f;
+        mainCameraYAxis = Camera.main.transform.eulerAngles.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = bystanderTracker.transform.position;   // sync the avatar's postion with the tracker's position
-        bystanderRotationEulerY = bystanderTracker.transform.eulerAngles.y;
-        cameraYAxis = Camera.main.transform.eulerAngles.y;
+        //transform.position = bystanderTracker.transform.position;   // sync the avatar's postion with the tracker's position
+        transform.position = tracker.position;
+      //  bystanderYAxis = bystanderTracker.transform.eulerAngles.y;
+        bystanderYAxis = tracker.eulerAngles.y;
+        mainCameraYAxis = Camera.main.transform.eulerAngles.y;
 
+        // For animoji guiding
         middlePos.transform.position = new Vector3(
-            (originalPos.transform.position.x + bystanderTracker.transform.position.x)/2, 
-            (originalPos.transform.position.y + bystanderTracker.transform.position.y)/2, 
-            (originalPos.transform.position.z + bystanderTracker.transform.position.z)/2);
+            (originalPos.transform.position.x + tracker.position.x)/2, 
+            (originalPos.transform.position.y + tracker.position.y)/2, 
+            (originalPos.transform.position.z + tracker.position.z)/2);
         // Debug.Log("originalPos: "+ originalPos.transform.position + "   tracker: " + bystanderTracker.transform.position);
 
+
+        // For avatar guiding to seated pos
         guidingPos.position = new Vector3(
-            (FovPos.transform.position.x + bystanderTracker.transform.position.x) / 2,
-            (FovPos.transform.position.y + bystanderTracker.transform.position.y) / 2,
-            (FovPos.transform.position.z + bystanderTracker.transform.position.z) / 2);
+            (FOVPos.transform.position.x + tracker.position.x) / 2,
+            (FOVPos.transform.position.y + tracker.position.y) / 2,
+            (FOVPos.transform.position.z + tracker.position.z) / 2);
             
 
         // The bystander is sitting to the left of the VR Player.
@@ -99,7 +110,7 @@ public class BystamderAvatar : MonoBehaviour
             // infoText.text = bystanderRotationEulerY.ToString();
 
             // The bystander is heading towards the VR user
-            if (bystanderRotationEulerY >= 60 && bystanderRotationEulerY <= 100) // critical zone: 30-0 degrees to the VR user
+            if (bystanderYAxis >= 60 && bystanderYAxis <= 100) // critical zone: 30-0 degrees to the VR user
             {              
                 if (isAnimojiSetting)
                 {
@@ -113,26 +124,26 @@ public class BystamderAvatar : MonoBehaviour
                     if (isInFOV)
                     {
                        // bystanderAvatar.SetActive(true);
-                        transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderRotationEulerY + 60), 0);
+                        transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 60), 0);
                        // Debug.Log("Avatar Y axis: " + + bystanderRotationEulerY + "   " + bystanderAvatar.transform.eulerAngles.y);
                     }
 
                     if (isSeatedAndInFOV)
                     {
-                        if(cameraYAxis >= 250 && cameraYAxis <= 310) // VR user is heading towards the bystander
+                        if(mainCameraYAxis >= 250 && mainCameraYAxis <= 310) // VR user is heading towards the bystander
                         {
                             transform.position = bystanderTracker.transform.position;
-                            bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
                         } 
-                        else if(cameraYAxis > 310 && cameraYAxis <= 315)
+                        else if(mainCameraYAxis > 310 && mainCameraYAxis <= 315)
                         {
                             bystanderAvatar.SetActive(false);
                         }
                         else
                         {
-                            bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderRotationEulerY + 60), 0);
-                            transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 60), 0);
+                            transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
 
 
                             //if (!isGuiding)
@@ -152,7 +163,7 @@ public class BystamderAvatar : MonoBehaviour
                         }
                     }
         
-                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     bystanderAvatar.SetActive(true);
  
                     // fully fade in (1) the image with the duration of 2
@@ -165,7 +176,7 @@ public class BystamderAvatar : MonoBehaviour
                   //  Debug.Log("isMixed Critica: " + Camera.main.transform.eulerAngles.y);
                     // presenceAnimojiBoard.transform.position = new Vector3(Camera.main.transform.position.x - 0.4f, presenceAnimojiBoard.transform.position.y - 0.2f, presenceAnimojiBoard.transform.position.z);
                     
-                    if (cameraYAxis >= 320 || (cameraYAxis > 0 && cameraYAxis <= 90)) {
+                    if (mainCameraYAxis >= 320 || (mainCameraYAxis > 0 && mainCameraYAxis <= 90)) {
                        // Debug.Log("camera: 320");
                         bystanderAvatar.SetActive(false);
 
@@ -184,9 +195,9 @@ public class BystamderAvatar : MonoBehaviour
                         frontImage.enabled = true;
                         backImage.enabled = false;
 
-                    } else if(cameraYAxis < 320 && cameraYAxis >= 250) {
+                    } else if(mainCameraYAxis < 320 && mainCameraYAxis >= 250) {
                         bystanderAvatar.SetActive(true);
-                        transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                        transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
 
                         frontImage.enabled = false;
                         backImage.enabled = false;
@@ -200,7 +211,7 @@ public class BystamderAvatar : MonoBehaviour
                 //    infoText.text = "Bystander's direnction: " + rotationEulerY;
 
             }
-            else if(bystanderRotationEulerY >= 30 && bystanderRotationEulerY < 60)
+            else if(bystanderYAxis >= 30 && bystanderYAxis < 60)
             {
 
                 if (isAnimojiSetting)
@@ -213,8 +224,8 @@ public class BystamderAvatar : MonoBehaviour
                 {
                     if (isInFOV) 
                     {
-                        transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderRotationEulerY + 60), 0);
+                        transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 60), 0);
                     }
 
                     //if (isSeatedAndFov) {
@@ -224,7 +235,7 @@ public class BystamderAvatar : MonoBehaviour
                     //}
 
 
-                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     //transform.localEulerAngles = new Vector3(0, 180, 0); // towards the front seat
                     // bystandreImage.CrossFadeAlpha(1, 1.0f, false);
                     bystanderAvatar.SetActive(true);
@@ -239,7 +250,7 @@ public class BystamderAvatar : MonoBehaviour
                     frontImage.transform.localScale = new Vector2(1f, 1f);
                 }
             }
-            else if (bystanderRotationEulerY < 30 && bystanderRotationEulerY >= 0)
+            else if (bystanderYAxis < 30 && bystanderYAxis >= 0)
             {
                 if (isAnimojiSetting)
                 {
@@ -251,11 +262,11 @@ public class BystamderAvatar : MonoBehaviour
                 {
                     if (isInFOV)
                     {
-                        transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderRotationEulerY + 60), 0);
+                        transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 60), 0);
                     }
 
-                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     // bystandreImage.CrossFadeAlpha(0, 1.0f, false);
                     bystanderAvatar.SetActive(true);
                 }
@@ -295,7 +306,7 @@ public class BystamderAvatar : MonoBehaviour
         {
             
             // critical zone
-            if(bystanderRotationEulerY <= 300 && bystanderRotationEulerY >= 260)
+            if(bystanderYAxis <= 300 && bystanderYAxis >= 260)
             {
                 if (isAnimojiSetting)
                 {
@@ -308,18 +319,18 @@ public class BystamderAvatar : MonoBehaviour
                 {
                     if (isInFOV)
                     {
-                        transform.position = FovPos.transform.position;
+                        transform.position = FOVPos.transform.position;
                     }
 
                     if (isSeatedAndInFOV)
                     {
-                        if (cameraYAxis >= 60 && cameraYAxis <= 100)
+                        if (mainCameraYAxis >= 60 && mainCameraYAxis <= 100)
                         {
                             transform.position = bystanderTracker.transform.position;
                         }
                         else
                         {
-                            transform.position = FovPos.transform.position;
+                            transform.position = FOVPos.transform.position;
                         }
                     }
 
@@ -327,14 +338,14 @@ public class BystamderAvatar : MonoBehaviour
 
 
 
-                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                    // Debug.Log(bystanderRotationEulerY);
                     bystanderAvatar.SetActive(true);
                 }
 
                 if (isMixedSetting)
                 {
-                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     bystanderAvatar.SetActive(true);
 
                     frontImage.enabled = false;
@@ -342,7 +353,7 @@ public class BystamderAvatar : MonoBehaviour
                 }
             }
             // pheriperal zone
-            else if(bystanderRotationEulerY <= 330 && bystanderRotationEulerY > 300)
+            else if(bystanderYAxis <= 330 && bystanderYAxis > 300)
             {
                 if (isAnimojiSetting)
                 {
@@ -354,11 +365,11 @@ public class BystamderAvatar : MonoBehaviour
                 {
                     if (isInFOV || isSeatedAndInFOV)
                     {
-                        transform.position = FovPos.transform.position;
+                        transform.position = FOVPos.transform.position;
                     }
 
 
-                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     bystanderAvatar.SetActive(true);
                 }
 
@@ -369,7 +380,7 @@ public class BystamderAvatar : MonoBehaviour
                     frontImage.enabled = true;
                 }
             }
-            else if(bystanderRotationEulerY <= 360 && bystanderRotationEulerY > 300)
+            else if(bystanderYAxis <= 360 && bystanderYAxis > 300)
             {
                 if (isAnimojiSetting)
                 {
@@ -381,10 +392,10 @@ public class BystamderAvatar : MonoBehaviour
                 {
                     if (isInFOV)
                     {
-                        transform.position = FovPos.transform.position;
+                        transform.position = FOVPos.transform.position;
                     }
 
-                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     bystanderAvatar.SetActive(true);
                 }
 
@@ -405,7 +416,7 @@ public class BystamderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
-                    transform.localEulerAngles = new Vector3(0, bystanderRotationEulerY, 0);
+                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     bystanderAvatar.SetActive(false);
                 }
 
@@ -448,7 +459,7 @@ public class BystamderAvatar : MonoBehaviour
 
     public void GuideToBystander()
     {
-        transform.position = new Vector3(FovPos.transform.position.x, bystanderTracker.transform.position.y, FovPos.transform.position.z);
+        transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
         //transform.position = new Vector3(middlePos.transform.position.x, bystanderTracker.transform.position.y, middlePos.transform.position.z);
         isGuiding = true;
         if (isguided)
