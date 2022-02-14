@@ -13,6 +13,9 @@ public class BystanderAvatar : MonoBehaviour
     public GameObject bystanderAvatar;
     // public RawImage bystandreImage;
 
+    public Animator bystanderAnim;
+    public bool doInteraction;
+
     [Header("GOs for Animoji")]
     // Variables for Animoji Setting
     public GameObject presenceAnimojiBoard;
@@ -53,10 +56,11 @@ public class BystanderAvatar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     { 
-        guidingPos = GetComponent<Transform>(); // TODO: for what?
+        guidingPos = GetComponent<Transform>(); // For Avatar Setting (FOV -> Seated)
+        bystanderAnim.SetBool("isInteracting", false);
 
         // Default setting: avatar setting
-        if(!(isAnimojiSetting || isMixedSetting || isAvatarSetting))
+        if (!(isAnimojiSetting || isMixedSetting || isAvatarSetting))
             isAvatarSetting = true;
         // Default setting: avatar-FOV 
         if (isAvatarSetting && !(isSeated || isInFOV || isSeatedAndInFOV))
@@ -120,12 +124,20 @@ public class BystanderAvatar : MonoBehaviour
                     frontImage.transform.localScale = new Vector2(1.5f, 1.5f);
                 }
                 else if (isAvatarSetting)
-                {                
+                {
+                    if (doInteraction)
+                    {
+                        bystanderAnim.SetBool("isInteracting", true);
+                    }
+                    else
+                    {
+                        bystanderAnim.SetBool("isInteracting", false);
+                    }
                     if (isInFOV)
                     {
                        // bystanderAvatar.SetActive(true);
                         transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 60), 0);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
                        // Debug.Log("Avatar Y axis: " + + bystanderRotationEulerY + "   " + bystanderAvatar.transform.eulerAngles.y);
                     }
 
@@ -133,6 +145,7 @@ public class BystanderAvatar : MonoBehaviour
                     {
                         if(mainCameraYAxis >= 250 && mainCameraYAxis <= 310) // VR user is heading towards the bystander
                         {
+                            Debug.Log("called");
                             transform.position = bystanderTracker.transform.position;
                             bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
                         } 
@@ -142,17 +155,16 @@ public class BystanderAvatar : MonoBehaviour
                         }
                         else
                         {
-                            bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 60), 0);
-                            transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-
-
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                            transform.position = new Vector3(FOVPos.transform.position.x, tracker.position.y, FOVPos.transform.position.z);
+                           
                             //if (!isGuiding)
                             //{
 
 
                             //    GuideToBystander();
                             //}
-                            
+
                             //if(isGuiding && !isguided)
                             //{
                             //    Invoke("SetGuided", 2f);
@@ -222,19 +234,21 @@ public class BystanderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
+                    bystanderAnim.SetBool("isInteracting", false);
                     if (isInFOV) 
                     {
                         transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 60), 0);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
                     }
 
-                    //if (isSeatedAndFov) {
+                    //if (isSeatedAndInFOV)
+                    //{
                     //    bystanderAvatar.SetActive(true);
                     //    transform.position = bystanderTracker.transform.position;
 
                     //}
 
-
+                    transform.position = bystanderTracker.transform.position;
                     transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     //transform.localEulerAngles = new Vector3(0, 180, 0); // towards the front seat
                     // bystandreImage.CrossFadeAlpha(1, 1.0f, false);
@@ -260,12 +274,13 @@ public class BystanderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
+                    bystanderAnim.SetBool("isInteracting", false);
                     if (isInFOV)
                     {
                         transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 60), 0);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
                     }
-
+                    transform.position = bystanderTracker.transform.position;
                     transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     // bystandreImage.CrossFadeAlpha(0, 1.0f, false);
                     bystanderAvatar.SetActive(true);
@@ -289,6 +304,7 @@ public class BystanderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
+                    bystanderAnim.SetBool("isInteracting", false);
                     bystanderAvatar.SetActive(false);
                 }
 

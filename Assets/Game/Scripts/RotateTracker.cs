@@ -13,11 +13,11 @@ public class RotateTracker : MonoBehaviour
     private bool isHeadingTo30, isHeadingToFrontSeat;
     // TODO: why the gameManager needs to call this variable?
     public bool isHeadingToPlayer;
-    public Animator anim;
+    //public Animator anim;
 
     private void Start()
     {
-        anim.SetBool("isInteracting", false);
+       // anim.SetBool("isInteracting", false);
     }
     void Update()
     {
@@ -31,18 +31,18 @@ public class RotateTracker : MonoBehaviour
                                                                               // transform.Rotate(0, 1 * speed * Time.deltaTime, 0); // previous code
                                                                               // RotateForInteraction();
 
-                anim.SetBool("isInteracting", false);
+              //  anim.SetBool("isInteracting", false);
 
 
                 if (Mathf.Round(transform.eulerAngles.y) == 90)
                 { // Heading towards the VR-Player
                     if (doInteraction)
                     {
-                        if (anim)
-                        {
-                            //   Debug.Log("anim interaction is called");
-                            anim.SetBool("isInteracting", true);
-                        }
+                        //if (anim)
+                        //{
+                        //    //   Debug.Log("anim interaction is called");
+                        //    anim.SetBool("isInteracting", true);
+                        //}
 
                         // Debug.Log("Invoke: " + System.DateTime.Now);
                         Invoke("HeadingBackTo30Degrees", 13f); // Stay in 13 seconds
@@ -64,7 +64,7 @@ public class RotateTracker : MonoBehaviour
                 {
                     transform.Rotate(Vector3.up * Time.deltaTime * rotateSpeed * -1);
                     // transform.Rotate(0, -1 * speed * Time.deltaTime, 0);
-                    anim.SetBool("isInteracting", false);
+                    //anim.SetBool("isInteracting", false);
                     if (Mathf.Round(transform.eulerAngles.y) == 60)
                     {
                         if (doInteraction)
@@ -85,7 +85,7 @@ public class RotateTracker : MonoBehaviour
             // Bystander: 30 -> 90 degrees (towards the front seat)
             if (isHeadingToFrontSeat && !isHeadingToPlayer)
             {
-                anim.SetBool("isInteracting", false);
+                //anim.SetBool("isInteracting", false);
                 if (transform.eulerAngles.y > 0)
                 {
                     transform.Rotate(Vector3.up * Time.deltaTime * rotateSpeed * -1);
@@ -106,14 +106,14 @@ public class RotateTracker : MonoBehaviour
        // Debug.Log(" Called: " + System.DateTime.Now + doInteraction);
         isHeadingTo30 = true;
         isHeadingToPlayer = false;
-        anim.SetBool("isInteracting", false);
+        //anim.SetBool("isInteracting", false);
     }
 
     private void HeadingBacktoFrontSeat() {
         isHeadingTo30 = false;
         isHeadingToFrontSeat = true;
         isHeadingToPlayer = false;
-        anim.SetBool("isInteracting", false);
+        //anim.SetBool("isInteracting", false);
     }
 
     public void SetisHeadingToPlayer()
