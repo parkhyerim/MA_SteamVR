@@ -70,7 +70,7 @@ public class MemoryCardGameManager : MonoBehaviour
         hideTimer = startToShowTimer + showCardsInSeconds;
       //  Debug.Log(startToShowTimer + " " + hideTimer);
         score = 0;
-        gameScoreText.text = score.ToString() + "/20";
+        gameScoreText.text = "SCORE: "+ score.ToString() + "/20";
         timeText.text = "";
 
     }
@@ -84,7 +84,7 @@ public class MemoryCardGameManager : MonoBehaviour
         if (Time.time >= startToShowTimer && Time.time <= hideTimer)
         {
             timer += Time.deltaTime;
-            timeText.text = "remaining times: " + (showCardsInSeconds-Math.Round(timer));
+            timeText.text = "TIME REMANING: " + (showCardsInSeconds-Math.Round(timer));
             // *** Debug.Log(timer);
             //  Debug.Log(Time.time + " startToShow:" + startToShowTimer + " hideTimer: "+ hideTimer);
             // ShowCards();
@@ -152,6 +152,7 @@ public class MemoryCardGameManager : MonoBehaviour
 
     public void BystanderStart()
     {
+        timeText.text = "";
         rt.isHeadingToPlayer = true;
     }
  
@@ -197,7 +198,7 @@ public class MemoryCardGameManager : MonoBehaviour
             Destroy(firstSelectedCard.gameObject);
             Destroy(secondSelectedCard.gameObject);
             score += 2;
-            gameScoreText.text = score.ToString() + "/20";
+            gameScoreText.text = "SCORE: " + score.ToString() + "/20";
 
             audioSource.PlayOneShot(clipCardMatch);
         }

@@ -145,7 +145,7 @@ public class BystanderAvatar : MonoBehaviour
                     {
                         if(mainCameraYAxis >= 250 && mainCameraYAxis <= 310) // VR user is heading towards the bystander
                         {
-                            Debug.Log("called");
+                          
                             transform.position = bystanderTracker.transform.position;
                             bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
                         } 
@@ -185,31 +185,61 @@ public class BystanderAvatar : MonoBehaviour
                 }
                 else if (isMixedSetting)
                 {
-                  //  Debug.Log("isMixed Critica: " + Camera.main.transform.eulerAngles.y);
+
+                    if (doInteraction)
+                    {
+                        bystanderAnim.SetBool("isInteracting", true);
+                    }
+                    else
+                    {
+                        bystanderAnim.SetBool("isInteracting", false);
+                    }
+                    //  Debug.Log("isMixed Critica: " + Camera.main.transform.eulerAngles.y);
                     // presenceAnimojiBoard.transform.position = new Vector3(Camera.main.transform.position.x - 0.4f, presenceAnimojiBoard.transform.position.y - 0.2f, presenceAnimojiBoard.transform.position.z);
-                    
+
                     if (mainCameraYAxis >= 320 || (mainCameraYAxis > 0 && mainCameraYAxis <= 90)) {
                        // Debug.Log("camera: 320");
-                        bystanderAvatar.SetActive(false);
+                       
+
+                        if (isInFOV)
+                        {
+                            bystanderAvatar.SetActive(true);
+                            transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                        }
+                        else
+                        {
+                            bystanderAvatar.SetActive(false);
+                            frontImage.transform.localScale = new Vector2(1.5f, 1.5f);
+                            // presenceAnimojiBoard.transform.position = middlePos.transform.position;
+                            presenceAnimojiBoard.transform.position = guidePos.transform.position;
+                            // Debug.Log("Panel:" + presenceAnimojiBoard.transform.position + "  Camera: " + Camera.main.transform.position);
 
 
-                        frontImage.transform.localScale = new Vector2(1.5f, 1.5f);
-                       // presenceAnimojiBoard.transform.position = middlePos.transform.position;
-                        presenceAnimojiBoard.transform.position = guidePos.transform.position;
-                        // Debug.Log("Panel:" + presenceAnimojiBoard.transform.position + "  Camera: " + Camera.main.transform.position);
+                            currentMovementTime += Time.deltaTime;
+                            presenceAnimojiBoard.transform.position = Vector3.Lerp(
+                                originalPos.transform.position,
+                                guidePos.transform.position,
+                                currentMovementTime / timeToReachTarget);
+                            frontImage.enabled = true;
+                            backImage.enabled = false;
+                        }
                       
-                 
-                        currentMovementTime += Time.deltaTime;
-                        presenceAnimojiBoard.transform.position = Vector3.Lerp(
-                            originalPos.transform.position, 
-                            guidePos.transform.position,
-                            currentMovementTime/timeToReachTarget);
-                        frontImage.enabled = true;
-                        backImage.enabled = false;
 
                     } else if(mainCameraYAxis < 320 && mainCameraYAxis >= 250) {
+
                         bystanderAvatar.SetActive(true);
-                        transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
+                        if (isInFOV)
+                        {
+                            transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                        }
+                        else
+                        {
+                            transform.position = tracker.position;
+                            transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
+                        }
+                       
 
                         frontImage.enabled = false;
                         backImage.enabled = false;
@@ -262,6 +292,7 @@ public class BystanderAvatar : MonoBehaviour
                     backImage.enabled = false;
                     frontImage.enabled = true;
                     frontImage.transform.localScale = new Vector2(1f, 1f);
+                    bystanderAnim.SetBool("isInteracting", false);
                 }
             }
             else if (bystanderYAxis < 30 && bystanderYAxis >= 0)
@@ -289,6 +320,7 @@ public class BystanderAvatar : MonoBehaviour
                 if (isMixedSetting)
                 {
                     bystanderAvatar.SetActive(false);
+                    bystanderAnim.SetBool("isInteracting", false);
                     presenceAnimojiBoard.transform.position = originalPos.transform.position;
                     backImage.enabled = true;
                     frontImage.enabled = false;
@@ -314,6 +346,7 @@ public class BystanderAvatar : MonoBehaviour
                     presenceAnimojiBoard.transform.position = originalPos.transform.position;
                     backImage.enabled = false;
                     frontImage.enabled = false;
+                    bystanderAnim.SetBool("isInteracting", false);
                 }
             }
         }
