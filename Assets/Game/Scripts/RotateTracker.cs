@@ -60,12 +60,12 @@ public class RotateTracker : MonoBehaviour
             // Bystander: 0 -> 30 degrees (towards the front seat)
             if (isHeadingTo30 && !isHeadingToPlayer)
             {
-                if (transform.eulerAngles.y > 60)
+                if (transform.eulerAngles.y > 50) // 60
                 {
                     transform.Rotate(Vector3.up * Time.deltaTime * rotateSpeed * -1);
                     // transform.Rotate(0, -1 * speed * Time.deltaTime, 0);
                     //anim.SetBool("isInteracting", false);
-                    if (Mathf.Round(transform.eulerAngles.y) == 60)
+                    if (Mathf.Round(transform.eulerAngles.y) == 50) // 60
                     {
                         if (doInteraction)
                         {

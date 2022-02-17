@@ -1135,7 +1135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e082207f971a01a4bad15446dcd58fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doInteraction: 1
+  doInteraction: 0
   useTracker: 0
   rotateSpeed: 20
   isHeadingTo30: 0
@@ -6291,7 +6291,7 @@ MonoBehaviour:
   tracker: {fileID: 202137950}
   bystanderAvatar: {fileID: 2101755741847965763}
   bystanderAnim: {fileID: 2497403534718943324}
-  doInteraction: 1
+  doInteraction: 0
   presenceAnimojiBoard: {fileID: 2321244900447995938}
   yesInteractionImage: {fileID: 2069349139}
   noInteractionImage: {fileID: 323142556}
@@ -6304,10 +6304,10 @@ MonoBehaviour:
   currentMovementTime: 0
   sitToLeft: 1
   isAnimojiSetting: 0
-  isAvatarSetting: 0
-  isMixedSetting: 1
+  isAvatarSetting: 1
+  isMixedSetting: 0
   isSeated: 0
-  isInFOV: 0
+  isInFOV: 1
   isSeatedAndInFOV: 0
   isGuiding: 0
   isguided: 0
@@ -22303,7 +22303,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 462110720233417092}
-  m_LocalRotation: {x: -0.12376215, y: 0.054269843, z: 0.009106457, w: 0.990785}
+  m_LocalRotation: {x: -0.123902395, y: 0.054268554, z: 0.009114139, w: 0.9907675}
   m_LocalPosition: {x: 0.03273677, y: 0.07959301, z: 0.07338554}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
@@ -29337,7 +29337,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 3114112697205464014}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -35945,7 +35945,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8426418937400547069}
-  m_LocalRotation: {x: -0.123762265, y: 0.017652595, z: 0.0029651686, w: 0.9921504}
+  m_LocalRotation: {x: -0.1239027, y: 0.017652176, z: 0.0029676673, w: 0.9921329}
   m_LocalPosition: {x: -0.033310317, y: 0.07965034, z: 0.073377386}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
