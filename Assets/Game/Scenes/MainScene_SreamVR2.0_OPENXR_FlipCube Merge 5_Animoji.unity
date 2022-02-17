@@ -1135,7 +1135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e082207f971a01a4bad15446dcd58fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doInteraction: 1
+  doInteraction: 0
   useTracker: 0
   rotateSpeed: 20
   isHeadingTo30: 0
@@ -5945,8 +5945,8 @@ MonoBehaviour:
   firstSelectedCard: {fileID: 0}
   secondSelectedCard: {fileID: 0}
   isFront: 0
-  showCardsInSeconds: 10
-  warmUpInSeconds: 5
+  showCardsInSeconds: 3
+  warmUpInSeconds: 3
   rt: {fileID: 202137951}
   gameScoreText: {fileID: 4889784658791220722}
   timeText: {fileID: 1686475052}
@@ -6218,7 +6218,7 @@ MonoBehaviour:
   tracker: {fileID: 202137950}
   bystanderAvatar: {fileID: 2101755741847965763}
   bystanderAnim: {fileID: 2497403534718943324}
-  doInteraction: 1
+  doInteraction: 0
   presenceAnimojiBoard: {fileID: 2321244900447995938}
   frontImage: {fileID: 2069349139}
   backImage: {fileID: 428763760}
@@ -6229,12 +6229,12 @@ MonoBehaviour:
   timeToReachTarget: 5
   currentMovementTime: 0
   sitToLeft: 1
-  isAnimojiSetting: 1
-  isAvatarSetting: 0
+  isAnimojiSetting: 0
+  isAvatarSetting: 1
   isMixedSetting: 0
   isSeated: 0
   isInFOV: 0
-  isSeatedAndInFOV: 0
+  isSeatedAndInFOV: 1
   isGuiding: 0
   isguided: 0
 --- !u!4 &995297014
@@ -9377,7 +9377,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1727231261
 RectTransform:
   m_ObjectHideFlags: 0

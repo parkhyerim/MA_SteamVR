@@ -52,6 +52,8 @@ public class BystanderAvatar : MonoBehaviour
     private float mainCameraYAxis;
     public bool isGuiding;
     public bool isguided;
+
+    private float angleinFOV = 50f;
  
     // Start is called before the first frame update
     void Start()
@@ -126,26 +128,37 @@ public class BystanderAvatar : MonoBehaviour
                 else if (isAvatarSetting)
                 {
                     if (doInteraction)
-                    {
                         bystanderAnim.SetBool("isInteracting", true);
-                    }
-                    else
-                    {
+                    else                    
                         bystanderAnim.SetBool("isInteracting", false);
-                    }
+
                     if (isInFOV)
                     {
                        // bystanderAvatar.SetActive(true);
                         transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
-                       // Debug.Log("Avatar Y axis: " + + bystanderRotationEulerY + "   " + bystanderAvatar.transform.eulerAngles.y);
+                       // bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + 50, 0);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + ((bystanderYAxis*(90+angleinFOV)/90) - bystanderYAxis), 0);
+                       // Debug.Log(bystanderYAxis + "<---> " + bystanderAvatar.transform.eulerAngles.y);
+                        // Debug.Log("Avatar Y axis: " + + bystanderRotationEulerY + "   " + bystanderAvatar.transform.eulerAngles.y);
+
+
+                        //if (bystanderYAxis <= 0)
+                        //{
+                        //    bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
+                        //}
+                        //else
+                        //{
+                        //    bystanderAvatar.transform.eulerAngles = new Vector3(0, ((bystanderYAxis * (140 / 90)) - bystanderYAxis), 0);
+                        //}
+
+                        //Debug.Log("Bystander Y Axis:" + (bystanderYAxis * 14 / 9 - 90));
+
                     }
 
                     if (isSeatedAndInFOV)
                     {
                         if(mainCameraYAxis >= 250 && mainCameraYAxis <= 310) // VR user is heading towards the bystander
-                        {
-                          
+                        {                       
                             transform.position = bystanderTracker.transform.position;
                             bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
                         } 
@@ -155,7 +168,7 @@ public class BystanderAvatar : MonoBehaviour
                         }
                         else
                         {
-                            bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV) / 90) - bystanderYAxis), 0);
                             transform.position = new Vector3(FOVPos.transform.position.x, tracker.position.y, FOVPos.transform.position.z);
                            
                             //if (!isGuiding)
@@ -202,7 +215,8 @@ public class BystanderAvatar : MonoBehaviour
                         {
                             bystanderAvatar.SetActive(true);
                             transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-                            bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                            // bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV) / 90) - bystanderYAxis), 0);
                         }
                         else
                         {
@@ -229,7 +243,8 @@ public class BystanderAvatar : MonoBehaviour
                         if (isInFOV)
                         {
                             transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-                            bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                            // bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV) / 90) - bystanderYAxis), 0);
                         }
                         else
                         {
@@ -241,8 +256,6 @@ public class BystanderAvatar : MonoBehaviour
                         frontImage.enabled = false;
                         backImage.enabled = false;
                     }
-
-                    // Debug.Log("Camera Rotation: " + Camera.main.transform.rotation.y);
                 }
 
 
@@ -265,7 +278,8 @@ public class BystanderAvatar : MonoBehaviour
                     if (isInFOV) 
                     {
                         transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                        // bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV) / 90) - bystanderYAxis), 0);
                     }
 
                     if (isSeatedAndInFOV)
@@ -306,7 +320,8 @@ public class BystanderAvatar : MonoBehaviour
                     if (isInFOV)
                     {
                         transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                        // bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV) / 90) - bystanderYAxis), 0);
                     }
 
                     if (isSeatedAndInFOV)
