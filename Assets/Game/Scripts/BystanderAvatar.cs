@@ -268,14 +268,14 @@ public class BystanderAvatar : MonoBehaviour
                         bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
                     }
 
-                    //if (isSeatedAndInFOV)
-                    //{
-                    //    bystanderAvatar.SetActive(true);
-                    //    transform.position = bystanderTracker.transform.position;
+                    if (isSeatedAndInFOV)
+                    {
+                        bystanderAvatar.SetActive(true);
+                        transform.position = bystanderTracker.transform.position;
 
-                    //}
+                    }
 
-                    transform.position = bystanderTracker.transform.position;
+                  //  transform.position = bystanderTracker.transform.position;
                     transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     //transform.localEulerAngles = new Vector3(0, 180, 0); // towards the front seat
                     // bystandreImage.CrossFadeAlpha(1, 1.0f, false);
@@ -308,7 +308,13 @@ public class BystanderAvatar : MonoBehaviour
                         transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
                         bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
                     }
-                    transform.position = bystanderTracker.transform.position;
+
+                    if (isSeatedAndInFOV)
+                    {
+                        transform.position = bystanderTracker.transform.position;
+                    }
+
+                      
                     transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     // bystandreImage.CrossFadeAlpha(0, 1.0f, false);
                     bystanderAvatar.SetActive(true);
