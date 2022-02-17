@@ -1116,7 +1116,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202137948}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.85, y: 1.35, z: -1.9}
+  m_LocalPosition: {x: -0.85, y: 1.35, z: -2.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 13165406}
@@ -1135,7 +1135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e082207f971a01a4bad15446dcd58fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doInteraction: 0
+  doInteraction: 1
   useTracker: 0
   rotateSpeed: 20
   isHeadingTo30: 0
@@ -1334,7 +1334,7 @@ GameObject:
   - component: {fileID: 223576690}
   - component: {fileID: 223576689}
   m_Layer: 0
-  m_Name: Video Player
+  m_Name: Y_VideoPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1348,11 +1348,11 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223576688}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: ee9b3cd6f4a9632459bdf99a2c646d4d, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 4a0341c8d0046ed48b3544e63b585dbe, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 8400000, guid: be2c3e61b27375941ab06a0c01469f9c, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 1c0ccaa9f6cb394459f296d5686da917, type: 2}
   m_TimeReference: 0
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: _MainTex
@@ -2458,6 +2458,78 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pos: {fileID: 0}
   identifier: 5
+--- !u!1 &323142553
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 323142554}
+  - component: {fileID: 323142555}
+  - component: {fileID: 323142556}
+  m_Layer: 5
+  m_Name: RawImage NoInteraction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &323142554
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323142553}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3273529806536674807}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &323142555
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323142553}
+  m_CullTransparentMesh: 1
+--- !u!114 &323142556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323142553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 8400000, guid: b415044cdc35c88499fde4bc6ba50491, type: 2}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &326435063
 GameObject:
   m_ObjectHideFlags: 0
@@ -3193,7 +3265,7 @@ GameObject:
   - component: {fileID: 428763761}
   - component: {fileID: 428763760}
   m_Layer: 5
-  m_Name: RawImage BH (2)
+  m_Name: RawImage Backside
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3438,7 +3510,8 @@ MonoBehaviour:
   bystanderAnim: {fileID: 0}
   doInteraction: 0
   presenceAnimojiBoard: {fileID: 0}
-  frontImage: {fileID: 0}
+  yesInteractionImage: {fileID: 0}
+  noInteractionImage: {fileID: 0}
   backImage: {fileID: 0}
   FOVPos: {fileID: 0}
   guidePos: {fileID: 0}
@@ -6218,9 +6291,10 @@ MonoBehaviour:
   tracker: {fileID: 202137950}
   bystanderAvatar: {fileID: 2101755741847965763}
   bystanderAnim: {fileID: 2497403534718943324}
-  doInteraction: 0
+  doInteraction: 1
   presenceAnimojiBoard: {fileID: 2321244900447995938}
-  frontImage: {fileID: 2069349139}
+  yesInteractionImage: {fileID: 2069349139}
+  noInteractionImage: {fileID: 323142556}
   backImage: {fileID: 428763760}
   FOVPos: {fileID: 1175379520}
   guidePos: {fileID: 1512761169}
@@ -6229,12 +6303,12 @@ MonoBehaviour:
   timeToReachTarget: 5
   currentMovementTime: 0
   sitToLeft: 1
-  isAnimojiSetting: 0
-  isAvatarSetting: 1
+  isAnimojiSetting: 1
+  isAvatarSetting: 0
   isMixedSetting: 0
   isSeated: 0
   isInFOV: 0
-  isSeatedAndInFOV: 1
+  isSeatedAndInFOV: 0
   isGuiding: 0
   isguided: 0
 --- !u!4 &995297014
@@ -8951,7 +9025,8 @@ MonoBehaviour:
   bystanderAnim: {fileID: 0}
   doInteraction: 0
   presenceAnimojiBoard: {fileID: 0}
-  frontImage: {fileID: 1401731131}
+  yesInteractionImage: {fileID: 0}
+  noInteractionImage: {fileID: 0}
   backImage: {fileID: 1715460138}
   FOVPos: {fileID: 0}
   guidePos: {fileID: 0}
@@ -9360,78 +9435,6 @@ Transform:
   m_Father: {fileID: 497398372}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1727231260
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1727231261}
-  - component: {fileID: 1727231262}
-  - component: {fileID: 1727231263}
-  m_Layer: 5
-  m_Name: RawImage NoInteraction
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &1727231261
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727231260}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3273529806536674807}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1727231262
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727231260}
-  m_CullTransparentMesh: 1
---- !u!114 &1727231263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727231260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Texture: {fileID: 8400000, guid: 26e4021dfefc8bf4095ad826f758228a, type: 2}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
 --- !u!1 &1727976091
 GameObject:
   m_ObjectHideFlags: 0
@@ -10400,7 +10403,7 @@ GameObject:
   - component: {fileID: 1890763956}
   - component: {fileID: 1890763955}
   m_Layer: 0
-  m_Name: AniNo_VideoPlayer
+  m_Name: N_VideoPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10414,11 +10417,11 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1890763954}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 55193a161b4d29144a04cfcb2a0d352c, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 32dcec0e213c68644af28fe13fba67fd, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 8400000, guid: 26e4021dfefc8bf4095ad826f758228a, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: b415044cdc35c88499fde4bc6ba50491, type: 2}
   m_TimeReference: 0
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: _MainTex
@@ -13450,7 +13453,7 @@ GameObject:
   - component: {fileID: 2069349138}
   - component: {fileID: 2069349139}
   m_Layer: 5
-  m_Name: RawImage FH (3)
+  m_Name: RawImage YesInteraction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13503,7 +13506,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 8400000, guid: be2c3e61b27375941ab06a0c01469f9c, type: 2}
+  m_Texture: {fileID: 8400000, guid: 1c0ccaa9f6cb394459f296d5686da917, type: 2}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -19954,7 +19957,8 @@ MonoBehaviour:
   bystanderAnim: {fileID: 0}
   doInteraction: 0
   presenceAnimojiBoard: {fileID: 0}
-  frontImage: {fileID: 1983949685}
+  yesInteractionImage: {fileID: 0}
+  noInteractionImage: {fileID: 0}
   backImage: {fileID: 708005704}
   FOVPos: {fileID: 0}
   guidePos: {fileID: 0}
@@ -22046,7 +22050,7 @@ RectTransform:
   - {fileID: 1609408054}
   - {fileID: 428763762}
   - {fileID: 2069349137}
-  - {fileID: 1727231261}
+  - {fileID: 323142554}
   m_Father: {fileID: 2454652954034266459}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -35311,7 +35315,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2101755741847965763}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.7, z: 0}
+  m_LocalPosition: {x: 0, y: -0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1372181328}

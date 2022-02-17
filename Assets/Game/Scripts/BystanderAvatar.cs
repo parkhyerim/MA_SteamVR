@@ -19,7 +19,8 @@ public class BystanderAvatar : MonoBehaviour
     [Header("GOs for Animoji")]
     // Variables for Animoji Setting
     public GameObject presenceAnimojiBoard;
-    public RawImage frontImage;
+    public RawImage yesInteractionImage;
+    public RawImage noInteractionImage;
     public RawImage backImage;
 
     [Header("GOs for Avatar")]
@@ -68,7 +69,8 @@ public class BystanderAvatar : MonoBehaviour
         if (isAvatarSetting && !(isSeated || isInFOV || isSeatedAndInFOV))
             isInFOV = true;
 
-        frontImage.enabled = false;
+        yesInteractionImage.enabled = false;
+        noInteractionImage.enabled = false;
         backImage.enabled = false;
         bystanderAvatar.SetActive(false);
 
@@ -120,10 +122,20 @@ public class BystanderAvatar : MonoBehaviour
             {              
                 if (isAnimojiSetting)
                 {
-                    // SetAnimoji("critical");
-                    frontImage.enabled = true;
                     backImage.enabled = false;
-                    frontImage.transform.localScale = new Vector2(1.5f, 1.5f);
+                    // SetAnimoji("critical");
+                    if (doInteraction)
+                    {
+                        noInteractionImage.enabled = false;
+                        yesInteractionImage.enabled = true;
+                        yesInteractionImage.transform.localScale = new Vector2(1.5f, 1.5f);
+                    }
+                    else
+                    {
+                        yesInteractionImage.enabled = false;
+                        noInteractionImage.enabled = true;
+                    }
+                    
                 }
                 else if (isAvatarSetting)
                 {
@@ -221,7 +233,7 @@ public class BystanderAvatar : MonoBehaviour
                         else
                         {
                             bystanderAvatar.SetActive(false);
-                            frontImage.transform.localScale = new Vector2(1.5f, 1.5f);
+                            yesInteractionImage.transform.localScale = new Vector2(1.5f, 1.5f);
                             // presenceAnimojiBoard.transform.position = middlePos.transform.position;
                             presenceAnimojiBoard.transform.position = guidePos.transform.position;
                             // Debug.Log("Panel:" + presenceAnimojiBoard.transform.position + "  Camera: " + Camera.main.transform.position);
@@ -232,7 +244,17 @@ public class BystanderAvatar : MonoBehaviour
                                 originalPos.transform.position,
                                 guidePos.transform.position,
                                 currentMovementTime / timeToReachTarget);
-                            frontImage.enabled = true;
+                            if (doInteraction)
+                            {
+                                yesInteractionImage.enabled = true;
+                                noInteractionImage.enabled = false;
+                            }
+                            else
+                            {
+                                yesInteractionImage.enabled = false;
+                                noInteractionImage.enabled = true;
+                            }
+                               
                             backImage.enabled = false;
                         }
                       
@@ -251,9 +273,9 @@ public class BystanderAvatar : MonoBehaviour
                             transform.position = tracker.position;
                             transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                         }
-                       
 
-                        frontImage.enabled = false;
+                        noInteractionImage.enabled = false;
+                        yesInteractionImage.enabled = false;
                         backImage.enabled = false;
                     }
                 }
@@ -269,7 +291,18 @@ public class BystanderAvatar : MonoBehaviour
                 if (isAnimojiSetting)
                 {
                     backImage.enabled = false;
-                    frontImage.enabled = true;
+                    if (doInteraction)
+                    {
+                        noInteractionImage.enabled = false;
+                        yesInteractionImage.enabled = true;
+                        yesInteractionImage.transform.localScale = new Vector2(1f, 1f);
+                    }
+                    else
+                    {
+                        yesInteractionImage.enabled = false;
+                        noInteractionImage.enabled = true;
+                    }
+                   
                 }
 
                 if (isAvatarSetting)
@@ -301,8 +334,18 @@ public class BystanderAvatar : MonoBehaviour
                     bystanderAvatar.SetActive(false);
                     presenceAnimojiBoard.transform.position = originalPos.transform.position;
                     backImage.enabled = false;
-                    frontImage.enabled = true;
-                    frontImage.transform.localScale = new Vector2(1f, 1f);
+                    if (doInteraction)
+                    {
+                        noInteractionImage.enabled = false;
+                        yesInteractionImage.enabled = true;
+                        yesInteractionImage.transform.localScale = new Vector2(1f, 1f);
+                    }
+                    else
+                    {
+                        yesInteractionImage.enabled = false;
+                        noInteractionImage.enabled = true;
+                    }
+                   
                     bystanderAnim.SetBool("isInteracting", false);
                 }
             }
@@ -311,7 +354,7 @@ public class BystanderAvatar : MonoBehaviour
                 if (isAnimojiSetting)
                 {
                     backImage.enabled = true;
-                    frontImage.enabled = false;
+                    yesInteractionImage.enabled = false;
                 }
 
                 if (isAvatarSetting)
@@ -341,7 +384,8 @@ public class BystanderAvatar : MonoBehaviour
                     bystanderAnim.SetBool("isInteracting", false);
                     presenceAnimojiBoard.transform.position = originalPos.transform.position;
                     backImage.enabled = true;
-                    frontImage.enabled = false;
+                    noInteractionImage.enabled = false;
+                    yesInteractionImage.enabled = false;
                 }
             }
             else
@@ -349,7 +393,11 @@ public class BystanderAvatar : MonoBehaviour
                 if (isAnimojiSetting)
                 {
                     backImage.enabled = false;
-                    frontImage.enabled = false;
+                    yesInteractionImage.enabled = false;
+                    noInteractionImage.enabled = false;
+
+
+
                 }
 
                 if (isAvatarSetting)
@@ -363,7 +411,8 @@ public class BystanderAvatar : MonoBehaviour
                     bystanderAvatar.SetActive(false);
                     presenceAnimojiBoard.transform.position = originalPos.transform.position;
                     backImage.enabled = false;
-                    frontImage.enabled = false;
+                    yesInteractionImage.enabled = false;
+                    noInteractionImage.enabled = false;
                     bystanderAnim.SetBool("isInteracting", false);
                 }
             }
@@ -378,7 +427,7 @@ public class BystanderAvatar : MonoBehaviour
                 if (isAnimojiSetting)
                 {
                     backImage.enabled = false;
-                    frontImage.enabled = true;
+                    yesInteractionImage.enabled = true;
                     // TODO: image bigger and animations
                 }
 
@@ -415,7 +464,7 @@ public class BystanderAvatar : MonoBehaviour
                     transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
                     bystanderAvatar.SetActive(true);
 
-                    frontImage.enabled = false;
+                    yesInteractionImage.enabled = false;
                     backImage.enabled = false;
                 }
             }
@@ -425,7 +474,7 @@ public class BystanderAvatar : MonoBehaviour
                 if (isAnimojiSetting)
                 {
                     backImage.enabled = false;
-                    frontImage.enabled = true;
+                    yesInteractionImage.enabled = true;
                 }
 
                 if (isAvatarSetting)
@@ -444,7 +493,7 @@ public class BystanderAvatar : MonoBehaviour
                 {
                     bystanderAvatar.SetActive(false);
                     backImage.enabled = false;
-                    frontImage.enabled = true;
+                    yesInteractionImage.enabled = true;
                 }
             }
             else if(bystanderYAxis <= 360 && bystanderYAxis > 300)
@@ -452,7 +501,7 @@ public class BystanderAvatar : MonoBehaviour
                 if (isAnimojiSetting)
                 {
                     backImage.enabled = true;
-                    frontImage.enabled = false;
+                    yesInteractionImage.enabled = false;
                 }
 
                 if (isAvatarSetting)
@@ -470,7 +519,7 @@ public class BystanderAvatar : MonoBehaviour
                 {
                     bystanderAvatar.SetActive(false);
                     backImage.enabled = true;
-                    frontImage.enabled = false;
+                    yesInteractionImage.enabled = false;
                 }
             }
             else
@@ -478,7 +527,7 @@ public class BystanderAvatar : MonoBehaviour
                 if (isAnimojiSetting)
                 {
                     backImage.enabled = false;
-                    frontImage.enabled = false;
+                    yesInteractionImage.enabled = false;
                 }
 
                 if (isAvatarSetting)
@@ -491,7 +540,7 @@ public class BystanderAvatar : MonoBehaviour
                 {
                     bystanderAvatar.SetActive(false);
                     backImage.enabled = false;
-                    frontImage.enabled = false;
+                    yesInteractionImage.enabled = false;
                 }
             }
         }
@@ -518,9 +567,9 @@ public class BystanderAvatar : MonoBehaviour
     private void SetAnimoji(string rotationDegrees)
     {
       
-        frontImage.enabled = true;
+        yesInteractionImage.enabled = true;
         backImage.enabled = false;
-        frontImage.transform.localScale = new Vector2(1.5f, 1.5f);
+        yesInteractionImage.transform.localScale = new Vector2(1.5f, 1.5f);
         // frontImage.GetComponent<RectTransform>().rect.Set(0, 0, 100, 300);
     }
 
