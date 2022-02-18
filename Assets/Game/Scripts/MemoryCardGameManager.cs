@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class MemoryCardGameManager : MonoBehaviour
 {
@@ -42,15 +43,25 @@ public class MemoryCardGameManager : MonoBehaviour
     public GameObject matchEffectPrefab;
     public GameObject matchEffectPrefab2;
     float timer = 0.0f;
+
+  
+
     private void Awake()
     {
+
+
+       // GetComponent<MemoryCard>().gameObject.layer = LayerMask.NameToLayer("Default");
        
         // Get all card positions and save in list
         foreach(MemoryCard card in allCards)
         {
             allPositionsOfCards.Add(card.transform.position);
+           // card.gameObject.layer = LayerMask.NameToLayer("Default");
            
-           // Debug.Log(card.name + " " + card.transform.position + " " + card.transform.localEulerAngles);
+            Debug.Log(card.gameObject.GetComponent<XRSimpleInteractable>().interactionLayers);
+            card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
+          
+            // Debug.Log(card.name + " " + card.transform.position + " " + card.transform.localEulerAngles);
         }
 
         AngleOfCards = allCards[0].transform.localEulerAngles;
@@ -99,8 +110,6 @@ public class MemoryCardGameManager : MonoBehaviour
     public void ShowCards()
     {
        
-     
-
         // Debug.Log("showCard called");
         
         Vector3 frontAngles = new Vector3(0, 0, 0);
@@ -144,10 +153,12 @@ public class MemoryCardGameManager : MonoBehaviour
         foreach(MemoryCard card in allCards) {
             card.IsGameStart = true;
             card.transform.localEulerAngles = backAngles;
+            card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
         }
         //isFront = false;
         //mc.IsGameStart = true;
         Invoke("BystanderStart", 3f);
+      //  Invoke("StartGame", 30f);
     }
 
     public void BystanderStart()
@@ -201,6 +212,11 @@ public class MemoryCardGameManager : MonoBehaviour
             gameScoreText.text = "SCORE: " + score.ToString() + "/20";
 
             audioSource.PlayOneShot(clipCardMatch);
+            if(score == 20)
+            {
+                LevelManager levelManager = FindObjectOfType<LevelManager>();
+                levelManager.LoadNextLevel();
+            }
         }
         else
         {
@@ -220,6 +236,7 @@ public class MemoryCardGameManager : MonoBehaviour
     }
 
     public void StartGame() {
-
+        LevelManager levelManager = FindObjectOfType<LevelManager>();
+        levelManager.LoadNextLevel();
     }
 }
