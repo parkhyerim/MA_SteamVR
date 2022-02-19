@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System;
 using UnityEngine.XR.Interaction.Toolkit;
+using TMPro;
 
 public class MemoryCardGameManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class MemoryCardGameManager : MonoBehaviour
     public AudioClip clipCardBackward;
     public AudioClip clipCardMatch;
     public AudioClip clipCardUnmatch;
+
+    public GameObject uiCavans;
 
     public MemoryCard[] allCards;
     public List<Vector3> allPositionsOfCards = new List<Vector3>();
@@ -27,45 +30,43 @@ public class MemoryCardGameManager : MonoBehaviour
     [SerializeField]
     private bool isFront = false;
 
-    public float showCardsInSeconds = 10f;
-    public float warmUpInSeconds = 5f;
-    private float startToShowTimer; // time to show Card images
-    private float hideTimer; // time to turn backwards again
+    public float memorizingTime;
+    public float warmUpInSeconds;
+    public float gameTimes;
+
+    [SerializeField]
+    private float startShowingCards, hideCardAgainInSec, gameTimer; // time to show Card images, time to turn backwards again
 
     public RotateTracker rt;
 
-    public Text gameScoreText;
-    public Text timeText;
+    public TMP_Text gameScoreText;
+    public TMP_Text timeText;
 
     [SerializeField]
     private int score;
 
     public GameObject matchEffectPrefab;
     public GameObject matchEffectPrefab2;
-    float timer = 0.0f;
+    float timer = 0f;
+    float gameCountTimer = 0f;
 
-  
+    [SerializeField]
+    private bool canStart;
 
     private void Awake()
-    {
-
-
-       // GetComponent<MemoryCard>().gameObject.layer = LayerMask.NameToLayer("Default");
-       
-        // Get all card positions and save in list
+    {       
+        // Get all card positions and save in the list
         foreach(MemoryCard card in allCards)
         {
             allPositionsOfCards.Add(card.transform.position);
            // card.gameObject.layer = LayerMask.NameToLayer("Default");
            
-            Debug.Log(card.gameObject.GetComponent<XRSimpleInteractable>().interactionLayers);
+            // to make all cards uninteractable
             card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
-          
-            // Debug.Log(card.name + " " + card.transform.position + " " + card.transform.localEulerAngles);
         }
 
         AngleOfCards = allCards[0].transform.localEulerAngles;
-       // ** Debug.Log(AngleOfCards);
+
         // Randomize the positions of the cards
         System.Random randomNumber = new System.Random();
         allPositionsOfCards = allPositionsOfCards.OrderBy(position => randomNumber.Next()).ToList();
@@ -76,36 +77,70 @@ public class MemoryCardGameManager : MonoBehaviour
             allCards[i].transform.position = allPositionsOfCards[i];
         }
 
-        //
-        startToShowTimer = Time.time + warmUpInSeconds;
-        hideTimer = startToShowTimer + showCardsInSeconds;
-      //  Debug.Log(startToShowTimer + " " + hideTimer);
-        score = 0;
-        gameScoreText.text = "SCORE: "+ score.ToString() + "/20";
-        timeText.text = "";
+        // To set time to show all cards
+        //startShowingCards = Time.time + warmUpInSeconds;
+        //hideCardAgainInSec = startShowingCards + memorizingTime;
+        gameTimer = gameTimes + 1;
 
+        score = 0;
+        gameScoreText.text = "";
+        timeText.text = "";
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        //Debug.Log("starttimer: " + startToShowTimer + "  time: " + Time.time);
-        // check the current time to see whether it's time for hiding cards
-
-      
-        if (Time.time >= startToShowTimer && Time.time <= hideTimer)
+        if (canStart)
         {
-            timer += Time.deltaTime;
-            timeText.text = "TIME REMANING: " + (showCardsInSeconds-Math.Round(timer));
-            // *** Debug.Log(timer);
-            //  Debug.Log(Time.time + " startToShow:" + startToShowTimer + " hideTimer: "+ hideTimer);
-            // ShowCards();
-            if (isFront == false) {
-               
-                ShowCards();
-                isFront = true;
+            if (Time.time >= startShowingCards && Time.time <= hideCardAgainInSec)
+            {
+                timer += Time.fixedDeltaTime;
+                timeText.text = "TIME REMANING: " + (memorizingTime - Math.Round(timer));
+                // *** Debug.Log(timer);
+                //  Debug.Log(Time.time + " startToShow:" + startToShowTimer + " hideTimer: "+ hideTimer);
+                // ShowCards();
+                if (isFront == false)
+                {
+                    ShowCards();
+                    isFront = true;
+                }
+            }
+            else if (Time.time > hideCardAgainInSec)
+            {
+                gameCountTimer += Time.fixedDeltaTime;
+
+                timeText.text = "Time: " + (gameTimer - Math.Round(gameCountTimer));
             }
         }
     }
+    //private void Update()
+    //{
+    //    //Debug.Log("starttimer: " + startToShowTimer + "  time: " + Time.time);
+    //    // check the current time to see whether it's time for hiding cards
+
+    //    if (canStart)
+    //    {
+    //        if (Time.time >= startShowingCards && Time.time <= hideCardAgainInSec)
+    //        {
+    //            timer += Time.deltaTime;
+    //            timeText.text = "TIME REMANING: " + (memorizingTime - Math.Round(timer));
+    //            // *** Debug.Log(timer);
+    //            //  Debug.Log(Time.time + " startToShow:" + startToShowTimer + " hideTimer: "+ hideTimer);
+    //            // ShowCards();
+    //            if (isFront == false)
+    //            {
+    //                ShowCards();
+    //                isFront = true;
+    //            }
+    //        }
+    //        else if(Time.time > hideCardAgainInSec)
+    //        {
+    //            gameCountTimer += Time.deltaTime;
+
+    //            timeText.text = "Time: " + (gameTimer - Math.Round(gameCountTimer));
+    //        }
+    //    }
+      
+    //}
 
     public void ShowCards()
     {
@@ -127,7 +162,7 @@ public class MemoryCardGameManager : MonoBehaviour
 
         //}
 
-        Invoke("HideCards", time: showCardsInSeconds);
+        Invoke("HideCards", time: memorizingTime);
 
 
 
@@ -235,8 +270,19 @@ public class MemoryCardGameManager : MonoBehaviour
         canClick = true;
     }
 
-    public void StartGame() {
+    public void GoToNextLevel() {
         LevelManager levelManager = FindObjectOfType<LevelManager>();
         levelManager.LoadNextLevel();
     }
+
+    public void StartGame()
+    {
+        canStart = true;
+        startShowingCards = Time.time + warmUpInSeconds;
+        hideCardAgainInSec = startShowingCards + memorizingTime;
+        
+        Destroy(uiCavans);
+    }
+
+
 }
