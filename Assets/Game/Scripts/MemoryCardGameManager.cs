@@ -32,11 +32,12 @@ public class MemoryCardGameManager : MonoBehaviour
 
     public float memorizingTime;
     public float warmUpInSeconds;
-    public float gameTimes;
+    public int gameTimes;
 
     [SerializeField]
-    private float startShowingCards, hideCardAgainInSec, gameTimer; // time to show Card images, time to turn backwards again
-
+    private float startShowingCards, hideCardAgainInSec; // time to show Card images, time to turn backwards again
+    [SerializeField]
+    int gameTimer;
     public RotateTracker rt;
 
     public TMP_Text gameScoreText;
@@ -80,7 +81,7 @@ public class MemoryCardGameManager : MonoBehaviour
         // To set time to show all cards
         //startShowingCards = Time.time + warmUpInSeconds;
         //hideCardAgainInSec = startShowingCards + memorizingTime;
-        gameTimer = gameTimes + 1;
+        gameTimer = gameTimes;
 
         score = 0;
         gameScoreText.text = "";
@@ -94,7 +95,7 @@ public class MemoryCardGameManager : MonoBehaviour
             if (Time.time >= startShowingCards && Time.time <= hideCardAgainInSec)
             {
                 timer += Time.fixedDeltaTime;
-                timeText.text = "TIME REMANING: " + (memorizingTime - Math.Round(timer));
+                timeText.text = "TIME REMANING: " + (memorizingTime - Math.Round(timer)) + " ";
                 // *** Debug.Log(timer);
                 //  Debug.Log(Time.time + " startToShow:" + startToShowTimer + " hideTimer: "+ hideTimer);
                 // ShowCards();
@@ -104,11 +105,18 @@ public class MemoryCardGameManager : MonoBehaviour
                     isFront = true;
                 }
             }
-            else if (Time.time > hideCardAgainInSec)
+            else if (Time.time > hideCardAgainInSec && gameCountTimer <= gameTimes)
             {
                 gameCountTimer += Time.fixedDeltaTime;
 
-                timeText.text = "Time: " + (gameTimer - Math.Round(gameCountTimer));
+              
+                
+                timeText.text = "Time: " + (gameTimer - Math.Round(gameCountTimer)); // gameTimer - Math.Round(gameCountTimer)
+                if (Math.Round(gameCountTimer) == gameTimes)
+                {
+                    StopRayInteractoin();
+                    Invoke(nameof(GoToNextLevel), 4);
+                }
             }
         }
     }
@@ -141,6 +149,20 @@ public class MemoryCardGameManager : MonoBehaviour
     //    }
       
     //}
+
+
+    void StopRayInteractoin()
+    {
+        foreach (MemoryCard card in allCards)
+        {
+   
+            if(card != null)
+                card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
+        }
+
+    }
+
+
 
     public void ShowCards()
     {
@@ -249,8 +271,7 @@ public class MemoryCardGameManager : MonoBehaviour
             audioSource.PlayOneShot(clipCardMatch);
             if(score == 20)
             {
-                LevelManager levelManager = FindObjectOfType<LevelManager>();
-                levelManager.LoadNextLevel();
+                Invoke(nameof(GoToNextLevel), 5);
             }
         }
         else
