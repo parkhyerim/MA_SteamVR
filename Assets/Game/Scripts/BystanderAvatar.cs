@@ -53,13 +53,16 @@ public class BystanderAvatar : MonoBehaviour
     public bool isSeatedAndInFOV;
 
     private float mainCameraYAxis;
-    public bool isGuiding;
+    public bool isGuidingToSeated;
     public bool isguided;
 
     private float angleinFOV = 50f;
 
     private float guidingLength;
     private float guidingSpeed = 1.0f;
+    private float timeElapsedForGuiding;
+    public float lerpDurationForAvatar = 3f;
+    Vector3 velocity = Vector3.zero;
  
     // Start is called before the first frame update
     void Start()
@@ -183,8 +186,9 @@ public class BystanderAvatar : MonoBehaviour
                             transform.position = bystanderTracker.transform.position;
                             bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
                             arrowImage.enabled = false;
-                            isGuiding = false;
+                            isGuidingToSeated = false;
                             currentMovementTime = 0;
+                            timeElapsedForGuiding = 0;
                         } 
                         //else if(mainCameraYAxis > 310 && mainCameraYAxis <= 315) 
                         //{
@@ -193,26 +197,56 @@ public class BystanderAvatar : MonoBehaviour
                         //}
                         else  // The bystander is outside the FOV of the VR user ( 310 < d < 360, ....)
                         {
-                           
-                            if (!isGuiding)
+                            arrowImage.enabled = true;
+                            arrowImage.transform.position = arrowPos.transform.position;
+                            currentMovementTime += Time.deltaTime;
+
+                            if (!isGuidingToSeated)
                             {
                                 bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV) / 90) - bystanderYAxis), 0);
                                 transform.position = new Vector3(FOVPos.transform.position.x, tracker.position.y, FOVPos.transform.position.z);
                             }
-                            arrowImage.enabled = true;
-                            arrowImage.transform.position = arrowPos.transform.position;
-
-                            currentMovementTime += Time.deltaTime;
-
-                            if(currentMovementTime > 2f)
+                            else
                             {
-                                isGuiding = true;
-                                transform.position = Vector3.Lerp(
-                                          transform.position,
-                                          new Vector3(guidingPosForAV.transform.position.x, tracker.position.y, guidingPosForAV.transform.position.z),
-                                          currentMovementTime / timeToReachTarget);
+                                timeElapsedForGuiding += Time.deltaTime;
+                                Debug.Log("isGuiding: "  + timeElapsedForGuiding);
+                                if (timeElapsedForGuiding < lerpDurationForAvatar)
+                                {
+                                    float t = timeElapsedForGuiding / lerpDurationForAvatar;
+                                    t = t * t * (3f - 2f * t);
+                                    transform.position = Vector3.Lerp(
+                                             new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z),
+                                              new Vector3(tracker.position.x, tracker.position.y, tracker.position.z),
+                                             t);
 
-                                bystanderAvatar.transform.rotation = Quaternion.Lerp(Quaternion.Euler(bystanderAvatar.transform.eulerAngles), Quaternion.Euler(new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV -10) / 90) - bystanderYAxis), 0)), Time.time * (currentMovementTime / timeToReachTarget));
+                                    //  new Vector3(guidingPosForAV.transform.position.x, tracker.position.y, guidingPosForAV.transform.position.z)
+                             
+                                    bystanderAvatar.transform.rotation = Quaternion.Lerp(
+                                        Quaternion.Euler(bystanderAvatar.transform.eulerAngles),
+                                        Quaternion.Euler(new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV - 10) / 90) - bystanderYAxis), 0)),
+                                         t);
+
+                                }
+                                else
+                                {
+                                    transform.position = new Vector3(guidingPosForAV.transform.position.x, tracker.position.y, guidingPosForAV.transform.position.z);
+
+                                }
+                            }
+
+
+                            if (currentMovementTime > 2f)
+                            {
+                                isGuidingToSeated = true;
+                               
+
+                                //isGuiding = true;
+                                //transform.position = Vector3.Lerp(
+                                //          transform.position,
+                                //          new Vector3(guidingPosForAV.transform.position.x, tracker.position.y, guidingPosForAV.transform.position.z),
+                                //          currentMovementTime / timeToReachTarget);
+
+                                //bystanderAvatar.transform.rotation = Quaternion.Lerp(Quaternion.Euler(bystanderAvatar.transform.eulerAngles), Quaternion.Euler(new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV -10) / 90) - bystanderYAxis), 0)), Time.time * (currentMovementTime / timeToReachTarget));
 
                             }
                         
@@ -685,6 +719,10 @@ public class BystanderAvatar : MonoBehaviour
         }
     }
 
+    public void SetGuide()
+    {
+        Debug.Log("setGuide is called");
+    }
     public void TurnBackwards()
     {
          transform.localEulerAngles = new Vector3(0, 180, 0);
@@ -708,7 +746,7 @@ public class BystanderAvatar : MonoBehaviour
     {
         transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
         //transform.position = new Vector3(middlePos.transform.position.x, bystanderTracker.transform.position.y, middlePos.transform.position.z);
-        isGuiding = true;
+        isGuidingToSeated = true;
         if (isguided)
         {
             Invoke("SetGuided", 2f);

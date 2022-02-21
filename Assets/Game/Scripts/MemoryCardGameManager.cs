@@ -196,7 +196,7 @@ public class MemoryCardGameManager : MonoBehaviour
         instructionText.text = "Match Pairs by Clicking Two Cards!";
 
         Invoke("HideCards", time: memorizingTime);
-        Invoke(nameof(showNotification), time: memorizingTime - 2f);
+        Invoke(nameof(showNotification), time: memorizingTime - 1f);
 
 
 

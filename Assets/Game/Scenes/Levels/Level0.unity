@@ -1022,7 +1022,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 0.4}
+  m_SizeDelta: {x: 1, y: 0.3}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &171239121
 MonoBehaviour:
@@ -2247,8 +2247,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0.5, y: -0.4}
-  m_SizeDelta: {x: 1, y: 0.4}
+  m_AnchoredPosition: {x: 0.5, y: -0.3}
+  m_SizeDelta: {x: 1, y: 0.3}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &289261180
 MonoBehaviour:
@@ -3281,8 +3281,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0.5, y: -0.19999999}
-  m_SizeDelta: {x: 1, y: 0.39999998}
+  m_AnchoredPosition: {x: 0.5, y: -0.15}
+  m_SizeDelta: {x: 1, y: 0.3}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &348758832
 MonoBehaviour:
@@ -4313,7 +4313,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 2, y: 0.39999998}
+  m_SizeDelta: {x: 2, y: 0.3}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &494615364
 MonoBehaviour:
@@ -4486,8 +4486,9 @@ MonoBehaviour:
   isSeated: 0
   isInFOV: 0
   isSeatedAndInFOV: 0
-  isGuiding: 0
+  isGuidingToSeated: 0
   isguided: 0
+  lerpDurationForAvatar: 3
 --- !u!1 &500187884
 GameObject:
   m_ObjectHideFlags: 0
@@ -8087,7 +8088,7 @@ MonoBehaviour:
   isFront: 0
   memorizingTime: 5
   bufferBeforeStartingGame: 2
-  totalGameTime: 20
+  totalGameTime: 60
   gameTimer: 0
   startShowingCards: 0
   hideCardAgainInSec: 0
@@ -8629,8 +8630,9 @@ MonoBehaviour:
   isSeated: 0
   isInFOV: 0
   isSeatedAndInFOV: 1
-  isGuiding: 0
+  isGuidingToSeated: 0
   isguided: 0
+  lerpDurationForAvatar: 5
 --- !u!4 &995297014
 Transform:
   m_ObjectHideFlags: 0
@@ -8815,8 +8817,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 3.516}
-  m_SizeDelta: {x: 2, y: 1.2}
+  m_AnchoredPosition: {x: 0, y: 3.1}
+  m_SizeDelta: {x: 2, y: 0.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1026668693
 GameObject:
@@ -12285,8 +12287,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.20000002}
-  m_SizeDelta: {x: 1, y: 0.39999998}
+  m_AnchoredPosition: {x: 0, y: 0.15}
+  m_SizeDelta: {x: 1, y: 0.3}
   m_Pivot: {x: 1, y: 1}
 --- !u!1 &1645935783
 GameObject:
@@ -24047,8 +24049,9 @@ MonoBehaviour:
   isSeated: 0
   isInFOV: 0
   isSeatedAndInFOV: 0
-  isGuiding: 0
+  isGuidingToSeated: 0
   isguided: 0
+  lerpDurationForAvatar: 3
 --- !u!4 &2780380935429303479
 Transform:
   m_ObjectHideFlags: 0
@@ -26438,7 +26441,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 462110720233417092}
-  m_LocalRotation: {x: -0.12388972, y: 0.054268666, z: 0.009113445, w: 0.99076897}
+  m_LocalRotation: {x: -0.12376215, y: 0.054269843, z: 0.009106457, w: 0.990785}
   m_LocalPosition: {x: 0.03273677, y: 0.07959301, z: 0.07338554}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
@@ -38762,7 +38765,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6941542213375137039}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.8, z: 5}
+  m_LocalPosition: {x: 0, y: 1.5, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4109195129671627901}
@@ -39642,7 +39645,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8426418937400547069}
-  m_LocalRotation: {x: -0.12389002, y: 0.017652214, z: 0.0029674417, w: 0.9921345}
+  m_LocalRotation: {x: -0.123762265, y: 0.017652595, z: 0.0029651686, w: 0.9921504}
   m_LocalPosition: {x: -0.033310317, y: 0.07965034, z: 0.073377386}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
