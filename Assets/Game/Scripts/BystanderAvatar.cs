@@ -31,7 +31,10 @@ public class BystanderAvatar : MonoBehaviour
     public GameObject originalPos;
     public GameObject middlePos;
     private Transform guidingPos;
-    public GameObject headPos;
+    public GameObject arrowPos;
+    public GameObject arrowPosForAvatar;
+    public GameObject arrowOriginalPosForAvatar;
+    public GameObject guidingPosForAV;
    
     [Header("Time Settings")]
     public float timeToReachTarget;
@@ -48,14 +51,15 @@ public class BystanderAvatar : MonoBehaviour
     public bool isSeated;
     public bool isInFOV;
     public bool isSeatedAndInFOV;
-    // public Transform infoBubble;
-    // private Text infoText;
 
     private float mainCameraYAxis;
     public bool isGuiding;
     public bool isguided;
 
     private float angleinFOV = 50f;
+
+    private float guidingLength;
+    private float guidingSpeed = 1.0f;
  
     // Start is called before the first frame update
     void Start()
@@ -75,16 +79,13 @@ public class BystanderAvatar : MonoBehaviour
         backsideImage.enabled = false;
         bystanderAvatar.SetActive(false);
         arrowImage.enabled = false;
-        //if(infoBubble != null)
-        //{
-        //    infoText = GetComponentInChildren<Text>();
-        //    infoText.text = "Bystander Rotation:";
-        //}
-
+     
         // bystanderYAxis = bystanderTracker.transform.eulerAngles.y;
         bystanderYAxis = tracker.eulerAngles.y;
         bystanderRotationOffset = bystanderYAxis - 0f;
         mainCameraYAxis = Camera.main.transform.eulerAngles.y;
+
+        guidingLength = Vector3.Distance(new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z), tracker.position);
     }
 
     // Update is called once per frame
@@ -112,13 +113,12 @@ public class BystanderAvatar : MonoBehaviour
         // The bystander is sitting to the left of the VR Player.
         if (sitToLeft)
         {
-            // infoText.text = bystanderRotationEulerY.ToString();
-
             /***************************************************
              ** CRITICAL ZONE: 30-0 degrees to the VR user
              ** The bystander is heading towards the VR user
              *  (F)
-             *  (B) /_ (V)
+             *  (B) /-> (V
+             *  B: 30 >= d >= 0 (-10)
              ****************************************************/
             if (bystanderYAxis >= 60 && bystanderYAxis < 100) // 100 <- 90
             {              
@@ -177,23 +177,46 @@ public class BystanderAvatar : MonoBehaviour
 
                     if (isSeatedAndInFOV)
                     {
-                        if(mainCameraYAxis >= 250 && mainCameraYAxis <= 310) // VR user is heading towards the bystander
+                        // The bystander is inside VR user's FOV
+                        if (mainCameraYAxis >= 250 && mainCameraYAxis <= 310) 
                         {                       
                             transform.position = bystanderTracker.transform.position;
                             bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
                             arrowImage.enabled = false;
+                            isGuiding = false;
+                            currentMovementTime = 0;
                         } 
-                        else if(mainCameraYAxis > 310 && mainCameraYAxis <= 315)
+                        //else if(mainCameraYAxis > 310 && mainCameraYAxis <= 315) 
+                        //{
+                        //    bystanderAvatar.SetActive(false);
+                        //    arrowImage.enabled = false;
+                        //}
+                        else  // The bystander is outside the FOV of the VR user ( 310 < d < 360, ....)
                         {
-                            bystanderAvatar.SetActive(false);
-                            arrowImage.enabled = false;
-                        }
-                        else
-                        {
-                            bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV) / 90) - bystanderYAxis), 0);
-                            transform.position = new Vector3(FOVPos.transform.position.x, tracker.position.y, FOVPos.transform.position.z);
+                           
+                            if (!isGuiding)
+                            {
+                                bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV) / 90) - bystanderYAxis), 0);
+                                transform.position = new Vector3(FOVPos.transform.position.x, tracker.position.y, FOVPos.transform.position.z);
+                            }
                             arrowImage.enabled = true;
-                            arrowImage.transform.position = headPos.transform.position;
+                            arrowImage.transform.position = arrowPos.transform.position;
+
+                            currentMovementTime += Time.deltaTime;
+
+                            if(currentMovementTime > 2f)
+                            {
+                                isGuiding = true;
+                                transform.position = Vector3.Lerp(
+                                          transform.position,
+                                          new Vector3(guidingPosForAV.transform.position.x, tracker.position.y, guidingPosForAV.transform.position.z),
+                                          currentMovementTime / timeToReachTarget);
+
+                                bystanderAvatar.transform.rotation = Quaternion.Lerp(Quaternion.Euler(bystanderAvatar.transform.eulerAngles), Quaternion.Euler(new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV -10) / 90) - bystanderYAxis), 0)), Time.time * (currentMovementTime / timeToReachTarget));
+
+                            }
+                        
+
                             //if (!isGuiding)
                             //{
 
@@ -304,6 +327,7 @@ public class BystanderAvatar : MonoBehaviour
             //  (F)
             //   //_
             //  (B) (V)
+            // B: 60 >= d > 30
             else if (bystanderYAxis >= 30 && bystanderYAxis < 60)
             {
                 if (isAnimojiSetting)
@@ -334,6 +358,12 @@ public class BystanderAvatar : MonoBehaviour
                 if (isAvatarSetting)
                 {
                     bystanderAnim.SetBool("isInteracting", false);
+                    //  transform.position = bystanderTracker.transform.position;
+                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
+                    //transform.localEulerAngles = new Vector3(0, 180, 0); // towards the front seat
+                    // bystandreImage.CrossFadeAlpha(1, 1.0f, false);
+                    bystanderAvatar.SetActive(true);
+
                     if (isInFOV) 
                     {
                         transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
@@ -343,17 +373,11 @@ public class BystanderAvatar : MonoBehaviour
 
                     if (isSeatedAndInFOV)
                     {
-                        bystanderAvatar.SetActive(true);
                         transform.position = bystanderTracker.transform.position;
+                        // +
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
                         arrowImage.enabled = false;
-
                     }
-
-                  //  transform.position = bystanderTracker.transform.position;
-                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
-                    //transform.localEulerAngles = new Vector3(0, 180, 0); // towards the front seat
-                    // bystandreImage.CrossFadeAlpha(1, 1.0f, false);
-                    bystanderAvatar.SetActive(true);
                 }
 
                 if (isMixedSetting)
@@ -422,6 +446,7 @@ public class BystanderAvatar : MonoBehaviour
             //  (F)
             //   ||/
             //  (B) (V)
+            // B: 90 >= d > 60
             else if (bystanderYAxis < 30 && bystanderYAxis >= 0)  
             {
                 if (isAnimojiSetting)
@@ -435,6 +460,9 @@ public class BystanderAvatar : MonoBehaviour
                 if (isAvatarSetting)
                 {
                     bystanderAnim.SetBool("isInteracting", false);
+                    bystanderAvatar.SetActive(true);
+                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
+
                     if (isInFOV)
                     {
                         transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
@@ -444,14 +472,10 @@ public class BystanderAvatar : MonoBehaviour
 
                     if (isSeatedAndInFOV)
                     {
+                        // Avatar's position = bystander's seating position
                         transform.position = bystanderTracker.transform.position;
                         arrowImage.enabled = false;
                     }
-
-                      
-                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
-                    // bystandreImage.CrossFadeAlpha(0, 1.0f, false);
-                    bystanderAvatar.SetActive(true);
                 }
 
                 if (isMixedSetting)
@@ -465,9 +489,9 @@ public class BystanderAvatar : MonoBehaviour
                     //yesInteractionFrontImage.enabled = false;
                     //arrowImage.enabled = false;
 
+                    // The bystander's avatar is outside the VR user's FOV
                     if (mainCameraYAxis >= 320 || (mainCameraYAxis > 0 && mainCameraYAxis <= 90))
                     {
-
                         bystanderAvatar.SetActive(false);
                         bystanderAnim.SetBool("isInteracting", false);
                         presenceAnimojiBoard.transform.position = originalPos.transform.position;
@@ -475,8 +499,6 @@ public class BystanderAvatar : MonoBehaviour
                         noInteractionFrontImage.enabled = false;
                         yesInteractionFrontImage.enabled = false;
                         arrowImage.enabled = false;
-                   
-
                     }
                     else if (mainCameraYAxis < 320 && mainCameraYAxis >= 250)
                     {
@@ -491,18 +513,12 @@ public class BystanderAvatar : MonoBehaviour
                         backsideImage.enabled = false;
                         arrowImage.enabled = false;
                     }
-
-
-
-
-
-
-
                 }
             }
             //  (F)
             //  \|
             //  (B) (V)
+            //  B: d > 90
             else
             {
                 if (isAnimojiSetting)
@@ -515,8 +531,15 @@ public class BystanderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
+                    // TODO: Is the avatar shown when the bystander is at an angle greater than 90 degrees towards the VR user?
+                    // If No
+                    // no Avatar
                     bystanderAnim.SetBool("isInteracting", false);
                     bystanderAvatar.SetActive(false);
+
+                    // If yes
+                    //bystanderAnim.SetBool("isInteracting", false);
+                    //bystanderAvatar.SetActive(true);
                 }
 
                 if (isMixedSetting)
@@ -531,7 +554,7 @@ public class BystanderAvatar : MonoBehaviour
                 }
             }
         }
-        /*
+        /******************************************************************
          * To the right side of the VR user
          */
         else
@@ -660,14 +683,6 @@ public class BystanderAvatar : MonoBehaviour
                 }
             }
         }
-
-
-        //if (infoBubble != null)
-        //{
-        //   // infoText.text = bystanderRotationEulerY.ToString();
-        //    infoBubble.LookAt(Camera.main.transform.position);
-        //    infoBubble.Rotate(0, 180f, 0);
-        //}
     }
 
     public void TurnBackwards()

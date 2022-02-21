@@ -21,7 +21,9 @@ public class MemoryCardGameManager : MonoBehaviour
     public TMP_Text gameScoreText;
     public TMP_Text timeText;
     public TMP_Text gameProcessText;
+    public TMP_Text instructionText;
     public Image gameProcessBackground;
+   // public GameObject process;
 
     [Header("Cards")]
     public MemoryCard[] allCards;
@@ -128,7 +130,8 @@ public class MemoryCardGameManager : MonoBehaviour
                 if (Math.Round(gameCountTimer) == totalGameTime)
                 {
                     StopRayInteractoin();
-                    Invoke(nameof(GoToNextLevel), 4);
+                    EndGame();
+                    Invoke(nameof(GoToNextLevel), 10);
                 }
             }
         }
@@ -190,6 +193,7 @@ public class MemoryCardGameManager : MonoBehaviour
 
 
         //}
+        instructionText.text = "Match Pairs by Clicking Two Cards!";
 
         Invoke("HideCards", time: memorizingTime);
         Invoke(nameof(showNotification), time: memorizingTime - 2f);
@@ -211,12 +215,14 @@ public class MemoryCardGameManager : MonoBehaviour
     public void showNotification()
     {
         gameProcessBackground.enabled = true;
-        gameProcessText.text = "Match Pairs by clicking two cards!";
+        gameProcessText.text = "GAME START!";
     }
     public void HideCards() {
         //  timeText.text = "Game Start";
+
         gameProcessBackground.enabled = false;
-        gameProcessText.text = "";
+        gameProcessText.enabled = false;
+        instructionText.text = "";
     
     gameScoreText.text = "0/20";
         // Debug.Log("HideCards is called");
@@ -289,7 +295,8 @@ public class MemoryCardGameManager : MonoBehaviour
             audioSource.PlayOneShot(clipCardMatch);
             if(score == 20)
             {
-                Invoke(nameof(GoToNextLevel), 5);
+                EndGame();
+                Invoke(nameof(GoToNextLevel), 10);
             }
         }
         else
@@ -307,6 +314,14 @@ public class MemoryCardGameManager : MonoBehaviour
         audioSource.PlayOneShot(clipCardBackward);
 
         canClick = true;
+    }
+
+    public void EndGame()
+    {
+        gameProcessBackground.enabled = true;
+        gameProcessText.enabled = true;
+        gameProcessText.text = "FINISH";
+        
     }
 
     public void GoToNextLevel() {
