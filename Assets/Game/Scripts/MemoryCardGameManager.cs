@@ -9,49 +9,50 @@ using TMPro;
 
 public class MemoryCardGameManager : MonoBehaviour
 {
+    [Header("Audio")]
     public AudioSource audioSource;
-
     public AudioClip clipCardForward;
     public AudioClip clipCardBackward;
     public AudioClip clipCardMatch;
     public AudioClip clipCardUnmatch;
 
-    public GameObject uiCavans;
+    [Header("UI")]
+    public GameObject menuUICanvas;
+    public TMP_Text gameScoreText;
+    public TMP_Text timeText;
+    public TMP_Text gameProcessText;
+    public Image gameProcessBackground;
 
+    [Header("Cards")]
     public MemoryCard[] allCards;
     public List<Vector3> allPositionsOfCards = new List<Vector3>();
     public Vector3 AngleOfCards = new Vector3();
-
     public MemoryCard firstSelectedCard;
-    public MemoryCard secondSelectedCard;
-    //private MemoryCard mc = new MemoryCard();
-    
+    public MemoryCard secondSelectedCard;    
+
     private bool canClick = true;
     [SerializeField]
     private bool isFront = false;
 
+    [Header("Time Manager")]
     public float memorizingTime;
-    public float warmUpInSeconds;
-    public int gameTimes;
-
-    [SerializeField]
-    private float startShowingCards, hideCardAgainInSec; // time to show Card images, time to turn backwards again
+    public float bufferBeforeStartingGame;
+    public int totalGameTime;
     [SerializeField]
     int gameTimer;
-    public RotateTracker rt;
+    [SerializeField]
+    private float startShowingCards, hideCardAgainInSec; // time to show Card images, time to turn backwards again
+    float timer = 0f;
+    float gameCountTimer = 0f;
 
-    public TMP_Text gameScoreText;
-    public TMP_Text timeText;
+    public RotateTracker rt;
 
     [SerializeField]
     private int score;
 
     public GameObject matchEffectPrefab;
     public GameObject matchEffectPrefab2;
-    float timer = 0f;
-    float gameCountTimer = 0f;
 
-    [SerializeField]
     private bool canStart;
 
     private void Awake()
@@ -81,11 +82,13 @@ public class MemoryCardGameManager : MonoBehaviour
         // To set time to show all cards
         //startShowingCards = Time.time + warmUpInSeconds;
         //hideCardAgainInSec = startShowingCards + memorizingTime;
-        gameTimer = gameTimes;
+        gameTimer = totalGameTime;
 
         score = 0;
         gameScoreText.text = "";
         timeText.text = "";
+        gameProcessText.text = "";
+        gameProcessBackground.enabled = false;
     }
 
     private void FixedUpdate()
@@ -94,25 +97,35 @@ public class MemoryCardGameManager : MonoBehaviour
         {
             if (Time.time >= startShowingCards && Time.time <= hideCardAgainInSec)
             {
+                //if(Time.time == hideCardAgainInSec)
+                //{
+                //    gameProcessBackground.enabled = true;
+                //    gameProcessText.text = "Match a pair of cards!";
+                //}
+
+                //gameProcessBackground.enabled = false;
+                //gameProcessText.text = "";
+
                 timer += Time.fixedDeltaTime;
-                timeText.text = "TIME REMANING: " + (memorizingTime - Math.Round(timer)) + " ";
+                timeText.text = (memorizingTime - Math.Round(timer)).ToString();
                 // *** Debug.Log(timer);
                 //  Debug.Log(Time.time + " startToShow:" + startToShowTimer + " hideTimer: "+ hideTimer);
                 // ShowCards();
+               
                 if (isFront == false)
                 {
                     ShowCards();
                     isFront = true;
                 }
             }
-            else if (Time.time > hideCardAgainInSec && gameCountTimer <= gameTimes)
+            else if (Time.time > hideCardAgainInSec && gameCountTimer <= totalGameTime)
             {
                 gameCountTimer += Time.fixedDeltaTime;
 
               
                 
-                timeText.text = "Time: " + (gameTimer - Math.Round(gameCountTimer)); // gameTimer - Math.Round(gameCountTimer)
-                if (Math.Round(gameCountTimer) == gameTimes)
+                timeText.text = (gameTimer - Math.Round(gameCountTimer)).ToString(); // gameTimer - Math.Round(gameCountTimer)
+                if (Math.Round(gameCountTimer) == totalGameTime)
                 {
                     StopRayInteractoin();
                     Invoke(nameof(GoToNextLevel), 4);
@@ -159,16 +172,10 @@ public class MemoryCardGameManager : MonoBehaviour
             if(card != null)
                 card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
         }
-
     }
 
-
-
     public void ShowCards()
-    {
-       
-        // Debug.Log("showCard called");
-        
+    {             
         Vector3 frontAngles = new Vector3(0, 0, 0);
 
         foreach(MemoryCard card in allCards) {
@@ -185,6 +192,7 @@ public class MemoryCardGameManager : MonoBehaviour
         //}
 
         Invoke("HideCards", time: memorizingTime);
+        Invoke(nameof(showNotification), time: memorizingTime - 2f);
 
 
 
@@ -199,8 +207,18 @@ public class MemoryCardGameManager : MonoBehaviour
 
     }
 
+
+    public void showNotification()
+    {
+        gameProcessBackground.enabled = true;
+        gameProcessText.text = "Match Pairs by clicking two cards!";
+    }
     public void HideCards() {
-        timeText.text = "Game Start";
+        //  timeText.text = "Game Start";
+        gameProcessBackground.enabled = false;
+        gameProcessText.text = "";
+    
+    gameScoreText.text = "0/20";
         // Debug.Log("HideCards is called");
         Vector3 backAngles = new Vector3(0, 180, 0);
         //for (int i = 0; i < allCards.Length; i++) {
@@ -215,12 +233,12 @@ public class MemoryCardGameManager : MonoBehaviour
         //isFront = false;
         //mc.IsGameStart = true;
         Invoke("BystanderStart", 3f);
-      //  Invoke("StartGame", 30f);
     }
 
     public void BystanderStart()
     {
         timeText.text = "";
+       // gameScoreText.text = "0/20";
         rt.isHeadingToPlayer = true;
     }
  
@@ -266,7 +284,7 @@ public class MemoryCardGameManager : MonoBehaviour
             Destroy(firstSelectedCard.gameObject);
             Destroy(secondSelectedCard.gameObject);
             score += 2;
-            gameScoreText.text = "SCORE: " + score.ToString() + "/20";
+            gameScoreText.text = score.ToString() + "/20";
 
             audioSource.PlayOneShot(clipCardMatch);
             if(score == 20)
@@ -299,10 +317,9 @@ public class MemoryCardGameManager : MonoBehaviour
     public void StartGame()
     {
         canStart = true;
-        startShowingCards = Time.time + warmUpInSeconds;
+        startShowingCards = Time.time + bufferBeforeStartingGame;
         hideCardAgainInSec = startShowingCards + memorizingTime;
-        
-        Destroy(uiCavans);
+        Destroy(menuUICanvas);
     }
 
 
