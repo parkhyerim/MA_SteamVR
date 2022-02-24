@@ -15,9 +15,7 @@ public class GameManager : MonoBehaviour
     public AudioClip clipCardBackward;
     public AudioClip clipCardMatch;
     public AudioClip clipCardUnmatch;
-    public AudioClip bgMusic;
-    public AudioSource bgMusicAudioSource;
-    bool canMusicPlay;
+   // bool canMusicPlay;
 
     [Header("EFFECT")]
     public GameObject matchEffectPrefab;
@@ -72,13 +70,10 @@ public class GameManager : MonoBehaviour
         foreach(MemoryCard card in allCards)
         {
             allPositionsOfCards.Add(card.transform.position);
-           // card.gameObject.layer = LayerMask.NameToLayer("Default");
-           
             // to make all cards uninteractable
             card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
         }
         
-
         AngleOfCards = allCards[0].transform.localEulerAngles;
 
         // Randomize the positions of the cards
@@ -107,11 +102,10 @@ public class GameManager : MonoBehaviour
             img.enabled = false;
         }
        
-        canMusicPlay = true;
+       // canMusicPlay = true;
 
-        //        UnityEngine.UI.Button pauseBtn = GameObject.Find("PauseButton").GetComponent<UnityEngine.UI.Button>();
         interactionUI.SetActive(false);
-     //   pauseBtn.gameObject.SetActive(false);
+     // pauseBtn.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -131,10 +125,7 @@ public class GameManager : MonoBehaviour
 
                 timer += Time.fixedDeltaTime;
                 timeText.text = (memorizingTime - Math.Round(timer)).ToString();
-                // *** Debug.Log(timer);
-                //  Debug.Log(Time.time + " startToShow:" + startToShowTimer + " hideTimer: "+ hideTimer);
-                // ShowCards();
-               
+            
                 if (isFront == false)
                 {
                     ShowCards();
@@ -160,51 +151,8 @@ public class GameManager : MonoBehaviour
                     timeText.text = (gameTimer - Math.Round(gameCountTimer)).ToString();
                 }
             }
-
-
-            //if (canMusicPlay)
-            //{
-            //    bgMusicAudioSource.Play(0);
-            //   // audioSource.Play();
-            //    Debug.Log("music can be played");
-            //}
-            //else
-            //{
-            //    bgMusicAudioSource.Stop();
-            //}
-
-
         }
     }
-    //private void Update()
-    //{
-    //    //Debug.Log("starttimer: " + startToShowTimer + "  time: " + Time.time);
-    //    // check the current time to see whether it's time for hiding cards
-
-    //    if (canStart)
-    //    {
-    //        if (Time.time >= startShowingCards && Time.time <= hideCardAgainInSec)
-    //        {
-    //            timer += Time.deltaTime;
-    //            timeText.text = "TIME REMANING: " + (memorizingTime - Math.Round(timer));
-    //            // *** Debug.Log(timer);
-    //            //  Debug.Log(Time.time + " startToShow:" + startToShowTimer + " hideTimer: "+ hideTimer);
-    //            // ShowCards();
-    //            if (isFront == false)
-    //            {
-    //                ShowCards();
-    //                isFront = true;
-    //            }
-    //        }
-    //        else if(Time.time > hideCardAgainInSec)
-    //        {
-    //            gameCountTimer += Time.deltaTime;
-
-    //            timeText.text = "Time: " + (gameTimer - Math.Round(gameCountTimer));
-    //        }
-    //    }
-      
-    //}
 
     public void PauseGameTime()
     {
@@ -212,7 +160,6 @@ public class GameManager : MonoBehaviour
         {
             pausedTime = gameCountTimer;
             pausedGame = true;
-            Debug.Log(pausedTime);
             StopRayInteractoin();
         }
         else
@@ -222,8 +169,6 @@ public class GameManager : MonoBehaviour
         }
     }
       
-
-
     void StopRayInteractoin()
     {
         foreach (MemoryCard card in allCards)
@@ -239,7 +184,7 @@ public class GameManager : MonoBehaviour
         {
             if (card != null)
                 card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
-        }
+        }   
     }
 
     public void ShowCards()
@@ -249,26 +194,11 @@ public class GameManager : MonoBehaviour
         foreach(MemoryCard card in allCards) {
             card.transform.localEulerAngles = frontAngles;
         }
-        //for (int i = 0; i < allCards.Length; i++) {
-        //    //allCards[i].transform.localEulerAngles = frontAngles;
 
-        //    allCards[i].transform.Rotate(frontAngles);
-
-        //    Debug.Log(allCards[i].transform.localEulerAngles);
-        //}
         instructionText.text = "Match Pairs by Clicking Two Cards!";
 
         Invoke("HideCards", time: memorizingTime);
         Invoke(nameof(showNotification), time: memorizingTime - 0.8f);
-
-        //float targetRotation = 0;
-        //Quaternion rotationValue = Quaternion.Euler(0, targetRotation, 0);
-        //for (int i = 0; i < allCards.Length; i++) {
-        //    allCards[i].transform.rotation = Quaternion.Lerp(transform.rotation, rotationValue, 10 * Time.deltaTime);
-
-        //    allCards[i].transform.rotation = rotationValue;
-        //    Debug.Log(allCards[i].transform.rotation);
-        //}
     }
 
     public void showNotification()
@@ -285,19 +215,14 @@ public class GameManager : MonoBehaviour
         instructionText.text = "";
     
         gameScoreText.text = "0/20";
-        // Debug.Log("HideCards is called");
         Vector3 backAngles = new Vector3(0, 180, 0);
-        //for (int i = 0; i < allCards.Length; i++) {
-        //    allCards[i].transform.localEulerAngles = backAngles;
-            
-        //}
+
         foreach(MemoryCard card in allCards) {
             card.IsGameStart = true;
             card.transform.localEulerAngles = backAngles;
             card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
         }
         //isFront = false;
-        //mc.IsGameStart = true;
         Invoke("BystanderStart", 5f);
         interactionUI.SetActive(true);
       //  pauseBtn.gameObject.SetActive(true);
@@ -336,7 +261,6 @@ public class GameManager : MonoBehaviour
             // 1 second later
             Invoke("CheckMatch", 1);         
         }
-       // Debug.Log(card.name + " " + card.identifier);
     }
 
     public void CheckMatch()
@@ -344,7 +268,6 @@ public class GameManager : MonoBehaviour
         // RESULT
         if (firstSelectedCard.identifier == secondSelectedCard.identifier)
         {
-           
             Instantiate(matchEffectPrefab, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
             Instantiate(matchEffectPrefab, secondSelectedCard.gameObject.transform.position, Quaternion.identity);
             Instantiate(matchEffectPrefab2, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
@@ -354,31 +277,27 @@ public class GameManager : MonoBehaviour
             score += 2;
             gameScoreText.text = score.ToString() + "/20";
 
-            if (score % 4 == 0 && score!= 20)
-            {
+            //if ((score % 4 == 0) && score!= 20)
+            //{
                 // notificationCheerImage.enabled = true;
                 StartCoroutine("ShowRandomImage");
                 randomNumber = UnityEngine.Random.Range(0, notificationCheerImages.Count);
-                Debug.Log(randomNumber);
                 notificationCheerImages[randomNumber].enabled = true;
                 notificationCheerImages[randomNumber].transform.position = firstSelectedCard.gameObject.transform.position;
-            }
-
-
+            //}
 
             audioSource.PlayOneShot(clipCardMatch);
             if(score == 20)
             {
                 StopRayInteractoin();
-                Invoke(nameof(EndGame), 1);
-                Invoke(nameof(GoToNextLevel), 10);
+                Invoke(nameof(EndGame), 3);
+                Invoke(nameof(GoToNextLevel), 8);
             }
         }
         else
         {
             firstSelectedCard.targetRotation = 180;
             secondSelectedCard.targetRotation = 180;
-
             audioSource.PlayOneShot(clipCardUnmatch);
         }
 
@@ -396,7 +315,11 @@ public class GameManager : MonoBehaviour
         gameProcesCanvas.SetActive(true);
         notificationBGImage.enabled = true;
         notificationText.enabled = true;
-        notificationText.text = "FINISHED!";        
+        
+        if (score == 20)
+            notificationText.text = "BRAVO!\nYOU WIN!";
+        else
+            notificationText.text = "GAME OVER!";
     }
 
     public void GoToNextLevel() {
@@ -419,7 +342,5 @@ public class GameManager : MonoBehaviour
         startShowingCards = Time.time + bufferBeforeStartingGame;
         hideCardAgainInSec = startShowingCards + memorizingTime;
         Destroy(menuUICanvas);
-
-        //  IdentifyInteraction iUI = FindObjectOfType<IdentifyInteraction>();  
     }
 }

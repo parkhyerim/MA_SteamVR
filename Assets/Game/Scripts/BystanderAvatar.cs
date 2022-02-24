@@ -329,7 +329,6 @@ public class BystanderAvatar : MonoBehaviour
                                 originalArrowPos.transform.position,
                                 arrowPosition.transform.position,
                                t);
-
                         }
                         else
                         {
