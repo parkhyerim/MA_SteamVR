@@ -14,8 +14,12 @@ public class IdentifyInteraction : MonoBehaviour
     bool pauseClicked;
    public GameManager gameManager;
     bool onceClicked;
+    public Image interactionImage;
 
-
+    private void Awake()
+    {
+       // interactionImage.enabled = false;
+    }
     public void OnPauseButtonClicked()
     { 
         if (!pauseClicked)
@@ -26,12 +30,14 @@ public class IdentifyInteraction : MonoBehaviour
             {
                 audioSource.PlayOneShot(quesitionAudio);
                 onceClicked = true;
+                interactionImage.enabled = false;
             }
             button.GetComponentInChildren<TMP_Text>().text = "RESUME";
             button.GetComponent<Image>().color = new Color32(255, 209, 139, 255);
             // buttonText.text = "RESUME";
             pauseClicked = true;
             gameManager.PauseGameTime();
+            
         }
         else 
         {

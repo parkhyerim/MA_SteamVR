@@ -30,8 +30,9 @@ public class GameManager : MonoBehaviour
     public TMP_Text instructionText;
     public TMP_Text notificationText;  
     public Image notificationBGImage;
+    public List<Image> notificationCheerImages;
     public GameObject gameProcesCanvas;
-    GameObject interactionUI;
+    public GameObject interactionUI;
 
     [Header("CARDs")]
     public MemoryCard[] allCards;
@@ -58,10 +59,12 @@ public class GameManager : MonoBehaviour
     private bool canStart;
 
     public RotateTracker rTracker;
+
     public Button pauseBtn;
     [SerializeField]
     private float pausedTime;
     bool pausedGame;
+    int randomNumber;
 
     private void Awake()
     {       
@@ -96,13 +99,19 @@ public class GameManager : MonoBehaviour
         score = 0;
         gameScoreText.text = "";
         timeText.text = "";
-        notificationText.text = "";
-        notificationBGImage.enabled = false;
+        gameProcesCanvas.gameObject.SetActive(false);
+        //notificationText.text = "";
+       // notificationBGImage.enabled = false;
+        foreach(Image img in notificationCheerImages)
+        {
+            img.enabled = false;
+        }
+       
         canMusicPlay = true;
 
-//        UnityEngine.UI.Button pauseBtn = GameObject.Find("PauseButton").GetComponent<UnityEngine.UI.Button>();
-        pauseBtn.gameObject.SetActive(false);
-
+        //        UnityEngine.UI.Button pauseBtn = GameObject.Find("PauseButton").GetComponent<UnityEngine.UI.Button>();
+        interactionUI.SetActive(false);
+     //   pauseBtn.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -250,7 +259,7 @@ public class GameManager : MonoBehaviour
         instructionText.text = "Match Pairs by Clicking Two Cards!";
 
         Invoke("HideCards", time: memorizingTime);
-        Invoke(nameof(showNotification), time: memorizingTime - 1f);
+        Invoke(nameof(showNotification), time: memorizingTime - 0.8f);
 
         //float targetRotation = 0;
         //Quaternion rotationValue = Quaternion.Euler(0, targetRotation, 0);
@@ -264,11 +273,13 @@ public class GameManager : MonoBehaviour
 
     public void showNotification()
     {
+        gameProcesCanvas.SetActive(true);
         notificationBGImage.enabled = true;
         notificationText.text = "GAME START!";
     }
     public void HideCards() {
         //  timeText.text = "Game Start";
+        
         notificationBGImage.enabled = false;
         notificationText.enabled = false;
         instructionText.text = "";
@@ -287,8 +298,9 @@ public class GameManager : MonoBehaviour
         }
         //isFront = false;
         //mc.IsGameStart = true;
-        Invoke("BystanderStart", 15f);
-        pauseBtn.gameObject.SetActive(true);
+        Invoke("BystanderStart", 5f);
+        interactionUI.SetActive(true);
+      //  pauseBtn.gameObject.SetActive(true);
     }
 
     public void BystanderStart()
@@ -341,10 +353,20 @@ public class GameManager : MonoBehaviour
             score += 2;
             gameScoreText.text = score.ToString() + "/20";
 
+            if(score % 4 == 0)
+            {
+                // notificationCheerImage.enabled = true;
+                StartCoroutine("ShowRandomImage");
+                randomNumber = UnityEngine.Random.Range(0, notificationCheerImages.Count);
+                Debug.Log(randomNumber);
+                notificationCheerImages[randomNumber].enabled = true;
+            }
+
             audioSource.PlayOneShot(clipCardMatch);
             if(score == 20)
             {
-                EndGame();
+                StopRayInteractoin();
+                Invoke(nameof(EndGame), 1);
                 Invoke(nameof(GoToNextLevel), 10);
             }
         }
@@ -367,14 +389,24 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
+        gameProcesCanvas.SetActive(true);
         notificationBGImage.enabled = true;
         notificationText.enabled = true;
-        notificationText.text = "FINISH";        
+        notificationText.text = "FINISHED!";        
     }
 
     public void GoToNextLevel() {
         LevelManager levelManager = FindObjectOfType<LevelManager>();
         levelManager.LoadNextLevel();
+    }
+
+    public IEnumerator ShowRandomImage()
+    {
+        while (true)
+        {   
+            yield return new WaitForSeconds(1);
+            notificationCheerImages[randomNumber].enabled = false;
+        }
     }
 
     public void StartGame()
