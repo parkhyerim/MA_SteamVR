@@ -12,26 +12,34 @@ public class IdentifyInteraction : MonoBehaviour
     public TMP_Text buttonText;
     public AudioSource bgMusicAS;
     bool pauseClicked;
+   public GameManager gameManager;
+    bool onceClicked;
+
 
     public void OnPauseButtonClicked()
-    {
-       
-       
+    { 
         if (!pauseClicked)
         {
-            Debug.Log("Pause Button is clicked");
+           // Debug.Log("Pause Button is clicked");
             bgMusicAS.Pause();
-            audioSource.PlayOneShot(quesitionAudio);
+            if (!onceClicked)
+            {
+                audioSource.PlayOneShot(quesitionAudio);
+                onceClicked = true;
+            }
             button.GetComponentInChildren<TMP_Text>().text = "RESUME";
             button.GetComponent<Image>().color = new Color32(255, 209, 139, 255);
             // buttonText.text = "RESUME";
             pauseClicked = true;
+            gameManager.PauseGameTime();
         }
-        else
+        else 
         {
             button.GetComponentInChildren<TMP_Text>().text = "PAUSE";
             button.GetComponent<Image>().color = new Color32(0, 144, 255, 255);
-            bgMusicAS.Play();
+            bgMusicAS.UnPause();
+            gameManager.PauseGameTime();
+            pauseClicked = false;
         }
 
 

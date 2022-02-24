@@ -59,6 +59,9 @@ public class GameManager : MonoBehaviour
 
     public RotateTracker rTracker;
     public Button pauseBtn;
+    [SerializeField]
+    private float pausedTime;
+    bool pausedGame;
 
     private void Awake()
     {       
@@ -131,14 +134,21 @@ public class GameManager : MonoBehaviour
             }
             else if (Time.time > hideCardAgainInSec && gameCountTimer <= totalGameTime)
             {
-                gameCountTimer += Time.fixedDeltaTime;
-           
-                timeText.text = (gameTimer - Math.Round(gameCountTimer)).ToString(); // gameTimer - Math.Round(gameCountTimer)
-                if (Math.Round(gameCountTimer) == totalGameTime)
+                if (!pausedGame)
                 {
-                    StopRayInteractoin();
-                    EndGame();
-                    Invoke(nameof(GoToNextLevel), 10);
+                    gameCountTimer += Time.fixedDeltaTime;
+
+                    timeText.text = (gameTimer - Math.Round(gameCountTimer)).ToString(); // gameTimer - Math.Round(gameCountTimer)
+                    if (Math.Round(gameCountTimer) == totalGameTime)
+                    {
+                        StopRayInteractoin();
+                        EndGame();
+                        Invoke(nameof(GoToNextLevel), 10);
+                    }
+                }
+                else
+                {
+                    timeText.text = (gameTimer - Math.Round(gameCountTimer)).ToString();
                 }
             }
 
@@ -156,8 +166,6 @@ public class GameManager : MonoBehaviour
 
 
         }
-
-
     }
     //private void Update()
     //{
@@ -189,14 +197,39 @@ public class GameManager : MonoBehaviour
       
     //}
 
+    public void PauseGameTime()
+    {
+        if (!pausedGame)
+        {
+            pausedTime = gameCountTimer;
+            pausedGame = true;
+            Debug.Log(pausedTime);
+            StopRayInteractoin();
+        }
+        else
+        {
+            pausedGame = false;
+            StartRayInteraction();
+        }
+    }
+      
+
 
     void StopRayInteractoin()
     {
         foreach (MemoryCard card in allCards)
-        {
-   
+        {   
             if(card != null)
                 card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
+        }
+    }
+
+    void StartRayInteraction()
+    {
+        foreach (MemoryCard card in allCards)
+        {
+            if (card != null)
+                card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
         }
     }
 
@@ -213,15 +246,11 @@ public class GameManager : MonoBehaviour
         //    allCards[i].transform.Rotate(frontAngles);
 
         //    Debug.Log(allCards[i].transform.localEulerAngles);
-
-
         //}
         instructionText.text = "Match Pairs by Clicking Two Cards!";
 
         Invoke("HideCards", time: memorizingTime);
         Invoke(nameof(showNotification), time: memorizingTime - 1f);
-
-
 
         //float targetRotation = 0;
         //Quaternion rotationValue = Quaternion.Euler(0, targetRotation, 0);
@@ -231,9 +260,7 @@ public class GameManager : MonoBehaviour
         //    allCards[i].transform.rotation = rotationValue;
         //    Debug.Log(allCards[i].transform.rotation);
         //}
-
     }
-
 
     public void showNotification()
     {
@@ -242,12 +269,11 @@ public class GameManager : MonoBehaviour
     }
     public void HideCards() {
         //  timeText.text = "Game Start";
-
         notificationBGImage.enabled = false;
         notificationText.enabled = false;
         instructionText.text = "";
     
-    gameScoreText.text = "0/20";
+        gameScoreText.text = "0/20";
         // Debug.Log("HideCards is called");
         Vector3 backAngles = new Vector3(0, 180, 0);
         //for (int i = 0; i < allCards.Length; i++) {
@@ -272,7 +298,6 @@ public class GameManager : MonoBehaviour
         rTracker.isHeadingToPlayer = true;
     }
  
-
     public void CardClicked(MemoryCard card)
     {
         if (canClick == false || card == firstSelectedCard)
@@ -344,8 +369,7 @@ public class GameManager : MonoBehaviour
     {
         notificationBGImage.enabled = true;
         notificationText.enabled = true;
-        notificationText.text = "FINISH";
-        
+        notificationText.text = "FINISH";        
     }
 
     public void GoToNextLevel() {
@@ -360,11 +384,6 @@ public class GameManager : MonoBehaviour
         hideCardAgainInSec = startShowingCards + memorizingTime;
         Destroy(menuUICanvas);
 
-        //  IdentifyInteraction iUI = FindObjectOfType<IdentifyInteraction>();
-
-     
-
+        //  IdentifyInteraction iUI = FindObjectOfType<IdentifyInteraction>();  
     }
-
-
 }
