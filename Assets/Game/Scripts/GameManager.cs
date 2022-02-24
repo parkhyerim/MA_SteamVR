@@ -344,6 +344,7 @@ public class GameManager : MonoBehaviour
         // RESULT
         if (firstSelectedCard.identifier == secondSelectedCard.identifier)
         {
+           
             Instantiate(matchEffectPrefab, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
             Instantiate(matchEffectPrefab, secondSelectedCard.gameObject.transform.position, Quaternion.identity);
             Instantiate(matchEffectPrefab2, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
@@ -353,14 +354,17 @@ public class GameManager : MonoBehaviour
             score += 2;
             gameScoreText.text = score.ToString() + "/20";
 
-            if(score % 4 == 0)
+            if (score % 4 == 0 && score!= 20)
             {
                 // notificationCheerImage.enabled = true;
                 StartCoroutine("ShowRandomImage");
                 randomNumber = UnityEngine.Random.Range(0, notificationCheerImages.Count);
                 Debug.Log(randomNumber);
                 notificationCheerImages[randomNumber].enabled = true;
+                notificationCheerImages[randomNumber].transform.position = firstSelectedCard.gameObject.transform.position;
             }
+
+
 
             audioSource.PlayOneShot(clipCardMatch);
             if(score == 20)
