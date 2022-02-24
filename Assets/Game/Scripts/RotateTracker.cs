@@ -8,6 +8,7 @@ public class RotateTracker : MonoBehaviour
     public bool doInteraction;
     public bool useTracker;
 
+    // temporary
     public float rotateSpeed = 2;
     [SerializeField]
     private bool isHeadingTo30, isHeadingToFrontSeat;
@@ -69,13 +70,10 @@ public class RotateTracker : MonoBehaviour
                     {
                         if (doInteraction)
                         {
-
-
                             Invoke("HeadingBacktoFrontSeat", 0f);
                         }
                         else
                         {
-
                             Invoke("HeadingBacktoFrontSeat", 12.5f);
                         }
                     }

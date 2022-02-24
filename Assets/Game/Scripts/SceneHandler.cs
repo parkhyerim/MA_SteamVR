@@ -30,7 +30,7 @@ public class SceneHandler : MonoBehaviour
            // Debug.Log(e.target.gameObject);
             cardObject = e.target.gameObject;
             memoryCard = cardObject.GetComponent<MemoryCard>();
-            FindObjectOfType<MemoryCardGameManager>().CardClicked(memoryCard);
+            FindObjectOfType<GameManager>().CardClicked(memoryCard);
         }
     }
 
