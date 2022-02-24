@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text notificationText;  
     public Image notificationBGImage;
     public GameObject gameProcesCanvas;
+    GameObject interactionUI;
 
     [Header("CARDs")]
     public MemoryCard[] allCards;
@@ -57,6 +58,7 @@ public class GameManager : MonoBehaviour
     private bool canStart;
 
     public RotateTracker rTracker;
+    public Button pauseBtn;
 
     private void Awake()
     {       
@@ -69,6 +71,7 @@ public class GameManager : MonoBehaviour
             // to make all cards uninteractable
             card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
         }
+        
 
         AngleOfCards = allCards[0].transform.localEulerAngles;
 
@@ -93,6 +96,10 @@ public class GameManager : MonoBehaviour
         notificationText.text = "";
         notificationBGImage.enabled = false;
         canMusicPlay = true;
+
+//        UnityEngine.UI.Button pauseBtn = GameObject.Find("PauseButton").GetComponent<UnityEngine.UI.Button>();
+        pauseBtn.gameObject.SetActive(false);
+
     }
 
     private void FixedUpdate()
@@ -255,6 +262,7 @@ public class GameManager : MonoBehaviour
         //isFront = false;
         //mc.IsGameStart = true;
         Invoke("BystanderStart", 15f);
+        pauseBtn.gameObject.SetActive(true);
     }
 
     public void BystanderStart()
@@ -351,6 +359,11 @@ public class GameManager : MonoBehaviour
         startShowingCards = Time.time + bufferBeforeStartingGame;
         hideCardAgainInSec = startShowingCards + memorizingTime;
         Destroy(menuUICanvas);
+
+        //  IdentifyInteraction iUI = FindObjectOfType<IdentifyInteraction>();
+
+     
+
     }
 
 
