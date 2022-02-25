@@ -120,7 +120,7 @@ public class BystanderAvatar : MonoBehaviour
              ** CRITICAL ZONE: 30-0 degrees to the VR user
              ** The bystander is heading towards the VR user
              *  (F)
-             *  (B) /-> (V
+             *  (B) /-> (V)
              *  B: 30 >= d >= 0 (-10)
              ****************************************************/
             if (bystanderYAxis >= 60 && bystanderYAxis < 100) // 100 <- 90
@@ -138,15 +138,15 @@ public class BystanderAvatar : MonoBehaviour
                     }
                     else
                     {
-                        // Bigger Animoji
-                        //yesInteractionFrontImage.enabled = false;
-                        //noInteractionFrontImage.enabled = true;
-                        //noInteractionFrontImage.transform.localScale = new Vector2(1.5f, 1.5f);
-                        noInteractionFrontImage.enabled = false;
-                        yesInteractionFrontImage.enabled = true;
-                        yesInteractionFrontImage.transform.localScale = new Vector2(1.5f, 1.5f);
-                    }
-                    
+                        // TODO: FE 
+                        // Bigger Animoji without FE 
+                        yesInteractionFrontImage.enabled = false;
+                        noInteractionFrontImage.enabled = true;
+                        noInteractionFrontImage.transform.localScale = new Vector2(1.5f, 1.5f);
+                        //noInteractionFrontImage.enabled = false;
+                        //yesInteractionFrontImage.enabled = true;
+                        //yesInteractionFrontImage.transform.localScale = new Vector2(1.5f, 1.5f);
+                    }                 
                 }
                 else if (isAvatarSetting)
                 {
@@ -196,8 +196,7 @@ public class BystanderAvatar : MonoBehaviour
                         //    arrowImage.enabled = false;
                         //}
                         else  // The bystander is outside the FOV of the VR user ( 310 < d < 360, ....)
-                        {
-                            
+                        {                         
                             currentMovementTime += Time.deltaTime;
 
                             if (!isGuidingToSeated)
@@ -229,17 +228,14 @@ public class BystanderAvatar : MonoBehaviour
 
 
                                     arrowImage.transform.position = Vector3.Lerp(
-                       arrowPos.transform.position,
-                       new Vector3(guidingPosForAV.transform.position.x, arrowPos.transform.position.y, guidingPosForAV.transform.position.z),
-                       t);
-
-
+                                                       arrowPos.transform.position,
+                                                       new Vector3(guidingPosForAV.transform.position.x, arrowPos.transform.position.y, guidingPosForAV.transform.position.z),
+                                                       t);                                      
                                 }
                                 else
                                 {
                                     transform.position = new Vector3(guidingPosForAV.transform.position.x, tracker.position.y, guidingPosForAV.transform.position.z);
                                     new Vector3(guidingPosForAV.transform.position.x, arrowPos.transform.position.y, guidingPosForAV.transform.position.z);
-
                                 }
                             }
 
@@ -248,7 +244,6 @@ public class BystanderAvatar : MonoBehaviour
                             {
                                 isGuidingToSeated = true;
                                
-
                                 //isGuiding = true;
                                 //transform.position = Vector3.Lerp(
                                 //          transform.position,
@@ -406,26 +401,26 @@ public class BystanderAvatar : MonoBehaviour
                 if (isAnimojiSetting)
                 {
                     backsideImage.enabled = false;
-                    if (doInteraction)
-                    {
-                        // Frontside Animoji with Facial Expressions (FE)
-                        //noInteractionFrontImage.enabled = false;
-                        //yesInteractionFrontImage.enabled = true;
-                        //yesInteractionFrontImage.transform.localScale = new Vector2(1f, 1f);
-                        yesInteractionFrontImage.enabled = false;
-                        noInteractionFrontImage.enabled = true;
-                        noInteractionFrontImage.transform.localScale = new Vector2(1f, 1f);
-                    }
-                    else
-                    {
-                        // Frontside Animoji without FE
-                        yesInteractionFrontImage.enabled = false;
-                        noInteractionFrontImage.enabled = true;
-                        noInteractionFrontImage.transform.localScale = new Vector2(1f, 1f);
-                        //noInteractionFrontImage.enabled = false;
-                        //yesInteractionFrontImage.enabled = true;
-                        //yesInteractionFrontImage.transform.localScale = new Vector2(1f, 1f);
-                    }                
+                    yesInteractionFrontImage.enabled = false;
+                    noInteractionFrontImage.enabled = true;
+                    noInteractionFrontImage.transform.localScale = new Vector2(1f, 1f);
+                    //if (doInteraction)
+                    //{
+                    //    // Frontside Animoji with Facial Expressions (FE)
+                    //    //noInteractionFrontImage.enabled = false;
+                    //    //yesInteractionFrontImage.enabled = true;
+                    //    //yesInteractionFrontImage.transform.localScale = new Vector2(1f, 1f);
+                    //    yesInteractionFrontImage.enabled = false;
+                    //    noInteractionFrontImage.enabled = true;
+                    //    noInteractionFrontImage.transform.localScale = new Vector2(1f, 1f);
+                    //}
+                    //else
+                    //{
+                    //    // Frontside Animoji without FE
+                    //    yesInteractionFrontImage.enabled = false;
+                    //    noInteractionFrontImage.enabled = true;
+                    //    noInteractionFrontImage.transform.localScale = new Vector2(1f, 1f);
+                    //}                
                 }
 
                 if (isAvatarSetting)

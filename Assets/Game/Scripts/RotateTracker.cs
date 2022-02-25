@@ -16,10 +16,6 @@ public class RotateTracker : MonoBehaviour
     public bool isHeadingToPlayer;
     //public Animator anim;
 
-    private void Start()
-    {
-       // anim.SetBool("isInteracting", false);
-    }
     void Update()
     {
         if (!useTracker)
@@ -31,7 +27,6 @@ public class RotateTracker : MonoBehaviour
                 transform.Rotate(Vector3.up * Time.deltaTime * rotateSpeed);  // Rotate the object around its local Y axis at 1 * speed degrees per second
                                                                               // transform.Rotate(0, 1 * speed * Time.deltaTime, 0); // previous code
                                                                               // RotateForInteraction();
-
               //  anim.SetBool("isInteracting", false);
 
 
@@ -39,19 +34,11 @@ public class RotateTracker : MonoBehaviour
                 { // Heading towards the VR-Player
                     if (doInteraction)
                     {
-                        //if (anim)
-                        //{
-                        //    //   Debug.Log("anim interaction is called");
-                        //    anim.SetBool("isInteracting", true);
-                        //}
-
                         // Debug.Log("Invoke: " + System.DateTime.Now);
                         Invoke("HeadingBackTo30Degrees", 13f); // Stay in 13 seconds
                     }
                     else
                     {
-
-
                         // Debug.Log("Invoke: " + System.DateTime.Now);
                         Invoke("HeadingBackTo30Degrees", 0.5f);   // Stay in 0.5 seconds
                     }

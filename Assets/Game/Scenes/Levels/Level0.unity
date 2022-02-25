@@ -1576,7 +1576,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.609}
+  m_AnchoredPosition: {x: 0, y: 2.0089998}
   m_SizeDelta: {x: 2, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &202137948
@@ -1609,8 +1609,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37c2cf88f7c59f4c8cf5d3812568143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 3
-  origin: {fileID: 0}
+  index: 8
+  origin: {fileID: 202137950}
 --- !u!4 &202137950
 Transform:
   m_ObjectHideFlags: 0
@@ -1618,7 +1618,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202137948}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.85, y: 1.35, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1638,7 +1638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e082207f971a01a4bad15446dcd58fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doInteraction: 1
+  doInteraction: 0
   useTracker: 0
   rotateSpeed: 20
   isHeadingTo30: 0
@@ -3545,7 +3545,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 20, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.2199986, y: 1.78}
+  m_AnchoredPosition: {x: 2.2199986, y: 2.1799998}
   m_SizeDelta: {x: 1, y: 1.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!82 &336189064
@@ -9005,7 +9005,7 @@ MonoBehaviour:
   secondSelectedCard: {fileID: 0}
   memorizingTime: 2
   bufferBeforeStartingGame: 2
-  totalGameTime: 30
+  totalGameTime: 40
   gameTimer: 0
   startShowingCards: 0
   hideCardAgainInSec: 0
@@ -9025,6 +9025,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e94116c1b1bea4db3c3d871d1070f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  studyOrder: 
+  animoji_Y: 0
+  animoji_N: 0
+  avatar_Y: 0
+  avatar_N: 0
+  mixed_Y: 0
+  mixed_N: 0
 --- !u!1 &902342422
 GameObject:
   m_ObjectHideFlags: 0
@@ -9522,7 +9529,7 @@ MonoBehaviour:
   tracker: {fileID: 202137950}
   bystanderAvatar: {fileID: 2101755741847965763}
   bystanderAnim: {fileID: 2497403534718943324}
-  doInteraction: 1
+  doInteraction: 0
   presenceAnimojiBoard: {fileID: 2321244900447995938}
   yesInteractionFrontImage: {fileID: 2069349139}
   noInteractionFrontImage: {fileID: 323142556}
@@ -9542,11 +9549,11 @@ MonoBehaviour:
   currentMovementTime: 0
   sitToLeft: 1
   isAnimojiSetting: 0
-  isAvatarSetting: 0
-  isMixedSetting: 1
+  isAvatarSetting: 1
+  isMixedSetting: 0
   isSeated: 0
   isInFOV: 0
-  isSeatedAndInFOV: 0
+  isSeatedAndInFOV: 1
   isGuidingToSeated: 0
   isguided: 0
   lerpDurationForAvatar: 6
@@ -9734,7 +9741,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 3.1}
+  m_AnchoredPosition: {x: 0, y: 3.5}
   m_SizeDelta: {x: 2, y: 0.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1026668693
@@ -20140,7 +20147,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.549}
+  m_AnchoredPosition: {x: 0, y: 1.949}
   m_SizeDelta: {x: 3, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2138297659
@@ -28043,7 +28050,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 462110720233417092}
-  m_LocalRotation: {x: -0.12390379, y: 0.054268543, z: 0.009114215, w: 0.9907673}
+  m_LocalRotation: {x: -0.123902395, y: 0.054268554, z: 0.009114139, w: 0.9907675}
   m_LocalPosition: {x: 0.03273677, y: 0.07959301, z: 0.07338554}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
@@ -40367,7 +40374,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6941542213375137039}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 5}
+  m_LocalPosition: {x: 0, y: 1.9, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4109195129671627901}
@@ -41247,7 +41254,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8426418937400547069}
-  m_LocalRotation: {x: -0.1239041, y: 0.017652174, z: 0.0029676924, w: 0.9921327}
+  m_LocalRotation: {x: -0.1239027, y: 0.017652176, z: 0.0029676673, w: 0.9921329}
   m_LocalPosition: {x: -0.033310317, y: 0.07965034, z: 0.073377386}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []

@@ -12,7 +12,7 @@ public class IdentifyInteraction : MonoBehaviour
     public TMP_Text buttonText;
     public AudioSource bgMusicAS;
     bool pauseClicked;
-   public GameManager gameManager;
+    public GameManager gameManager;
     bool onceClicked;
     public Image interactionImage;
 
@@ -28,7 +28,7 @@ public class IdentifyInteraction : MonoBehaviour
             bgMusicAS.Pause();
             if (!onceClicked)
             {
-                audioSource.PlayOneShot(quesitionAudio);
+                Invoke(nameof(PlayQuestionAudio), 1f);
                 onceClicked = true;
                 interactionImage.enabled = false;
             }
@@ -51,5 +51,12 @@ public class IdentifyInteraction : MonoBehaviour
 
     }
 
+    public void PlayQuestionAudio()
+    {
+        audioSource.PlayOneShot(quesitionAudio);
+    }
+
 }
+
+
 
