@@ -5,9 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    int currentLevelIndex;
+    int currentLevelIndex; // practice 0
+
+    public List<int> studyOrder;
+
+    private static LevelManager instance;
+
     
-   // public int[] studyOrder = new int[] { 1, 3, 5, 4, 2, 6 };
+    public int[] userStudyOrder = new int[6];
+    [SerializeField]
+    private string[] randomedOrder = new string[] {"AnimojiY", "AnimojiN", "AvatarY", "AvatarN", "MixedY", "MixedN"};
+    
     //public int animoji_Y;
     //public int animoji_N;
     //public int avatar_Y;
@@ -27,21 +35,36 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
-       // Debug.Log(currentLevelIndex);
-       // newOrder = new int[6];
-        
-       //for(int i = 0; i <studyOrder.Length; i++ )
-       // {
-       //     newOrder[i] = studyOrder[i];
-       // }
+        // currentLevelIndex = 0;
+        string currentSceneName = SceneManager.GetActiveScene().name;
+       // Debug.Log(currentSceneName);
     }
 
     public void LoadNextLevel()
     {
-        currentLevelIndex += 1;
-      //  Debug.Log("Level" + currentLevelIndex + "is called");
-       // Debug.Log(newOrder[currentLevelIndex]);
-       if(currentLevelIndex <=6)
-            SceneManager.LoadScene(currentLevelIndex);
+        currentLevelIndex += 1; // 0 -> 1, 1-> 2, 
+       // int nextIndex = userStudyOrder[currentLevelIndex-1];
+       // Debug.Log("next index: " + nextIndex);
+        //  Debug.Log("Level" + currentLevelIndex + "is called");
+        // Debug.Log(newOrder[currentLevelIndex]);
+        if (currentLevelIndex <= 6)
+            GoToScene(currentLevelIndex);
+        else
+            GoToScene("EndScene");
+    }
+
+    public void GoToScene(string nameScene)
+    {
+        SceneManager.LoadScene(nameScene);
+    }
+
+    public void GoToScene(int indexScene)
+    {
+        SceneManager.LoadScene(indexScene);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }

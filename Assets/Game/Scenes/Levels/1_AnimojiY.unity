@@ -9124,7 +9124,6 @@ MonoBehaviour:
   - {fileID: 729858323}
   - {fileID: 151269761}
   gameProcesCanvas: {fileID: 197975250}
-  interactionUI: {fileID: 336189057}
   allCards:
   - {fileID: 4109195129671627898}
   - {fileID: 4109195129426358807}
@@ -9152,7 +9151,7 @@ MonoBehaviour:
   secondSelectedCard: {fileID: 0}
   memorizingTime: 8
   bufferBeforeStartingGame: 2
-  totalGameTime: 70
+  totalGameTime: 30
   gameTimer: 0
   startShowingCards: 0
   hideCardAgainInSec: 0
@@ -9172,6 +9171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e94116c1b1bea4db3c3d871d1070f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userStudyOrder: 050000000400000003000000020000000100000000000000
+  randomedOrder: 
 --- !u!1 &902342422
 GameObject:
   m_ObjectHideFlags: 0
