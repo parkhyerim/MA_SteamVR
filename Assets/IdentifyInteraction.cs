@@ -15,6 +15,7 @@ public class IdentifyInteraction : MonoBehaviour
     public GameManager gameManager;
     bool onceClicked;
     public Image interactionImage;
+    public BystanderAvatar bAvatar;
 
     private void Awake()
     {
@@ -28,7 +29,8 @@ public class IdentifyInteraction : MonoBehaviour
             bgMusicAS.Pause();
             if (!onceClicked)
             {
-                Invoke(nameof(PlayQuestionAudio), 1f);
+                if (bAvatar.doInteraction)
+                    Invoke(nameof(PlayQuestionAudio), 1f);
                 onceClicked = true;
                 interactionImage.enabled = false;
             }

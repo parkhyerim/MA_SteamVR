@@ -6,11 +6,26 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/Level0.unity
+    path: Assets/Game/Scenes/Levels/Level0_practice.unity
+    guid: 2ccb5ad3031332f449c476b15a11fa3f
+  - enabled: 1
+    path: Assets/Game/Scenes/Levels/Level0_AnimojiY.unity
     guid: 32680f81b4a6f0746b7314f5e823cf4a
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Game/Scenes/Levels/Level4_AvatarN.unity
+    guid: 9ce6b53c2c426e54bb5ebad5276663e1
+  - enabled: 1
+    path: Assets/Game/Scenes/Levels/Level6_MixedN.unity
+    guid: 6e80fa3c1f29f2f4aa0047564353252a
+  - enabled: 1
+    path: Assets/Game/Scenes/Levels/Level3_AvatarY.unity
+    guid: 7220a5e61c803a04db246eee564ac5e6
+  - enabled: 1
+    path: Assets/Game/Scenes/Levels/Level2_AnimojiN.unity
+    guid: 7bd3f5e162c336b47acd4a3bc6d31b81
+  - enabled: 1
+    path: Assets/Game/Scenes/Levels/Level5_MixedY.unity
+    guid: 197bc60dbbf3a6d4d98e0cdadeb70b14
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d367a92b0d4cf114c826faa81e847686, type: 2}
     Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: 06b947aecd64d04419eebef1f634e8e0, type: 2}

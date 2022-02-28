@@ -290,8 +290,8 @@ public class GameManager : MonoBehaviour
             if(score == 20)
             {
                 StopRayInteractoin();
-                Invoke(nameof(EndGame), 3);
-                Invoke(nameof(GoToNextLevel), 8);
+                Invoke(nameof(EndGame), 2);
+                Invoke(nameof(GoToNextLevel), 3);
             }
         }
         else

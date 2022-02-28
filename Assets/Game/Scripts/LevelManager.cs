@@ -5,15 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    int currentLevelIndex = 0;
-    public int[] studyOrder;
-    public int animoji_Y;
-    public int animoji_N;
-    public int avatar_Y;
-    public int avatar_N;
-    public int mixed_Y;
-    public int mixed_N;
-
+    int currentLevelIndex;
+    
+   // public int[] studyOrder = new int[] { 1, 3, 5, 4, 2, 6 };
+    //public int animoji_Y;
+    //public int animoji_N;
+    //public int avatar_Y;
+    //public int avatar_N;
+    //public int mixed_Y;
+    //public int mixed_N;
+   // private int[] newOrder;
     /**
      * index 0 - practice
      * index 1 - aimoji y
@@ -25,14 +26,22 @@ public class LevelManager : MonoBehaviour
      */
     private void Start()
     {
-        studyOrder = new int[6];
+        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+        Debug.Log(currentLevelIndex);
+       // newOrder = new int[6];
         
+       //for(int i = 0; i <studyOrder.Length; i++ )
+       // {
+       //     newOrder[i] = studyOrder[i];
+       // }
     }
 
     public void LoadNextLevel()
     {
         currentLevelIndex += 1;
         Debug.Log("Level" + currentLevelIndex + "is called");
-        SceneManager.LoadScene(currentLevelIndex);
+       // Debug.Log(newOrder[currentLevelIndex]);
+       if(currentLevelIndex <=6)
+            SceneManager.LoadScene(currentLevelIndex);
     }
 }
