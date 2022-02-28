@@ -27,7 +27,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
-        Debug.Log(currentLevelIndex);
+       // Debug.Log(currentLevelIndex);
        // newOrder = new int[6];
         
        //for(int i = 0; i <studyOrder.Length; i++ )
@@ -39,7 +39,7 @@ public class LevelManager : MonoBehaviour
     public void LoadNextLevel()
     {
         currentLevelIndex += 1;
-        Debug.Log("Level" + currentLevelIndex + "is called");
+      //  Debug.Log("Level" + currentLevelIndex + "is called");
        // Debug.Log(newOrder[currentLevelIndex]);
        if(currentLevelIndex <=6)
             SceneManager.LoadScene(currentLevelIndex);

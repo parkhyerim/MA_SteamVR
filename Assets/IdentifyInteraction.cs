@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class IdentifyInteraction : MonoBehaviour
 {
+    // public InputActionReference pauseReference = null;
+    
     public AudioSource audioSource;
     public AudioClip quesitionAudio;
     public Button button;
@@ -17,10 +20,25 @@ public class IdentifyInteraction : MonoBehaviour
     public Image interactionImage;
     public BystanderAvatar bAvatar;
 
-    private void Awake()
-    {
-       // interactionImage.enabled = false;
-    }
+    //private void Awake()
+    //{
+    //    // interactionImage.enabled = false;
+    //    pauseReference.action.started += PauseGame;
+    //}
+
+
+    //private void OnDestroy()
+    //{
+    //    pauseReference.action.started -= PauseGame;
+    //}
+
+    //private void PauseGame(InputAction.CallbackContext context)
+    //{
+    //    bool isActive = !gameObject.activeSelf;
+    //    gameObject.SetActive(isActive);
+
+    //}
+
     public void OnPauseButtonClicked()
     { 
         if (!pauseClicked)

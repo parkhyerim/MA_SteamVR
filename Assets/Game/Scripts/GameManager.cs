@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public AudioClip clipCardBackward;
     public AudioClip clipCardMatch;
     public AudioClip clipCardUnmatch;
-   // bool canMusicPlay;
+    // bool canMusicPlay;
 
     [Header("EFFECT")]
     public GameObject matchEffectPrefab;
@@ -26,18 +26,18 @@ public class GameManager : MonoBehaviour
     public TMP_Text gameScoreText;
     public TMP_Text timeText;
     public TMP_Text instructionText;
-    public TMP_Text notificationText;  
+    public TMP_Text notificationText;
     public Image notificationBGImage;
     public List<Image> notificationCheerImages;
     public GameObject gameProcesCanvas;
-    public GameObject interactionUI;
+    // public GameObject interactionUI;
 
     [Header("CARDs")]
     public MemoryCard[] allCards;
     public List<Vector3> allPositionsOfCards = new List<Vector3>();
     public Vector3 AngleOfCards = new Vector3();
     public MemoryCard firstSelectedCard;
-    public MemoryCard secondSelectedCard;    
+    public MemoryCard secondSelectedCard;
     private bool canClick = true;
     private bool isFront = false;
 
@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int score;
     private bool canStart;
+    private bool canPause;
 
     public RotateTracker rTracker;
 
@@ -63,6 +64,11 @@ public class GameManager : MonoBehaviour
     private float pausedTime;
     bool pausedGame;
     int randomNumber;
+    private bool bystanderInteract;
+
+    public bool CanStart { get => canStart; set => canStart = value; }
+    public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
+    public bool CanPause { get => canPause; set => canPause = value; }
 
     private void Awake()
     {       
@@ -104,13 +110,14 @@ public class GameManager : MonoBehaviour
        
        // canMusicPlay = true;
 
-        interactionUI.SetActive(false);
+      //  interactionUI.SetActive(false);
+
      // pauseBtn.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
     {
-        if (canStart)
+        if (CanStart)
         {
             if (Time.time >= startShowingCards && Time.time <= hideCardAgainInSec)
             {
@@ -222,9 +229,11 @@ public class GameManager : MonoBehaviour
             card.transform.localEulerAngles = backAngles;
             card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
         }
+
+        CanPause = true;
         //isFront = false;
         Invoke("BystanderStart", 5f);
-        interactionUI.SetActive(true);
+       // interactionUI.SetActive(true);
       //  pauseBtn.gameObject.SetActive(true);
     }
 
@@ -233,6 +242,7 @@ public class GameManager : MonoBehaviour
         timeText.text = "";
        // gameScoreText.text = "0/20";
         rTracker.isHeadingToPlayer = true;
+        BystanderInteract = true;
     }
  
     public void CardClicked(MemoryCard card)
@@ -315,6 +325,8 @@ public class GameManager : MonoBehaviour
         gameProcesCanvas.SetActive(true);
         notificationBGImage.enabled = true;
         notificationText.enabled = true;
+        bystanderInteract = false;
+        CanPause = false;
         
         if (score == 20)
             notificationText.text = "BRAVO!\nYOU WIN!";
@@ -338,7 +350,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        canStart = true;
+        CanStart = true;
         startShowingCards = Time.time + bufferBeforeStartingGame;
         hideCardAgainInSec = startShowingCards + memorizingTime;
         Destroy(menuUICanvas);
