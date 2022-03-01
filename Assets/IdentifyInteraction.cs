@@ -56,7 +56,7 @@ public class IdentifyInteraction : MonoBehaviour
             button.GetComponent<Image>().color = new Color32(255, 209, 139, 255);
             // buttonText.text = "RESUME";
             pauseClicked = true;
-            gameManager.PauseGameTime();
+            gameManager.PauseGame();
             
         }
         else 
@@ -64,7 +64,7 @@ public class IdentifyInteraction : MonoBehaviour
             button.GetComponentInChildren<TMP_Text>().text = "PAUSE";
             button.GetComponent<Image>().color = new Color32(0, 144, 255, 255);
             bgMusicAS.UnPause();
-            gameManager.PauseGameTime();
+            gameManager.PauseGame();
             pauseClicked = false;
         }
 

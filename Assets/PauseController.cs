@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 public class PauseController : MonoBehaviour
 {
@@ -10,9 +11,10 @@ public class PauseController : MonoBehaviour
     public AudioClip quesitionAudio;
     public AudioSource bgMusicAS;
     bool pauseClicked;
-    bool onceClicked;
+    bool oncePaused;
     public GameManager gameManager;
     public BystanderAvatar bAvatar;
+    public LogManager logManager;
 
     private void Awake()
     {
@@ -28,27 +30,31 @@ public class PauseController : MonoBehaviour
     {
         // bool isActive = !gameObject.activeSelf;
         // gameObject.SetActive(isActive);
-        if (gameManager.CanPause)
+        if (gameManager.CanPauseGame)
         {
             if (!pauseClicked)
             {
                 bgMusicAS.Pause();
              //   Debug.Log("pause clicked");
-                if (!onceClicked && gameManager.BystanderInteract)
+                if (!oncePaused && gameManager.BystanderInteract)
                 {
-                    if (bAvatar.doInteraction )
+                    // gameManager.WriteToLogFile("Test1");
+                  //  logManager.WriteToLogFile("Identify time");
+                    if (bAvatar.doInteraction)
                         Invoke(nameof(PlayQuestionAudio), 1f);
-                    onceClicked = true;
+                    oncePaused = true;
                 }
                 pauseClicked = true;
-                gameManager.PauseGameTime();
+                gameManager.PauseGame();
             }
             else
             {
                // Debug.Log("resume clciked");
                 bgMusicAS.UnPause();
-                gameManager.PauseGameTime();
+                gameManager.PauseGame();
                 pauseClicked = false;
+                //  gameManager.WriteToLogFile("Test2");
+               // logManager.WriteToLogFile("Resume the game again (" + DateTime.Now.ToShortTimeString() + ")");
             }
         }      
     }

@@ -6,26 +6,26 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/PracticeScene.unity
-    guid: 50ab0f718d2effe4baa02503c8219d17
+    path: Assets/Game/Scenes/Levels/Practice.unity
+    guid: d5a1bc660d6978c41b2d077343b63518
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/1_AnimojiY.unity
+    path: Assets/Game/Scenes/Levels/AnimojiY.unity
     guid: 32680f81b4a6f0746b7314f5e823cf4a
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/2.unity
-    guid: 7b14fec4b3f172944bf934e438e6739d
+    path: Assets/Game/Scenes/Levels/AnimojiN.unity
+    guid: d63387ed6b3bbc74e98556b2c105ed1b
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/3.unity
-    guid: a73e108f3e7b5ff4fbb43902dedb575c
+    path: Assets/Game/Scenes/Levels/AvatarY.unity
+    guid: 30c3346091a5e3c48a27cc24b52ba8b9
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/4.unity
-    guid: cd23d316ca4102845b635679762d446c
+    path: Assets/Game/Scenes/Levels/AvatarN.unity
+    guid: dc937ae151ddf1645a141ec10276ca3d
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/5.unity
-    guid: 708274a614f0aa34db9565114e64b866
+    path: Assets/Game/Scenes/Levels/MixedN.unity
+    guid: 1ae0132d872cc8f4baba138c2c1c6c08
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/6.unity
-    guid: 36273c1f46d1e5d42a97b9b5fe747c03
+    path: Assets/Game/Scenes/Levels/MixedY.unity
+    guid: 471600b920bea06419e78347a633eb08
   - enabled: 1
     path: Assets/Game/Scenes/Levels/EndScene.unity
     guid: 5394d91b4237bec4bbe6bbdac31ee5f0

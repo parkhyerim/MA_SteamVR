@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class BystanderAvatar : MonoBehaviour
 {
     public GameObject bystanderTracker;
+    public GameManager gameManager;
     public Transform tracker;
     private float bystanderYAxis;  // bystander's euler y-axis
     private float bystanderRotationOffset = 0;
@@ -20,10 +21,9 @@ public class BystanderAvatar : MonoBehaviour
     public RawImage yesInteractionFrontImage;
     public RawImage noInteractionFrontImage;
     public RawImage backsideImage;
-    public RawImage arrowImage;
+   // public RawImage arrowImage;
     public GameObject arrowPosition;
     public GameObject originalArrowPos;
-
 
     [Header("GOs for Avatar")]
     // variables for Avatar Setting
@@ -66,8 +66,9 @@ public class BystanderAvatar : MonoBehaviour
     Vector3 velocity = Vector3.zero;
 
     [SerializeField]
-    private bool fromCriticalSection;
+    private bool fromCriticalSection, enterCriticalSection;
 
+    public LogManager logManager;
     // Start is called before the first frame update
     void Start()
     { 
@@ -75,17 +76,17 @@ public class BystanderAvatar : MonoBehaviour
         bystanderAnim.SetBool("isInteracting", false);
 
         // Default setting: avatar setting
-        if (!(isAnimojiSetting || isMixedSetting || isAvatarSetting))
+        if (!(isAnimojiSetting || isMixedSetting || isAvatarSetting) && !gameManager.isPracticeGame)
             isAvatarSetting = true;
         // Default setting: avatar-FOV 
         if (isAvatarSetting && !(isSeated || isInFOV || isSeatedAndInFOV))
-            isInFOV = true;
+            isSeatedAndInFOV = true;
 
         yesInteractionFrontImage.enabled = false;
         noInteractionFrontImage.enabled = false;
         backsideImage.enabled = false;
         bystanderAvatar.SetActive(false);
-        arrowImage.enabled = false;
+      //  arrowImage.enabled = false;
      
         // bystanderYAxis = bystanderTracker.transform.eulerAngles.y;
         bystanderYAxis = tracker.eulerAngles.y;
@@ -128,7 +129,14 @@ public class BystanderAvatar : MonoBehaviour
              *  B: 30 >= d >= 0 (-10)
              ****************************************************/
             if (bystanderYAxis >= 60 && bystanderYAxis < 100) // 100 <- 90
-            {              
+            {
+                if (!enterCriticalSection)
+                {
+                    BystanderEnterCriticalSection();
+                    enterCriticalSection = true;
+                }
+                   
+
                 if (isAnimojiSetting)
                 {
                     fromCriticalSection = true;
@@ -190,7 +198,7 @@ public class BystanderAvatar : MonoBehaviour
                         {                       
                             transform.position = bystanderTracker.transform.position;
                             bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
-                            arrowImage.enabled = false;
+                           // arrowImage.enabled = false;
                             isGuidingToSeated = false;
                             currentMovementTime = 0;
                             timeElapsedForGuiding = 0;
@@ -214,12 +222,12 @@ public class BystanderAvatar : MonoBehaviour
                             {
                                 if (doInteraction)
                                 {
-                                    arrowImage.enabled = true;
-                                    arrowImage.transform.position = arrowPos.transform.position;
+                                   // arrowImage.enabled = true;
+                                   // arrowImage.transform.position = arrowPos.transform.position;
                                 }
 
                                     timeElapsedForGuiding += Time.deltaTime;
-                                    // Debug.Log("isGuiding: "  + timeElapsedForGuiding);
+
                                     if (timeElapsedForGuiding < lerpDurationForAvatar)
                                     {
                                         float t = timeElapsedForGuiding / lerpDurationForAvatar;
@@ -238,16 +246,16 @@ public class BystanderAvatar : MonoBehaviour
 
                                     if (doInteraction)
                                     {
-                                        arrowImage.transform.position = Vector3.Lerp(
-                                                     arrowPos.transform.position,
-                                                     new Vector3(guidingPosForAV.transform.position.x, arrowPos.transform.position.y, guidingPosForAV.transform.position.z),
-                                                     t);
+                                       // arrowImage.transform.position = Vector3.Lerp(
+                                                     //arrowPos.transform.position,
+                                                     //new Vector3(guidingPosForAV.transform.position.x, arrowPos.transform.position.y, guidingPosForAV.transform.position.z),
+                                                     //t);
                                     }
                                 }
                                     else
                                     {
                                         transform.position = new Vector3(guidingPosForAV.transform.position.x, tracker.position.y, guidingPosForAV.transform.position.z);
-                                        new Vector3(guidingPosForAV.transform.position.x, arrowPos.transform.position.y, guidingPosForAV.transform.position.z);
+                                        // new Vector3(guidingPosForAV.transform.position.x, arrowPos.transform.position.y, guidingPosForAV.transform.position.z);
                                     }
                                 
                             }
@@ -360,7 +368,7 @@ public class BystanderAvatar : MonoBehaviour
                         noInteractionFrontImage.enabled = false;
                         yesInteractionFrontImage.enabled = false;
                         backsideImage.enabled = false;
-                        arrowImage.enabled = false;
+                       // arrowImage.enabled = false;
                     }
                 }
                 //if (infoBubble != null)
@@ -429,7 +437,7 @@ public class BystanderAvatar : MonoBehaviour
                         transform.position = bystanderTracker.transform.position;
                         // +
                         bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
-                        arrowImage.enabled = false;
+                      //  arrowImage.enabled = false;
                     }
                 }
 
@@ -538,7 +546,7 @@ public class BystanderAvatar : MonoBehaviour
                     {
                         // Avatar's position = bystander's seating position
                         transform.position = bystanderTracker.transform.position;
-                        arrowImage.enabled = false;
+                      //  arrowImage.enabled = false;
                     }
                 }
 
@@ -751,6 +759,13 @@ public class BystanderAvatar : MonoBehaviour
             }
         }
     }
+
+    private void BystanderEnterCriticalSection()
+    {
+       // Debug.Log("Bystander Want to talk");
+        gameManager.SetTimeStamp();
+    }
+
 
     public void SetGuide()
     {

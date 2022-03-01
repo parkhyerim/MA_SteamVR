@@ -11,10 +11,11 @@ public class LevelManager : MonoBehaviour
 
     private static LevelManager instance;
 
-    
     public int[] userStudyOrder = new int[6];
-    [SerializeField]
     private string[] randomedOrder = new string[] {"AnimojiY", "AnimojiN", "AvatarY", "AvatarN", "MixedY", "MixedN"};
+
+    public GameManager gameManager;
+    public LogManager logManager;
     
     //public int animoji_Y;
     //public int animoji_N;
@@ -37,7 +38,9 @@ public class LevelManager : MonoBehaviour
         currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
         // currentLevelIndex = 0;
         string currentSceneName = SceneManager.GetActiveScene().name;
-       // Debug.Log(currentSceneName);
+        // Debug.Log(currentSceneName);
+        // gameManager.WriteToLogFile("Index: " + currentLevelIndex + currentSceneName);
+      //  logManager.WriteToLogFile("Study Order: " + currentLevelIndex + " , name: " + currentSceneName);
     }
 
     public void LoadNextLevel()
