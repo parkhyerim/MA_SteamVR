@@ -136,7 +136,6 @@ public class BystanderAvatar : MonoBehaviour
                     enterCriticalSection = true;
                 }
                    
-
                 if (isAnimojiSetting)
                 {
                     fromCriticalSection = true;
@@ -163,6 +162,7 @@ public class BystanderAvatar : MonoBehaviour
                 }
                 else if (isAvatarSetting)
                 {
+                    fromCriticalSection = true;
                     if (doInteraction)
                         bystanderAnim.SetBool("isInteracting", true);
                     else                    
@@ -418,27 +418,50 @@ public class BystanderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
-                    bystanderAnim.SetBool("isInteracting", false);
-                    //  transform.position = bystanderTracker.transform.position;
-                    transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
-                    //transform.localEulerAngles = new Vector3(0, 180, 0); // towards the front seat
-                    // bystandreImage.CrossFadeAlpha(1, 1.0f, false);
-                    bystanderAvatar.SetActive(true);
-
-                    if (isInFOV) 
+                    if (fromCriticalSection)
                     {
-                        transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-                        // bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV) / 90) - bystanderYAxis), 0);
-                    }
+                        bystanderAnim.SetBool("isInteracting", false);
+                        //  transform.position = bystanderTracker.transform.position;
+                        transform.localEulerAngles = new Vector3(0, 30, 0);
+                        //transform.localEulerAngles = new Vector3(0, 180, 0); // towards the front seat
+                        // bystandreImage.CrossFadeAlpha(1, 1.0f, false);
+                        bystanderAvatar.SetActive(true);
 
-                    if (isSeatedAndInFOV)
-                    {
-                        transform.position = bystanderTracker.transform.position;
-                        // +
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
-                      //  arrowImage.enabled = false;
+                        if (isInFOV)
+                        {
+
+                        }
+
+                        if (isSeatedAndInFOV)
+                        {
+                            transform.position = bystanderTracker.transform.position;
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, 0, 0);
+                        }
                     }
+                    else
+                    {
+                        bystanderAnim.SetBool("isInteracting", false);
+                        //  transform.position = bystanderTracker.transform.position;
+                        transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);
+                        //transform.localEulerAngles = new Vector3(0, 180, 0); // towards the front seat
+                        // bystandreImage.CrossFadeAlpha(1, 1.0f, false);
+                        bystanderAvatar.SetActive(true);
+
+                        if (isInFOV)
+                        {
+                            transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
+                            // bystanderAvatar.transform.eulerAngles = new Vector3(0, (bystanderYAxis + 50), 0);
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis + ((bystanderYAxis * (90 + angleinFOV) / 90) - bystanderYAxis), 0);
+                        }
+
+                        if (isSeatedAndInFOV)
+                        {
+                            transform.position = bystanderTracker.transform.position;
+                            // +
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderYAxis, 0);
+                            //  arrowImage.enabled = false;
+                        }
+                    }            
                 }
 
                 if (isMixedSetting)
@@ -531,6 +554,7 @@ public class BystanderAvatar : MonoBehaviour
 
                 if (isAvatarSetting)
                 {
+                    fromCriticalSection = false;
                     bystanderAnim.SetBool("isInteracting", false);
                     bystanderAvatar.SetActive(true);
                     transform.localEulerAngles = new Vector3(0, bystanderYAxis, 0);

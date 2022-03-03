@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
     int gameTimer;
     private float showCardsInSec, hideCardAgainInSec; // time to show Card images, time to turn backwards again
     float beforeGameTimer = 0f;
+    public float BystanderStartTime = 25f;
 
     // public Button pauseBtn;
     [SerializeField]
@@ -253,7 +254,7 @@ public class GameManager : MonoBehaviour
 
         CanPauseGame = true;
         //isFront = false;
-        Invoke(nameof(BystanderStart), time: 5f);
+        Invoke(nameof(BystanderStart), time: BystanderStartTime);
        // interactionUI.SetActive(true);
       //  pauseBtn.gameObject.SetActive(true);
     }

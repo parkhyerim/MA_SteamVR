@@ -9725,8 +9725,8 @@ MonoBehaviour:
   currentMovementTime: 0
   sitToLeft: 1
   isAnimojiSetting: 0
-  isAvatarSetting: 1
-  isMixedSetting: 0
+  isAvatarSetting: 0
+  isMixedSetting: 1
   isSeated: 0
   isInFOV: 0
   isSeatedAndInFOV: 1
