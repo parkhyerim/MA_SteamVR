@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text notificationText;
     public Image notificationBGImage;
     public List<Image> notificationCheerImages;
+    public GameObject surveryUICanvas;
 
     [Header("CARDs")]
     public MemoryCard[] allCards;
@@ -78,7 +79,8 @@ public class GameManager : MonoBehaviour
     public bool isEndScene;
     private bool recordScore;
     int currentLevelIndex;
-   // [Header("Participant")]
+    // [Header("Participant")]
+
     //public string participantID = null;
 
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
@@ -119,6 +121,7 @@ public class GameManager : MonoBehaviour
 
         // Game Notification
         notificationCanvas.gameObject.SetActive(false);
+        surveryUICanvas.gameObject.SetActive(false);
 
         foreach(Image img in notificationCheerImages)
         {
@@ -131,21 +134,11 @@ public class GameManager : MonoBehaviour
 
         if(participantID == null || participantID == "")
             participantID = "not assigned";
-        
-        //if (participantID == null)
-        //{
-        //    WriteToLogFile("Participant:" + DateTime.Now.ToString());
-        //}
-        //else
-        //{
-        //    WriteToLogFile("Participant: " + participantID);
-        //}
     }
 
     private void Start()
     {
-        // WriteToLogFile(participantID);
-       
+        // WriteToLogFile(participantID);    
     }
 
     private void FixedUpdate()
@@ -194,23 +187,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PauseGame()
-    {
-        if (!gameIsPaused)
-        {
-            gameIsPaused = true;
-            pausedTime = (float)Math.Round(GameCountTimer);
-            identificationTime = (float)Math.Round(gameCountTimerIgnoringPause);
-            logManager.WriteToLogFile("Identification (Paused) Time: " + identificationTime);
-            StopRayInteractoin();
-        }
-        else
-        {
-            gameIsPaused = false;
-            logManager.WriteToLogFile("Resume Time: " + (float)Math.Round(gameCountTimerIgnoringPause));
-            StartRayInteraction();
-        }
-    }
 
     public void SetTimeStamp()
     {
@@ -341,6 +317,24 @@ public class GameManager : MonoBehaviour
         canClickCard = true;
     }
 
+    public void PauseGame()
+    {
+        if (!gameIsPaused)
+        {
+            gameIsPaused = true;
+            pausedTime = (float)Math.Round(GameCountTimer);
+            identificationTime = (float)Math.Round(gameCountTimerIgnoringPause);
+            logManager.WriteToLogFile("Identification (Paused) Time: " + identificationTime);
+            StopRayInteractoin();
+        }
+        else
+        {
+            gameIsPaused = false;
+            logManager.WriteToLogFile("Resume Time: " + (float)Math.Round(gameCountTimerIgnoringPause));
+            StartRayInteraction();
+        }
+    }
+
     public void EndGame()
     {
         notificationCanvas.SetActive(true);
@@ -361,7 +355,17 @@ public class GameManager : MonoBehaviour
             recordScore = true;
         }
 
-        Invoke(nameof(GoToNextLevel), 2f);
+       // Invoke(nameof(GoToNextLevel), 2f);
+        Invoke(nameof(DoSurvey), 3f);
+    }
+
+    public void DoSurvey()
+    {
+        surveryUICanvas.SetActive(true);
+        lineVisual.enabled = true;
+        notificationCanvas.SetActive(false);
+        notificationBGImage.enabled = false;
+        notificationText.enabled = false;
     }
 
     public void GoToNextLevel() {
