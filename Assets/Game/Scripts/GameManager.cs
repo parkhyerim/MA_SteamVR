@@ -342,7 +342,13 @@ public class GameManager : MonoBehaviour
         notificationText.enabled = true;
         bystanderInteract = false;
         CanPauseGame = false;
-        
+        //foreach (MemoryCard card in allCards)
+        //{
+           
+        //        Destroy(card);
+          
+        //}
+
         if (score == 20)
             notificationText.text = "BRAVO!\nYOU WIN!";
         else
@@ -356,16 +362,24 @@ public class GameManager : MonoBehaviour
         }
 
        // Invoke(nameof(GoToNextLevel), 2f);
-        Invoke(nameof(DoSurvey), 3f);
+        Invoke(nameof(DoSurvey), 1f);
     }
 
-    public void DoSurvey()
+    public void GoSurvey()
     {
         surveryUICanvas.SetActive(true);
+    }
+    public void DoSurvey()
+    {
+      
+        surveryUICanvas.SetActive(true);
         lineVisual.enabled = true;
+        
+        //lineVisual.gameObject.SetActive(true);
         notificationCanvas.SetActive(false);
         notificationBGImage.enabled = false;
         notificationText.enabled = false;
+       // menuUICanvas.SetActive(false);
     }
 
     public void GoToNextLevel() {
@@ -411,10 +425,13 @@ public class GameManager : MonoBehaviour
             if (card != null)
             {
                 card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
+              //  card.gameObject.SetActive(false);
             }
         }
 
-        lineVisual.enabled = false;
+       // Destroy(lineVisual);
+         lineVisual.enabled = false;
+      //  lineVisual.gameObject.SetActive(false);
     }
 
     void StartRayInteraction()
@@ -425,5 +442,10 @@ public class GameManager : MonoBehaviour
                 card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
         }
         lineVisual.enabled = true;
+    }
+
+    public void SubmitSurvey()
+    {
+        Debug.Log("submit survey");
     }
 }
