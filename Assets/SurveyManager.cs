@@ -10,6 +10,7 @@ public class SurveyManager : MonoBehaviour
     public Button warningBtn;
     public Button SubmitBtn;
     public LogManager logManager;
+    public GameManager gameManager;
 
     private void Awake()
     {
@@ -55,6 +56,8 @@ public class SurveyManager : MonoBehaviour
         {
             logManager.WriteToLogFile(t.Question + ": " + t.SelectedAnswer);
         }
+
+        gameManager.GoToNextLevel();
     }
     public void ControlWarning()
     {

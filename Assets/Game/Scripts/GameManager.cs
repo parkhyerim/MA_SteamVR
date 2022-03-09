@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     [Header("EFFECT")]
     public GameObject matchEffectPrefab;
     public GameObject matchEffectPrefab2;
+    public GameObject tunnelEffectPrefab1;
+    public GameObject tunnelEffectPrefab2;
 
     [Header("GAME UI")]
     public GameObject menuUICanvas;
@@ -87,7 +89,6 @@ public class GameManager : MonoBehaviour
     public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
     public bool CanPauseGame { get => canPauseGame; set => canPauseGame = value; }
     public float GameCountTimer { get => gameCountTimer; set => gameCountTimer = value; }
-
 
     private void Awake()
     {       
@@ -361,6 +362,9 @@ public class GameManager : MonoBehaviour
             recordScore = true;
         }
 
+       // tunnelEffectPrefab2.SetActive(false);
+       // tunnelEffectPrefab1.SetActive(false);
+
        // Invoke(nameof(GoToNextLevel), 2f);
         Invoke(nameof(DoSurvey), 1f);
     }
@@ -370,8 +374,7 @@ public class GameManager : MonoBehaviour
         surveryUICanvas.SetActive(true);
     }
     public void DoSurvey()
-    {
-      
+    { 
         surveryUICanvas.SetActive(true);
         lineVisual.enabled = true;
         
@@ -379,7 +382,13 @@ public class GameManager : MonoBehaviour
         notificationCanvas.SetActive(false);
         notificationBGImage.enabled = false;
         notificationText.enabled = false;
-       // menuUICanvas.SetActive(false);
+        // menuUICanvas.SetActive(false);
+
+        foreach (MemoryCard card in allCards)
+        {
+            if (card != null)
+                card.gameObject.SetActive(false);
+        }
     }
 
     public void GoToNextLevel() {
@@ -407,6 +416,9 @@ public class GameManager : MonoBehaviour
         // currentLevelIndex = 0;
         string currentSceneName = SceneManager.GetActiveScene().name;
         logManager.WriteToLogFile("Study Order: " + currentLevelIndex + " , name: " + currentSceneName);
+
+        Instantiate(tunnelEffectPrefab1);
+        Instantiate(tunnelEffectPrefab2);
     }
 
     //public void WriteToLogFile(string message)
