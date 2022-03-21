@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BSBystanderAvatar : MonoBehaviour
 {
     public GameObject bystanderTracker;
-    public BSGameManager bsgameManager;
+    public BeatSaberGameManager bsgameManager;
     public Transform tracker;
     private float bystanderYAxis;  // bystander's euler y-axis
     private float bystanderRotationOffset = 0;

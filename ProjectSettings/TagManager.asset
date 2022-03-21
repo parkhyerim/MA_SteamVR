@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - MemoryCard
+  - HitCube
+  - Cube
   layers:
   - Default
   - TransparentFX
@@ -17,11 +19,11 @@ TagManager:
   - MenuUI
   - Card
   - DashboardUI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - BlueCube
+  - RedCube
+  - GreenCube
+  - YellowCube
+  - HitCube
   - 
   - 
   - 

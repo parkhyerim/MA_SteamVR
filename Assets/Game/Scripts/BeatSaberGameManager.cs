@@ -8,14 +8,15 @@ using UnityEngine.XR.Interaction.Toolkit;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class BSGameManager : MonoBehaviour
+public class BeatSaberGameManager : MonoBehaviour
 {
+
     [Header("AUDIO")]
-    public AudioSource audioSource;
-    public AudioClip clipCardForward;
-    public AudioClip clipCardBackward;
-    public AudioClip clipCardMatch;
-    public AudioClip clipCardUnmatch;
+    //public AudioSource audioSource;
+    //public AudioClip clipCardForward;
+    //public AudioClip clipCardBackward;
+    //public AudioClip clipCardMatch;
+    //public AudioClip clipCardUnmatch;
 
     [Header("EFFECT")]
     //public GameObject matchEffectPrefab;
@@ -69,13 +70,13 @@ public class BSGameManager : MonoBehaviour
     private bool canPauseGame;
 
     [Header("TRACKER")]
-    public RotateTracker bysTracker;
+    public BSRotateTracker bysTracker;
     public XRInteractorLineVisual lineVisual;
     public string participantID;
 
     private int randomNumForEffect;
     private bool bystanderInteract;
-    public LogManager logManager;
+    public BSLogManager logManager;
     public bool isPracticeGame;
     public bool isEndScene;
     private bool recordScore;
@@ -143,6 +144,12 @@ public class BSGameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+
+
+
+
+
+
         if (CanStartGame)
         {
             if (Time.time >= showCardsInSec && Time.time <= hideCardAgainInSec) // Showing Time
@@ -255,7 +262,7 @@ public class BSGameManager : MonoBehaviour
         card.targetHeight = 0.05f;
         card.targetRotation = 0;
 
-        audioSource.PlayOneShot(clipCardForward);
+       // audioSource.PlayOneShot(clipCardForward);
 
         //if(firstSelectedCard == null)
         //{

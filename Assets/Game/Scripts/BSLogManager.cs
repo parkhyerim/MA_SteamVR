@@ -7,7 +7,7 @@ public class BSLogManager : MonoBehaviour
 {
     private string participantID;
 
-    public BSGameManager bsGameManager;
+    public BeatSaberGameManager bsGameManager;
 
     // Start is called before the first frame update
     void Start()

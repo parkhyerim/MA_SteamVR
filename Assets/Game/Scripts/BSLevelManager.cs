@@ -14,7 +14,7 @@ public class BSLevelManager : MonoBehaviour
     public int[] userStudyOrder = new int[6];
     private string[] randomedOrder = new string[] { "AnimojiY", "AnimojiN", "AvatarY", "AvatarN", "MixedY", "MixedN" };
 
-    public BSGameManager gameManager;
+    public BeatSaberGameManager gameManager;
     public BSLogManager logManager;
 
     private void Start()
