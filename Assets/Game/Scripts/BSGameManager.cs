@@ -16,13 +16,12 @@ public class BSGameManager : MonoBehaviour
     public AudioClip clipCardBackward;
     public AudioClip clipCardMatch;
     public AudioClip clipCardUnmatch;
-    // bool canMusicPlay;
 
     [Header("EFFECT")]
-    public GameObject matchEffectPrefab;
-    public GameObject matchEffectPrefab2;
-    public GameObject tunnelEffectPrefab1;
-    public GameObject tunnelEffectPrefab2;
+    //public GameObject matchEffectPrefab;
+    //public GameObject matchEffectPrefab2;
+    //public GameObject tunnelEffectPrefab1;
+    //public GameObject tunnelEffectPrefab2;
 
     [Header("GAME UI")]
     public GameObject menuUICanvas;
@@ -33,17 +32,17 @@ public class BSGameManager : MonoBehaviour
     public GameObject notificationCanvas;
     public TMP_Text notificationText;
     public Image notificationBGImage;
-    public List<Image> notificationCheerImages;
+   // public List<Image> notificationCheerImages;
     public GameObject surveryUICanvas;
 
     [Header("CARDs")]
-    public MemoryCard[] allCards;
-    private List<Vector3> allPositionsOfCards = new List<Vector3>();
-    private Vector3 AngleOfCards = new Vector3();
-    public MemoryCard firstSelectedCard;
-    public MemoryCard secondSelectedCard;
-    private bool canClickCard = true;
-    private bool isFrontCard = false;
+    //public MemoryCard[] allCards;
+    //private List<Vector3> allPositionsOfCards = new List<Vector3>();
+    //private Vector3 AngleOfCards = new Vector3();
+    //public MemoryCard firstSelectedCard;
+    //public MemoryCard secondSelectedCard;
+    //private bool canClickCard = true;
+    //private bool isFrontCard = false;
 
     [Header("TIME MANAGEMENT")]
     public float memorizingTime;
@@ -92,25 +91,25 @@ public class BSGameManager : MonoBehaviour
 
     private void Awake()
     {       
-        // Get all card positions and save in the list
-        foreach(MemoryCard card in allCards)
-        {
-            allPositionsOfCards.Add(card.transform.position);
-            // to make all cards uninteractable
-            card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
-        }
+        //// Get all card positions and save in the list
+        //foreach(MemoryCard card in allCards)
+        //{
+        //    allPositionsOfCards.Add(card.transform.position);
+        //    // to make all cards uninteractable
+        //  //  card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
+        //}
         
-        AngleOfCards = allCards[0].transform.localEulerAngles;
+        //AngleOfCards = allCards[0].transform.localEulerAngles;
 
-        // Randomize the positions of the cards
-        System.Random randomNumber = new System.Random();
-        allPositionsOfCards = allPositionsOfCards.OrderBy(position => randomNumber.Next()).ToList();
+        //// Randomize the positions of the cards
+        //System.Random randomNumber = new System.Random();
+        //allPositionsOfCards = allPositionsOfCards.OrderBy(position => randomNumber.Next()).ToList();
     
-        // Assign a new position
-        for(int i = 0; i < allCards.Length; i++)
-        {
-            allCards[i].transform.position = allPositionsOfCards[i];
-        }
+        //// Assign a new position
+        //for(int i = 0; i < allCards.Length; i++)
+        //{
+        //    allCards[i].transform.position = allPositionsOfCards[i];
+        //}
 
         // Time Management
         gameTimer = totalGameTime;
@@ -124,10 +123,10 @@ public class BSGameManager : MonoBehaviour
         notificationCanvas.gameObject.SetActive(false);
         surveryUICanvas.gameObject.SetActive(false);
 
-        foreach(Image img in notificationCheerImages)
-        {
-            img.enabled = false;
-        }
+        //foreach(Image img in notificationCheerImages)
+        //{
+        //    img.enabled = false;
+        //}
 
         // canMusicPlay = true;
         //  interactionUI.SetActive(false);
@@ -160,11 +159,11 @@ public class BSGameManager : MonoBehaviour
                 beforeGameTimer += Time.fixedDeltaTime;
                 gameTimeText.text = Math.Round(memorizingTime - beforeGameTimer).ToString();
             
-                if (isFrontCard == false)
-                {
-                    ShowCards();
-                    isFrontCard = true;
-                }
+                //if (isFrontCard == false)
+                //{
+                //    ShowCards();
+                //    isFrontCard = true;
+                //}
             }
             else if (Time.time > hideCardAgainInSec && GameCountTimer <= totalGameTime) // During the Game
             {
@@ -198,9 +197,9 @@ public class BSGameManager : MonoBehaviour
     {             
         Vector3 frontAngles = new Vector3(0, 0, 0);
 
-        foreach(MemoryCard card in allCards) {
-            card.transform.localEulerAngles = frontAngles;
-        }
+        //foreach(MemoryCard card in allCards) {
+        //    card.transform.localEulerAngles = frontAngles;
+        //}
 
         instructionText.text = "Match Pairs by Clicking Two Cards!";
 
@@ -223,11 +222,11 @@ public class BSGameManager : MonoBehaviour
         gameScoreText.text = "0/20";
         Vector3 backAngles = new Vector3(0, 180, 0);
 
-        foreach(MemoryCard card in allCards) {
-            card.IsGameStart = true;
-            card.transform.localEulerAngles = backAngles;
-            card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
-        }
+        //foreach(MemoryCard card in allCards) {
+        //    card.IsGameStart = true;
+        //    card.transform.localEulerAngles = backAngles;
+        //    card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
+        //}
 
         CanPauseGame = true;
         //isFront = false;
@@ -246,10 +245,10 @@ public class BSGameManager : MonoBehaviour
  
     public void CardClicked(MemoryCard card)
     {
-        if (canClickCard == false || card == firstSelectedCard)
-        {
-            return;
-        }
+        //if (canClickCard == false || card == firstSelectedCard)
+        //{
+        //    return;
+        //}
             
         // Always rotate card forwards to show its image
        // card.transform.localEulerAngles = new Vector3(0,0,0);
@@ -258,64 +257,64 @@ public class BSGameManager : MonoBehaviour
 
         audioSource.PlayOneShot(clipCardForward);
 
-        if(firstSelectedCard == null)
-        {
-            firstSelectedCard = card;
-        }
-        else
-        {
-            // Second card selected;
-            secondSelectedCard = card;
-            canClickCard = false;
-            // 1 second later
-            Invoke(nameof(CheckMatch), time: 1f); ;         
-        }
+        //if(firstSelectedCard == null)
+        //{
+        //    firstSelectedCard = card;
+        //}
+        //else
+        //{
+        //    // Second card selected;
+        //    secondSelectedCard = card;
+        //    canClickCard = false;
+        //    // 1 second later
+        //    Invoke(nameof(CheckMatch), time: 1f); ;         
+        //}
     }
 
     public void CheckMatch()
     {      
         // RESULT
-        if (firstSelectedCard.identifier == secondSelectedCard.identifier)
-        {
-            Instantiate(matchEffectPrefab, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
-            Instantiate(matchEffectPrefab, secondSelectedCard.gameObject.transform.position, Quaternion.identity);
-            Instantiate(matchEffectPrefab2, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
-            Instantiate(matchEffectPrefab2, secondSelectedCard.gameObject.transform.position, Quaternion.identity);
-            Destroy(firstSelectedCard.gameObject);
-            Destroy(secondSelectedCard.gameObject);
-            score += 2;
-            gameScoreText.text = score.ToString() + "/20";
+        //if (firstSelectedCard.identifier == secondSelectedCard.identifier)
+        //{
+        //    //Instantiate(matchEffectPrefab, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
+        //    //Instantiate(matchEffectPrefab, secondSelectedCard.gameObject.transform.position, Quaternion.identity);
+        //    //Instantiate(matchEffectPrefab2, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
+        //    //Instantiate(matchEffectPrefab2, secondSelectedCard.gameObject.transform.position, Quaternion.identity);
+        //    Destroy(firstSelectedCard.gameObject);
+        //    Destroy(secondSelectedCard.gameObject);
+        //    score += 2;
+        //    gameScoreText.text = score.ToString() + "/20";
 
-            //if ((score % 4 == 0) && score!= 20)
-            //{
-                // notificationCheerImage.enabled = true;
-                StartCoroutine("ShowRandomImage");
-                randomNumForEffect = UnityEngine.Random.Range(0, notificationCheerImages.Count);
-                notificationCheerImages[randomNumForEffect].enabled = true;
-                notificationCheerImages[randomNumForEffect].transform.position = firstSelectedCard.gameObject.transform.position;
-            //}
+        //    //if ((score % 4 == 0) && score!= 20)
+        //    //{
+        //        // notificationCheerImage.enabled = true;
+        //        StartCoroutine("ShowRandomImage");
+        //        randomNumForEffect = UnityEngine.Random.Range(0, notificationCheerImages.Count);
+        //        notificationCheerImages[randomNumForEffect].enabled = true;
+        //        notificationCheerImages[randomNumForEffect].transform.position = firstSelectedCard.gameObject.transform.position;
+        //    //}
 
-            audioSource.PlayOneShot(clipCardMatch);
-            if(score == 20)
-            {
-                StopRayInteractoin();
-                Invoke(nameof(EndGame), 2);
-            }
-        }
-        else
-        {
-            firstSelectedCard.targetRotation = 180;
-            secondSelectedCard.targetRotation = 180;
-            audioSource.PlayOneShot(clipCardUnmatch);
-        }
+        //    audioSource.PlayOneShot(clipCardMatch);
+        //    if(score == 20)
+        //    {
+        //        StopRayInteractoin();
+        //        Invoke(nameof(EndGame), 2);
+        //    }
+        //}
+        //else
+        //{
+        //    firstSelectedCard.targetRotation = 180;
+        //    secondSelectedCard.targetRotation = 180;
+        //    audioSource.PlayOneShot(clipCardUnmatch);
+        //}
 
-        // RESET
-        firstSelectedCard = null;
-        secondSelectedCard = null;
+        //// RESET
+        //firstSelectedCard = null;
+        //secondSelectedCard = null;
 
-        audioSource.PlayOneShot(clipCardBackward);
+        //audioSource.PlayOneShot(clipCardBackward);
 
-        canClickCard = true;
+        //canClickCard = true;
     }
 
     public void PauseGame()
@@ -384,11 +383,11 @@ public class BSGameManager : MonoBehaviour
         notificationText.enabled = false;
         // menuUICanvas.SetActive(false);
 
-        foreach (MemoryCard card in allCards)
-        {
-            if (card != null)
-                card.gameObject.SetActive(false);
-        }
+        //foreach (MemoryCard card in allCards)
+        //{
+        //    if (card != null)
+        //        card.gameObject.SetActive(false);
+        //}
     }
 
     public void GoToNextLevel() {
@@ -401,7 +400,7 @@ public class BSGameManager : MonoBehaviour
         while (true)
         {   
             yield return new WaitForSeconds(1);
-            notificationCheerImages[randomNumForEffect].enabled = false;
+           // notificationCheerImages[randomNumForEffect].enabled = false;
         }
     }
 
@@ -417,8 +416,8 @@ public class BSGameManager : MonoBehaviour
         string currentSceneName = SceneManager.GetActiveScene().name;
         logManager.WriteToLogFile("Study Order: " + currentLevelIndex + " , name: " + currentSceneName);
 
-        Instantiate(tunnelEffectPrefab1);
-        Instantiate(tunnelEffectPrefab2);
+        //Instantiate(tunnelEffectPrefab1);
+        //Instantiate(tunnelEffectPrefab2);
     }
 
     //public void WriteToLogFile(string message)
@@ -432,27 +431,25 @@ public class BSGameManager : MonoBehaviour
 
     void StopRayInteractoin()
     {
-        foreach (MemoryCard card in allCards)
-        {
-            if (card != null)
-            {
-                card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
-              //  card.gameObject.SetActive(false);
-            }
-        }
+        //foreach (MemoryCard card in allCards)
+        //{
+        //    if (card != null)
+        //    {
+        //        card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
+        //      //  card.gameObject.SetActive(false);
+        //    }
+        //}
 
-       // Destroy(lineVisual);
          lineVisual.enabled = false;
-      //  lineVisual.gameObject.SetActive(false);
     }
 
     void StartRayInteraction()
     {
-        foreach (MemoryCard card in allCards)
-        {
-            if (card != null)
-                card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
-        }
+        //foreach (MemoryCard card in allCards)
+        //{
+        //    if (card != null)
+        //        card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
+        //}
         lineVisual.enabled = true;
     }
 

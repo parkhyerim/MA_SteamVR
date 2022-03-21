@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class ChangeDegree : MonoBehaviour
 {
-
     public Text directionText;
     public float degrees;
 

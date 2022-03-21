@@ -30,10 +30,8 @@ public class MemoryCard : MonoBehaviour
             // Rotate
             Quaternion rotationValue = Quaternion.Euler(0, targetRotation, 0);
             transform.rotation = Quaternion.Lerp(transform.rotation, rotationValue, 10 * Time.deltaTime);
-        }
-      
+        } 
     }
-
 
     private void OnSelectEnter()
     {
@@ -46,9 +44,9 @@ public class MemoryCard : MonoBehaviour
             Debug.Log("trigger");
     }
 
+    // XR Interaction
     public void SelectCard()
     {
-      //  Debug.Log("Clciked");
         FindObjectOfType<GameManager>().CardClicked(this);
     }
 }

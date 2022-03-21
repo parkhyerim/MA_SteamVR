@@ -7,6 +7,7 @@ using System;
 using UnityEngine.XR.Interaction.Toolkit;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Globalization;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,14 +16,14 @@ public class GameManager : MonoBehaviour
     public AudioClip clipCardForward;
     public AudioClip clipCardBackward;
     public AudioClip clipCardMatch;
-    public AudioClip clipCardUnmatch;
-    // bool canMusicPlay;
+    public AudioClip clipCardDismatch;
 
     [Header("EFFECT")]
     public GameObject matchEffectPrefab;
     public GameObject matchEffectPrefab2;
     public GameObject tunnelEffectPrefab1;
     public GameObject tunnelEffectPrefab2;
+    public GameObject starEffectPrefab;
 
     [Header("GAME UI")]
     public GameObject menuUICanvas;
@@ -49,12 +50,12 @@ public class GameManager : MonoBehaviour
     public float memorizingTime;
     public float bufferBeforeStartingGame = 2f;
     public int totalGameTime;
-    [SerializeField]
+    //[SerializeField]
     float gameCountTimer;
     public float gameCountTimerIgnoringPause;
-    [SerializeField]
+   // [SerializeField]
     int gameTimer;
-    private float showCardsInSec, hideCardAgainInSec; // time to show Card images, time to turn backwards again
+    private float startShowingCardsInSec, startHidingCardAgainInSec; // time to show Card images, time to turn backwards again
     float beforeGameTimer = 0f;
     public float BystanderStartTime = 25f;
 
@@ -64,7 +65,7 @@ public class GameManager : MonoBehaviour
     bool gameIsPaused;
 
     [Header("SCORE")]
-    [SerializeField]
+    //[SerializeField]
     private int score;
     private bool canStartGame;
     private bool canPauseGame;
@@ -81,7 +82,6 @@ public class GameManager : MonoBehaviour
     public bool isEndScene;
     private bool recordScore;
     int currentLevelIndex;
-    // [Header("Participant")]
 
     //public string participantID = null;
 
@@ -92,35 +92,36 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {       
-        // Get all card positions and save in the list
+        //Get all card positions and save in the list
         foreach(MemoryCard card in allCards)
         {
             allPositionsOfCards.Add(card.transform.position);
-            // to make all cards uninteractable
+
+            //To make all cards uninteractable
             card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
         }
         
         AngleOfCards = allCards[0].transform.localEulerAngles;
 
-        // Randomize the positions of the cards
+        //Randomize the positions of the cards
         System.Random randomNumber = new System.Random();
         allPositionsOfCards = allPositionsOfCards.OrderBy(position => randomNumber.Next()).ToList();
     
-        // Assign a new position
+        //Assign a new position to all cards
         for(int i = 0; i < allCards.Length; i++)
         {
             allCards[i].transform.position = allPositionsOfCards[i];
         }
 
-        // Time Management
+        //Time Management
         gameTimer = totalGameTime;
 
-        // Score
+        //Score
         score = 0;
         gameScoreText.text = "";
         gameTimeText.text = "";
 
-        // Game Notification
+        //UI Elements deactivated
         notificationCanvas.gameObject.SetActive(false);
         surveryUICanvas.gameObject.SetActive(false);
 
@@ -129,24 +130,27 @@ public class GameManager : MonoBehaviour
             img.enabled = false;
         }
 
-        // canMusicPlay = true;
+        // Pause/Resume the game by clicking the panel
         //  interactionUI.SetActive(false);
         // pauseBtn.gameObject.SetActive(false);
 
-        if(participantID == null || participantID == "")
+        if (participantID == "" || participantID == null)
+        {
+            DateTime localDate = DateTime.Now;
+            string cultureName = "de-DE"; // de-DE  en-GB en-US
+            var culture = new CultureInfo(cultureName);
+            string name = localDate.ToString(culture);
             participantID = "not assigned";
-    }
-
-    private void Start()
-    {
-        // WriteToLogFile(participantID);    
+           // Debug.Log("participant name: " + participantID);
+        }      
     }
 
     private void FixedUpdate()
     {
         if (CanStartGame)
         {
-            if (Time.time >= showCardsInSec && Time.time <= hideCardAgainInSec) // Showing Time
+            if (Time.time >= startShowingCardsInSec 
+                && Time.time <= startHidingCardAgainInSec) // Showing Time
             {         
                 //if(Time.time == hideCardAgainInSec)
                 //{
@@ -166,7 +170,7 @@ public class GameManager : MonoBehaviour
                     isFrontCard = true;
                 }
             }
-            else if (Time.time > hideCardAgainInSec && GameCountTimer <= totalGameTime) // During the Game
+            else if (Time.time > startHidingCardAgainInSec && GameCountTimer <= totalGameTime) // During the Game
             {
                 gameCountTimerIgnoringPause += Time.fixedDeltaTime;
 
@@ -174,7 +178,7 @@ public class GameManager : MonoBehaviour
                 {
                     GameCountTimer += Time.fixedDeltaTime; 
                     gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
-                    if (Math.Round(GameCountTimer) == totalGameTime)
+                    if (Math.Round(GameCountTimer) == totalGameTime) //The time is up
                     {
                         StopRayInteractoin();
                         EndGame();
@@ -188,6 +192,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void StartGame()
+    {
+        CanStartGame = true;
+        startShowingCardsInSec = Time.time + bufferBeforeStartingGame;
+        startHidingCardAgainInSec = startShowingCardsInSec + memorizingTime;
+        Destroy(menuUICanvas);
+
+        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+        // currentLevelIndex = 0;
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        logManager.WriteToLogFile("Study Order: " + currentLevelIndex + " , name: " + currentSceneName);
+
+        Instantiate(tunnelEffectPrefab1);
+        Instantiate(tunnelEffectPrefab2);
+    }
 
     public void SetTimeStamp()
     {
@@ -196,10 +215,10 @@ public class GameManager : MonoBehaviour
 
     public void ShowCards()
     {             
-        Vector3 frontAngles = new Vector3(0, 0, 0);
+        Vector3 frontLocalEulerAngles = new Vector3(0, 0, 0);
 
         foreach(MemoryCard card in allCards) {
-            card.transform.localEulerAngles = frontAngles;
+            card.transform.localEulerAngles = frontLocalEulerAngles;
         }
 
         instructionText.text = "Match Pairs by Clicking Two Cards!";
@@ -208,24 +227,17 @@ public class GameManager : MonoBehaviour
         Invoke(nameof(showNotification), time: memorizingTime - 0.8f);
     }
 
-    public void showNotification()
-    {
-        notificationCanvas.SetActive(true);
-        notificationBGImage.enabled = true;
-        notificationText.text = "GAME START!";
-    }
     public void HideCards() {
-
-        notificationBGImage.enabled = false;
+        notificationBGImage.enabled = false; // TODO: notificationCanvas is parent
         notificationText.enabled = false;
         instructionText.text = "";
     
         gameScoreText.text = "0/20";
-        Vector3 backAngles = new Vector3(0, 180, 0);
+        Vector3 backsidelocEulerAngles = new Vector3(0, 180, 0);
 
         foreach(MemoryCard card in allCards) {
             card.IsGameStart = true;
-            card.transform.localEulerAngles = backAngles;
+            card.transform.localEulerAngles = backsidelocEulerAngles;
             card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
         }
 
@@ -235,7 +247,12 @@ public class GameManager : MonoBehaviour
        // interactionUI.SetActive(true);
       //  pauseBtn.gameObject.SetActive(true);
     }
-
+    public void showNotification()
+    {
+        notificationCanvas.SetActive(true);
+        notificationBGImage.enabled = true;
+        notificationText.text = "GAME START!";
+    }
     public void BystanderStart()
     {
         gameTimeText.text = "";
@@ -306,7 +323,7 @@ public class GameManager : MonoBehaviour
         {
             firstSelectedCard.targetRotation = 180;
             secondSelectedCard.targetRotation = 180;
-            audioSource.PlayOneShot(clipCardUnmatch);
+            audioSource.PlayOneShot(clipCardDismatch);
         }
 
         // RESET
@@ -405,21 +422,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StartGame()
-    {
-        CanStartGame = true;
-        showCardsInSec = Time.time + bufferBeforeStartingGame;
-        hideCardAgainInSec = showCardsInSec + memorizingTime;
-        Destroy(menuUICanvas);
-
-        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
-        // currentLevelIndex = 0;
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        logManager.WriteToLogFile("Study Order: " + currentLevelIndex + " , name: " + currentSceneName);
-
-        Instantiate(tunnelEffectPrefab1);
-        Instantiate(tunnelEffectPrefab2);
-    }
 
     //public void WriteToLogFile(string message)
     //{
