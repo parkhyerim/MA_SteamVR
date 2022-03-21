@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/Practice.unity
+    path: Assets/Game/Scenes/Levels/Archive_2/Practice.unity
     guid: d5a1bc660d6978c41b2d077343b63518
   - enabled: 1
     path: Assets/Game/Scenes/Levels/MixedN.unity
@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Levels/AvatarY.unity
     guid: 30c3346091a5e3c48a27cc24b52ba8b9
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/MixedY.unity
+    path: Assets/Game/Scenes/Levels/Archive_2/MixedY.unity
     guid: 471600b920bea06419e78347a633eb08
   - enabled: 1
     path: Assets/Game/Scenes/Levels/AnimojiN.unity
@@ -27,7 +27,7 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Levels/AvatarN.unity
     guid: dc937ae151ddf1645a141ec10276ca3d
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/EndScene.unity
+    path: Assets/Game/Scenes/Levels/Archive_2/EndScene.unity
     guid: 5394d91b4237bec4bbe6bbdac31ee5f0
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d367a92b0d4cf114c826faa81e847686, type: 2}
