@@ -8,12 +8,12 @@ public class Saber : MonoBehaviour
     public LayerMask layer;
     private Vector3 previousPos;
     public Material warningMat;
-    private Material originalMat;
+    public Material originalMat;
 
     // Start is called before the first frame update
     void Start()
     {
-        originalMat = this.gameObject.GetComponent<Renderer>().material;
+       // originalMat = this.gameObject.GetComponent<Renderer>().material;
     }
 
 
@@ -38,15 +38,15 @@ public class Saber : MonoBehaviour
     {
         if(collision.gameObject.tag == "Cube")
         {
-          //  Destroy(collision.gameObject);
-            Debug.Log(collision.gameObject.name);
-            this.gameObject.GetComponent<Renderer>().material.color = warningMat.color;
+            //Destroy(collision.gameObject);
+          //  Debug.Log(collision.gameObject.name);
+            //this.gameObject.GetComponent<Renderer>().material.color = warningMat.color;
         }
         if(collision.gameObject.tag == "HitCube")
         {
-            Destroy(collision.gameObject);
-            Debug.Log(collision.gameObject.name);
-            this.gameObject.GetComponent<Renderer>().material.color = originalMat.color;
+           // Destroy(collision.gameObject);
+          //  Debug.Log(collision.gameObject.name);
+          //  this.gameObject.GetComponent<Renderer>().material.color = originalMat.color;
         }
     }
 }
