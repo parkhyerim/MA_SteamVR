@@ -7,6 +7,11 @@ TagManager:
   - MemoryCard
   - HitCube
   - Cube
+  - projectile
+  - FxTemporaire
+  - BlueCube
+  - GreenCube
+  - YellowCube
   layers:
   - Default
   - TransparentFX

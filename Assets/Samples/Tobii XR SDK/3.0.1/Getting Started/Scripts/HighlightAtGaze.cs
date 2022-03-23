@@ -8,6 +8,9 @@ namespace Tobii.XR.Examples.GettingStarted
     //Monobehaviour which implements the "IGazeFocusable" interface, meaning it will be called on when the object receives focus
     public class HighlightAtGaze : MonoBehaviour, IGazeFocusable
     {
+       // public GameManager gameManager;
+        public BeatSaberGameManager gameManager;
+
         private static readonly int _baseColor = Shader.PropertyToID("_BaseColor");
         public Color highlightColor = Color.red;
         public float animationTime = 0.1f;
@@ -23,6 +26,8 @@ namespace Tobii.XR.Examples.GettingStarted
             if (hasFocus)
             {
                 _targetColor = highlightColor;
+                gameManager.EyeFocused();
+                
             }
             //If this object lost focus, fade the object's color to it's original color
             else

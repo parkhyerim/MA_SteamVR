@@ -1,24 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using System.Linq;
 using System;
-using UnityEngine.XR.Interaction.Toolkit;
+using System.Collections;
+using System.Globalization;
 using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class BeatSaberGameManager : MonoBehaviour
 {
-
     [Header("AUDIO")]
-    //public AudioSource audioSource;
-    //public AudioClip clipCardForward;
-    //public AudioClip clipCardBackward;
-    //public AudioClip clipCardMatch;
-    //public AudioClip clipCardUnmatch;
+    public AudioSource audioSource;
+    public AudioClip rightSlice;
+    public AudioClip wrongSlice;
+    public AudioClip sliceSound;
 
     [Header("EFFECT")]
+    public GameObject rightSliceEffectPrefab;
+    public GameObject wrongSliceEffectPrefab;
+    public GameObject blueCubeSliceEffetPrefab;
+    public GameObject greenCubeSliceEffectPrefab;
+    public GameObject yellowCubeSliceEffectPrefab;
+   
     //public GameObject matchEffectPrefab;
     //public GameObject matchEffectPrefab2;
     //public GameObject tunnelEffectPrefab1;
@@ -26,6 +29,9 @@ public class BeatSaberGameManager : MonoBehaviour
 
     [Header("GAME UI")]
     public GameObject menuUICanvas;
+    public GameObject timeCanvas;
+    public GameObject scoreCanvas;
+    public GameObject instructionCanvas;
     public TMP_Text gameScoreText;
     public TMP_Text gameTimeText;
     // public GameObject interactionUI;
@@ -36,17 +42,8 @@ public class BeatSaberGameManager : MonoBehaviour
    // public List<Image> notificationCheerImages;
     public GameObject surveryUICanvas;
 
-    [Header("CARDs")]
-    //public MemoryCard[] allCards;
-    //private List<Vector3> allPositionsOfCards = new List<Vector3>();
-    //private Vector3 AngleOfCards = new Vector3();
-    //public MemoryCard firstSelectedCard;
-    //public MemoryCard secondSelectedCard;
-    //private bool canClickCard = true;
-    //private bool isFrontCard = false;
-
     [Header("TIME MANAGEMENT")]
-    public float memorizingTime;
+    public float getReadyTime;
     public float bufferBeforeStartingGame = 2f;
     public int totalGameTime;
     [SerializeField]
@@ -54,13 +51,13 @@ public class BeatSaberGameManager : MonoBehaviour
     public float gameCountTimerIgnoringPause;
     [SerializeField]
     int gameTimer;
-    private float showCardsInSec, hideCardAgainInSec; // time to show Card images, time to turn backwards again
+    private float readyTime, startSpawingCubes; // time to show Card images, time to turn backwards again
     float beforeGameTimer = 0f;
     public float BystanderStartTime = 25f;
 
     // public Button pauseBtn;
     [SerializeField]
-    private float pausedTime, identificationTime;
+    private float pausedTime, identificationTime, eyeFocusedTime ;
     bool gameIsPaused;
 
     [Header("SCORE")]
@@ -81,6 +78,8 @@ public class BeatSaberGameManager : MonoBehaviour
     public bool isEndScene;
     private bool recordScore;
     int currentLevelIndex;
+
+    public CubeSpawner cubeSpawner;
     // [Header("Participant")]
 
     //public string participantID = null;
@@ -92,26 +91,6 @@ public class BeatSaberGameManager : MonoBehaviour
 
     private void Awake()
     {       
-        //// Get all card positions and save in the list
-        //foreach(MemoryCard card in allCards)
-        //{
-        //    allPositionsOfCards.Add(card.transform.position);
-        //    // to make all cards uninteractable
-        //  //  card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
-        //}
-        
-        //AngleOfCards = allCards[0].transform.localEulerAngles;
-
-        //// Randomize the positions of the cards
-        //System.Random randomNumber = new System.Random();
-        //allPositionsOfCards = allPositionsOfCards.OrderBy(position => randomNumber.Next()).ToList();
-    
-        //// Assign a new position
-        //for(int i = 0; i < allCards.Length; i++)
-        //{
-        //    allCards[i].transform.position = allPositionsOfCards[i];
-        //}
-
         // Time Management
         gameTimer = totalGameTime;
 
@@ -123,6 +102,9 @@ public class BeatSaberGameManager : MonoBehaviour
         // Game Notification
         notificationCanvas.gameObject.SetActive(false);
         surveryUICanvas.gameObject.SetActive(false);
+        timeCanvas.gameObject.SetActive(false);
+        scoreCanvas.gameObject.SetActive(false);
+        instructionCanvas.gameObject.SetActive(false);
 
         //foreach(Image img in notificationCheerImages)
         //{
@@ -133,27 +115,26 @@ public class BeatSaberGameManager : MonoBehaviour
         //  interactionUI.SetActive(false);
         // pauseBtn.gameObject.SetActive(false);
 
-        if(participantID == null || participantID == "")
-            participantID = "not assigned";
-    }
+       
 
-    private void Start()
-    {
-        // WriteToLogFile(participantID);    
+        if (participantID == "" || participantID == null)
+        {
+            DateTime localDate = DateTime.Now;
+            string cultureName = "de-DE"; // de-DE  en-GB en-US
+            var culture = new CultureInfo(cultureName);
+            string name = localDate.ToString(culture);
+            participantID = "not assigned";
+            // Debug.Log("participant name: " + participantID);
+        }
     }
 
     private void FixedUpdate()
     {
-
-
-
-
-
-
         if (CanStartGame)
         {
-            if (Time.time >= showCardsInSec && Time.time <= hideCardAgainInSec) // Showing Time
-            {         
+            if (Time.time >= readyTime && Time.time <= startSpawingCubes) // Showing Time
+            {
+                Debug.Log("Update is called");
                 //if(Time.time == hideCardAgainInSec)
                 //{
                 //    gameProcessBackground.enabled = true;
@@ -164,7 +145,7 @@ public class BeatSaberGameManager : MonoBehaviour
                 //gameProcessText.text = "";
 
                 beforeGameTimer += Time.fixedDeltaTime;
-                gameTimeText.text = Math.Round(memorizingTime - beforeGameTimer).ToString();
+                gameTimeText.text = Math.Round(getReadyTime - beforeGameTimer).ToString();
             
                 //if (isFrontCard == false)
                 //{
@@ -172,16 +153,21 @@ public class BeatSaberGameManager : MonoBehaviour
                 //    isFrontCard = true;
                 //}
             }
-            else if (Time.time > hideCardAgainInSec && GameCountTimer <= totalGameTime) // During the Game
+            else if (Time.time > startSpawingCubes && GameCountTimer <= totalGameTime) // During the Game
             {
                 gameCountTimerIgnoringPause += Time.fixedDeltaTime;
+                Debug.Log("Game Timer is running");
+              
+               // cubeSpawner.SetSpawner();
 
                 if (!gameIsPaused)
                 {
                     GameCountTimer += Time.fixedDeltaTime; 
                     gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
+                    cubeSpawner.CanSpawn = true;
                     if (Math.Round(GameCountTimer) == totalGameTime)
                     {
+                        cubeSpawner.CanSpawn = false;
                         StopRayInteractoin();
                         EndGame();
                     }
@@ -195,23 +181,24 @@ public class BeatSaberGameManager : MonoBehaviour
     }
 
 
-    public void SetTimeStamp()
+    public void SetAvatarTimeStamp()
     {
-        logManager.WriteToLogFile("Bystander wants to interact: " + (float)Math.Round(gameCountTimerIgnoringPause));
+        string curDateTime = GetCurrentTime();
+        logManager.WriteToLogFile("Bystander wants to interact: " + (float)Math.Round(gameCountTimerIgnoringPause) + " [" + curDateTime +"]");
     }
 
     public void ShowCards()
     {             
-        Vector3 frontAngles = new Vector3(0, 0, 0);
+       // Vector3 frontAngles = new Vector3(0, 0, 0);
 
         //foreach(MemoryCard card in allCards) {
         //    card.transform.localEulerAngles = frontAngles;
         //}
 
-        instructionText.text = "Match Pairs by Clicking Two Cards!";
+       // instructionText.text = "Match Pairs by Clicking Two Cards!";
 
-        Invoke("HideCards", time: memorizingTime);
-        Invoke(nameof(showNotification), time: memorizingTime - 0.8f);
+        Invoke("SpawnCubes", time: getReadyTime);
+        Invoke(nameof(showNotification), time: getReadyTime - 0.8f);
     }
 
     public void showNotification()
@@ -220,14 +207,16 @@ public class BeatSaberGameManager : MonoBehaviour
         notificationBGImage.enabled = true;
         notificationText.text = "GAME START!";
     }
-    public void HideCards() {
+    public void SpawnCubes() {
+
+        cubeSpawner.CanSpawn = true;
 
         notificationBGImage.enabled = false;
         notificationText.enabled = false;
         instructionText.text = "";
     
-        gameScoreText.text = "0/20";
-        Vector3 backAngles = new Vector3(0, 180, 0);
+        gameScoreText.text = "0";
+       // Vector3 backAngles = new Vector3(0, 180, 0);
 
         //foreach(MemoryCard card in allCards) {
         //    card.IsGameStart = true;
@@ -250,78 +239,47 @@ public class BeatSaberGameManager : MonoBehaviour
         // logManager
     }
  
-    public void CardClicked(MemoryCard card)
+    public void CubeSliced(GameObject cube)
     {
-        //if (canClickCard == false || card == firstSelectedCard)
-        //{
-        //    return;
-        //}
-            
-        // Always rotate card forwards to show its image
-       // card.transform.localEulerAngles = new Vector3(0,0,0);
-        card.targetHeight = 0.05f;
-        card.targetRotation = 0;
+      //  audioSource.PlayOneShot(sliceSound);
 
-       // audioSource.PlayOneShot(clipCardForward);
+        Debug.Log(cube.name + " called the Method");
 
-        //if(firstSelectedCard == null)
-        //{
-        //    firstSelectedCard = card;
-        //}
-        //else
-        //{
-        //    // Second card selected;
-        //    secondSelectedCard = card;
-        //    canClickCard = false;
-        //    // 1 second later
-        //    Invoke(nameof(CheckMatch), time: 1f); ;         
-        //}
-    }
-
-    public void CheckMatch()
-    {      
-        // RESULT
-        //if (firstSelectedCard.identifier == secondSelectedCard.identifier)
-        //{
-        //    //Instantiate(matchEffectPrefab, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
-        //    //Instantiate(matchEffectPrefab, secondSelectedCard.gameObject.transform.position, Quaternion.identity);
-        //    //Instantiate(matchEffectPrefab2, firstSelectedCard.gameObject.transform.position, Quaternion.identity);
-        //    //Instantiate(matchEffectPrefab2, secondSelectedCard.gameObject.transform.position, Quaternion.identity);
-        //    Destroy(firstSelectedCard.gameObject);
-        //    Destroy(secondSelectedCard.gameObject);
-        //    score += 2;
-        //    gameScoreText.text = score.ToString() + "/20";
-
-        //    //if ((score % 4 == 0) && score!= 20)
-        //    //{
-        //        // notificationCheerImage.enabled = true;
-        //        StartCoroutine("ShowRandomImage");
-        //        randomNumForEffect = UnityEngine.Random.Range(0, notificationCheerImages.Count);
-        //        notificationCheerImages[randomNumForEffect].enabled = true;
-        //        notificationCheerImages[randomNumForEffect].transform.position = firstSelectedCard.gameObject.transform.position;
-        //    //}
-
-        //    audioSource.PlayOneShot(clipCardMatch);
-        //    if(score == 20)
-        //    {
-        //        StopRayInteractoin();
-        //        Invoke(nameof(EndGame), 2);
-        //    }
-        //}
-        //else
-        //{
-        //    firstSelectedCard.targetRotation = 180;
-        //    secondSelectedCard.targetRotation = 180;
-        //    audioSource.PlayOneShot(clipCardUnmatch);
-        //}
-
-        //// RESET
-        //firstSelectedCard = null;
-        //secondSelectedCard = null;
-
-        //audioSource.PlayOneShot(clipCardBackward);
-
-        //canClickCard = true;
+        if(cube.tag == "BlueCube")
+        {
+            Debug.Log("Blue Cube Right Slice");
+            audioSource.PlayOneShot(rightSlice);
+            Instantiate(blueCubeSliceEffetPrefab, cube.transform.position, Quaternion.identity);
+            Destroy(cube);
+            score += 1;
+            gameScoreText.text = score.ToString();
+        }
+        
+        if(cube.tag == "GreenCube")
+        {
+            Debug.Log("Green Cube Slice");
+            audioSource.PlayOneShot(rightSlice);
+            Instantiate(greenCubeSliceEffectPrefab, cube.transform.position, Quaternion.identity);
+            Destroy(cube);
+            if (score > 0)
+            {
+                score += 1;
+                gameScoreText.text = score.ToString();
+            }
+        }
+        
+        if(cube.tag == "YellowCube")
+        {
+            Debug.Log("YEllow Cube Slice");
+            audioSource.PlayOneShot(wrongSlice);
+            Instantiate(yellowCubeSliceEffectPrefab, cube.transform.position, Quaternion.identity);
+            Destroy(cube);
+            if (score > 0)
+            {
+                score += 1;
+                gameScoreText.text = score.ToString();
+            }
+        }
     }
 
     public void PauseGame()
@@ -349,17 +307,8 @@ public class BeatSaberGameManager : MonoBehaviour
         notificationText.enabled = true;
         bystanderInteract = false;
         CanPauseGame = false;
-        //foreach (MemoryCard card in allCards)
-        //{
-           
-        //        Destroy(card);
-          
-        //}
 
-        if (score == 20)
-            notificationText.text = "BRAVO!\nYOU WIN!";
-        else
-            notificationText.text = "GAME OVER!";
+        notificationText.text = "BRAVO!\nYOUR SCORE IS " + score +"!";
 
         if (!recordScore)
         {
@@ -413,10 +362,16 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void StartGame()
     {
+        Debug.Log("Start Game Is Called");
         CanStartGame = true;
-        showCardsInSec = Time.time + bufferBeforeStartingGame;
-        hideCardAgainInSec = showCardsInSec + memorizingTime;
+        readyTime = Time.time + bufferBeforeStartingGame;
+        startSpawingCubes = readyTime + getReadyTime;
         Destroy(menuUICanvas);
+
+        scoreCanvas.SetActive(true);
+        timeCanvas.SetActive(true);
+        instructionCanvas.SetActive(true);
+     
 
         currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
         // currentLevelIndex = 0;
@@ -463,5 +418,27 @@ public class BeatSaberGameManager : MonoBehaviour
     public void SubmitSurvey()
     {
         Debug.Log("submit survey");
+    }
+
+    public void EyeFocused()
+    {
+        DateTime localDate = DateTime.Now;
+        string cultureName = "de-DE"; // de-DE  en-GB en-US
+        var culture = new CultureInfo(cultureName);
+        string name = localDate.ToString(culture);
+
+        Debug.Log("Eye focused: " + name);
+        eyeFocusedTime = (float)Math.Round(gameCountTimerIgnoringPause);
+        logManager.WriteToLogFile("Eye Focused Time: " + eyeFocusedTime);
+    }
+
+    public string GetCurrentTime()
+    {
+        DateTime localDate = DateTime.Now;
+        string cultureName = "de-DE"; // de-DE  en-GB en-US
+        var culture = new CultureInfo(cultureName);
+        string name = localDate.ToString(culture);
+
+        return name;
     }
 }

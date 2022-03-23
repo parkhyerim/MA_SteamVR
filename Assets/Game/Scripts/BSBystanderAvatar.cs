@@ -787,10 +787,8 @@ public class BSBystanderAvatar : MonoBehaviour
 
     private void BystanderEnterCriticalSection()
     {
-        // Debug.Log("Bystander Want to talk");
-        bsgameManager.SetTimeStamp();
+        bsgameManager.SetAvatarTimeStamp();
     }
-
 
     public void SetGuide()
     {

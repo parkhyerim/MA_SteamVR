@@ -6,21 +6,35 @@ public class CubeSpawner : MonoBehaviour
 {
     public GameObject[] cubes;
     public Transform[] points;
-    public float beat = (60 / 150)*2;
-    private float timer;
+    // TODO: Set the right beat for the selected music
+    public float beat = (60 / 150) * 2; // 1.142...
+    private float timer = 0.0f;
+    private float fastTimer;
+    private bool canSpawn;
+    public bool CanSpawn { get => canSpawn; set => canSpawn = value; }
 
-
-    // Update is called once per frame
     void Update()
     {
-        if (timer > beat)
+        if (CanSpawn)
         {
-            GameObject cube = Instantiate(cubes[Random.Range(0, 4)], points[Random.Range(0, 4)]);
-            cube.transform.localPosition = Vector3.zero;
-            cube.transform.Rotate(transform.forward, 90 * Random.Range(0, 4));
-            timer -= beat;
-        }
+            Debug.Log("Can Spawn in Cubespawner script is called");
+            // Check if we have reached beyond beat(1.142..) seconds
+            // Subtracting beat seconds is more accurate over time than resetting to zero.
+            if (timer > beat)
+            {
+                GameObject cube = Instantiate(cubes[Random.Range(0, cubes.Length)], points[Random.Range(0, points.Length)]);
+                cube.transform.localPosition = Vector3.zero;
+                cube.transform.Rotate(transform.forward, 90 * Random.Range(0, 4));
+                // Remove the recorded beat seconds.
+                timer -= beat;
+            }
 
-        timer += Time.deltaTime;
+            timer += Time.deltaTime;
+        }
+    }
+
+    public void SetSpawner()
+    {
+        CanSpawn = true;
     }
 }

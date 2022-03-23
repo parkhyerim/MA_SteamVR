@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
 
     // public Button pauseBtn;
     [SerializeField]
-    private float pausedTime, identificationTime;
+    private float pausedTime, identificationTime, eyeFocusedTime;
     bool gameIsPaused;
 
     [Header("SCORE")]
@@ -208,9 +208,10 @@ public class GameManager : MonoBehaviour
         Instantiate(tunnelEffectPrefab2);
     }
 
-    public void SetTimeStamp()
+    public void SetAvatarTimeStamp()
     {
-        logManager.WriteToLogFile("Bystander wants to interact: " + (float)Math.Round(gameCountTimerIgnoringPause));
+        string curDateTime = GetCurrentTime();
+        logManager.WriteToLogFile("Bystander wants to interact: " + (float)Math.Round(gameCountTimerIgnoringPause) + " [" + curDateTime + "]");
     }
 
     public void ShowCards()
@@ -461,5 +462,27 @@ public class GameManager : MonoBehaviour
     public void SubmitSurvey()
     {
         Debug.Log("submit survey");
+    }
+
+    public void EyeFocused()
+    {
+        DateTime localDate = DateTime.Now;
+        string cultureName = "de-DE"; // de-DE  en-GB en-US
+        var culture = new CultureInfo(cultureName);
+        string name = localDate.ToString(culture);
+
+        Debug.Log("Eye focused: " + name);
+        eyeFocusedTime = (float)Math.Round(gameCountTimerIgnoringPause);
+        logManager.WriteToLogFile("Eye Focused Time: " + eyeFocusedTime);
+    }
+
+    public string GetCurrentTime()
+    {
+        DateTime localDate = DateTime.Now;
+        string cultureName = "de-DE"; // de-DE  en-GB en-US
+        var culture = new CultureInfo(cultureName);
+        string name = localDate.ToString(culture);
+
+        return name;
     }
 }

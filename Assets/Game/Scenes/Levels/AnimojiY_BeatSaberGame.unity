@@ -12490,6 +12490,7 @@ MonoBehaviour:
   BystanderStartTime: 10
   pausedTime: 0
   identificationTime: 0
+  eyeFocusedTime: 0
   bysTracker: {fileID: 202137951}
   lineVisual: {fileID: 3114112698391372045}
   participantID: P01
