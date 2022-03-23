@@ -28,17 +28,18 @@ public class Saber : MonoBehaviour
             if(Vector3.Angle(transform.position - previousPos, hit.transform.up) > 110)
             {
                Debug.Log(hit.transform.gameObject.name + ": Hit Destroy " + Vector3.Angle(transform.position - previousPos, hit.transform.up));
-              
-                if(hit.transform.gameObject.name == "BlueCube")
+
+                
+                if(hit.transform.gameObject.name.Contains("Blue"))
                 {
                    Instantiate(blueEffect, hit.transform.position, Quaternion.identity);
                     
                 }
-                else if(hit.transform.gameObject.name == "GreenCube")
+                else if(hit.transform.gameObject.name.Contains("GreenCube"))
                 {
                     Instantiate(greenEffect, hit.transform.position, Quaternion.identity);
                 }
-                else if(hit.transform.gameObject.name == "YellowCube")
+                else if(hit.transform.gameObject.name.Contains("YellowCube"))
                 {
                     Instantiate(yellowEffect, hit.transform.position, Quaternion.identity);
                 }
