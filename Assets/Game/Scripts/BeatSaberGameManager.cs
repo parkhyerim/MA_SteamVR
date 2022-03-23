@@ -21,11 +21,6 @@ public class BeatSaberGameManager : MonoBehaviour
     public GameObject blueCubeSliceEffetPrefab;
     public GameObject greenCubeSliceEffectPrefab;
     public GameObject yellowCubeSliceEffectPrefab;
-   
-    //public GameObject matchEffectPrefab;
-    //public GameObject matchEffectPrefab2;
-    //public GameObject tunnelEffectPrefab1;
-    //public GameObject tunnelEffectPrefab2;
 
     [Header("GAME UI")]
     public GameObject menuUICanvas;
@@ -44,14 +39,13 @@ public class BeatSaberGameManager : MonoBehaviour
 
     [Header("TIME MANAGEMENT")]
     public float getReadyTime;
-    public float bufferBeforeStartingGame = 2f;
+    private float bufferingTimeBeforeStartGame = 1f;
     public int totalGameTime;
-    [SerializeField]
-    float gameCountTimer;
     public float gameCountTimerIgnoringPause;
-    [SerializeField]
+
+    float gameCountTimer;
     int gameTimer;
-    private float readyTime, startSpawingCubes; // time to show Card images, time to turn backwards again
+    private float readyTime, startTimeForSpawingCubes; // time to show Card images, time to turn backwards again
     float beforeGameTimer = 0f;
     public float BystanderStartTime = 25f;
 
@@ -69,6 +63,7 @@ public class BeatSaberGameManager : MonoBehaviour
     [Header("TRACKER")]
     public BSRotateTracker bysTracker;
     public XRInteractorLineVisual lineVisual;
+    [Header("PARTICIPANT")]
     public string participantID;
 
     private int randomNumForEffect;
@@ -80,9 +75,6 @@ public class BeatSaberGameManager : MonoBehaviour
     int currentLevelIndex;
 
     public CubeSpawner cubeSpawner;
-    // [Header("Participant")]
-
-    //public string participantID = null;
 
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
     public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
@@ -96,8 +88,8 @@ public class BeatSaberGameManager : MonoBehaviour
 
         // Score
         score = 0;
-        gameScoreText.text = "";
-        gameTimeText.text = "";
+       // gameScoreText.text = "";
+       // gameTimeText.text = "";
 
         // Game Notification
         notificationCanvas.gameObject.SetActive(false);
@@ -115,16 +107,11 @@ public class BeatSaberGameManager : MonoBehaviour
         //  interactionUI.SetActive(false);
         // pauseBtn.gameObject.SetActive(false);
 
-       
-
         if (participantID == "" || participantID == null)
         {
-            DateTime localDate = DateTime.Now;
-            string cultureName = "de-DE"; // de-DE  en-GB en-US
-            var culture = new CultureInfo(cultureName);
-            string name = localDate.ToString(culture);
+            string currentTime = GetCurrentTime();
             participantID = "not assigned";
-            // Debug.Log("participant name: " + participantID);
+            Debug.Log("participant name: " + participantID + " Current time: " + currentTime);
         }
     }
 
@@ -132,7 +119,7 @@ public class BeatSaberGameManager : MonoBehaviour
     {
         if (CanStartGame)
         {
-            if (Time.time >= readyTime && Time.time <= startSpawingCubes) // Showing Time
+            if (Time.time >= readyTime && Time.time <= startTimeForSpawingCubes) // Showing Time
             {
                 Debug.Log("Update is called");
                 //if(Time.time == hideCardAgainInSec)
@@ -153,7 +140,7 @@ public class BeatSaberGameManager : MonoBehaviour
                 //    isFrontCard = true;
                 //}
             }
-            else if (Time.time > startSpawingCubes && GameCountTimer <= totalGameTime) // During the Game
+            else if (Time.time > startTimeForSpawingCubes && GameCountTimer <= totalGameTime) // During the Game
             {
                 gameCountTimerIgnoringPause += Time.fixedDeltaTime;
                 Debug.Log("Game Timer is running");
@@ -362,10 +349,9 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void StartGame()
     {
-        Debug.Log("Start Game Is Called");
         CanStartGame = true;
-        readyTime = Time.time + bufferBeforeStartingGame;
-        startSpawingCubes = readyTime + getReadyTime;
+        readyTime = Time.time + bufferingTimeBeforeStartGame;
+        startTimeForSpawingCubes = readyTime + getReadyTime;
         Destroy(menuUICanvas);
 
         scoreCanvas.SetActive(true);
