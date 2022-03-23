@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 339008623900831590}
   m_Layer: 15
   m_Name: YellowCube
-  m_TagString: YellowCube
+  m_TagString: Cube
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 5799067942852652167}
   m_Layer: 15
   m_Name: BlueCube
-  m_TagString: BlueCube
+  m_TagString: Cube
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

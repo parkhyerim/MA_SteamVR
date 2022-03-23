@@ -44,7 +44,7 @@ public class BeatSaberGameManager : MonoBehaviour
     public float getReadyTime;
    // private float bufferingTimeBeforeStartGame = 1f;
     public int totalGameTime;
-    public float gameCountTimerIgnoringPause;
+    public float gameTimerIgnoringPause;
 
     float gameCountTimer;
     int gameTimer;
@@ -55,7 +55,7 @@ public class BeatSaberGameManager : MonoBehaviour
     // public Button pauseBtn;
     [SerializeField]
     private float pausedTime, identificationTime, eyeFocusedTime ;
-    bool gameIsPaused;
+    bool gamePaused;
 
     [Header("SCORE")]
     [SerializeField]
@@ -76,8 +76,11 @@ public class BeatSaberGameManager : MonoBehaviour
     public bool isEndScene;
     private bool recordScore;
     int currentSceneIndex;
+    private bool askSpawnCubes;
 
     public CubeSpawner cubeSpawner;
+    public BSPauseController pauseController;
+    public GameObject[] cubes;
 
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
     public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
@@ -101,11 +104,6 @@ public class BeatSaberGameManager : MonoBehaviour
         scoreUI.gameObject.SetActive(false);
         instructionUI.gameObject.SetActive(false);
 
-        //foreach(Image img in notificationCheerImages)
-        //{
-        //    img.enabled = false;
-        //}
-
         // canMusicPlay = true;
         //  interactionUI.SetActive(false);
         // pauseBtn.gameObject.SetActive(false);
@@ -120,31 +118,30 @@ public class BeatSaberGameManager : MonoBehaviour
     {
         if (CanStartGame)
         {
+            // Time Before Game Start
             if (Time.time >= timeFromSceneLoading && Time.time <= startTimeForSpawingCubes) // Showing Time
             {
                 beforeGameTimer += Time.fixedDeltaTime;
                 // gameTimeText.text = Math.Round(getReadyTime - beforeGameTimer).ToString();
                 gameTimeText.text = ConvertToMinAndSeconds(getReadyTime - beforeGameTimer);
-
-                //if (isFrontCard == false)
-                //{
-                //    ShowCards();
-                //    isFrontCard = true;
-                //}
             }
+            // GAME TIME
             else if (Time.time > startTimeForSpawingCubes && GameCountTimer <= totalGameTime) // During the Game
             {
-                gameCountTimerIgnoringPause += Time.fixedDeltaTime;
-                Debug.Log("Game Timer is running");
-              
-               // cubeSpawner.SetSpawner();
+                gameTimerIgnoringPause += Time.fixedDeltaTime;
 
-                if (!gameIsPaused)
+                if (!gamePaused)
                 {
                     GameCountTimer += Time.fixedDeltaTime; 
                    // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
                     gameTimeText.text = ConvertToMinAndSeconds(gameTimer - GameCountTimer);
-                    cubeSpawner.CanSpawn = true;
+                   
+                    if(askSpawnCubes == false)
+                    {
+                        SpawnCubes();
+                        askSpawnCubes = true;
+                    }
+                    
                     if (Math.Round(GameCountTimer) == totalGameTime)
                     {
                         cubeSpawner.CanSpawn = false;
@@ -184,29 +181,21 @@ public class BeatSaberGameManager : MonoBehaviour
     public void SetAvatarTimeStamp()
     {
         string curDateTime = GetCurrentTime();
-        logManager.WriteToLogFile("Bystander wants to interact: " + (float)Math.Round(gameCountTimerIgnoringPause) + " [" + curDateTime +"]");
+        logManager.WriteToLogFile("Bystander wants to interact: " + (float)Math.Round(gameTimerIgnoringPause) + " [" + curDateTime +"]");
     }
 
-    public void ShowCards()
-    {             
-       // Vector3 frontAngles = new Vector3(0, 0, 0);
+    //public void ShowCards()
+    //{            
+    //    Invoke("SpawnCubes", time: getReadyTime);
+    //    Invoke(nameof(showNotification), time: getReadyTime - 0.8f);
+    //}
 
-        //foreach(MemoryCard card in allCards) {
-        //    card.transform.localEulerAngles = frontAngles;
-        //}
-
-       // instructionText.text = "Match Pairs by Clicking Two Cards!";
-
-        Invoke("SpawnCubes", time: getReadyTime);
-        Invoke(nameof(showNotification), time: getReadyTime - 0.8f);
-    }
-
-    public void showNotification()
-    {
-        notificationUI.SetActive(true);
-      //  notificationBGImage.enabled = true;
-        notificationText.text = "GAME START!";
-    }
+    //public void showNotification()
+    //{
+    //    notificationUI.SetActive(true);
+    //  //  notificationBGImage.enabled = true;
+    //    notificationText.text = "GAME START!";
+    //}
     public void SpawnCubes() {
 
         cubeSpawner.CanSpawn = true;
@@ -217,12 +206,6 @@ public class BeatSaberGameManager : MonoBehaviour
     
         gameScoreText.text = "0";
        // Vector3 backAngles = new Vector3(0, 180, 0);
-
-        //foreach(MemoryCard card in allCards) {
-        //    card.IsGameStart = true;
-        //    card.transform.localEulerAngles = backAngles;
-        //    card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
-        //}
 
         CanPauseGame = true;
         //isFront = false;
@@ -237,6 +220,12 @@ public class BeatSaberGameManager : MonoBehaviour
         bysTracker.IsHeadingToPlayer = true;
         BystanderInteract = true;
         // logManager
+    }
+
+    public void BystanderEnd()
+    {
+        BystanderInteract = false;
+        pauseController.OncePausedInSession = false;       
     }
  
     public void CubeSliced(GameObject cube)
@@ -284,18 +273,34 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void PauseGame()
     {
-        if (!gameIsPaused)
+        if (!gamePaused)
         {
-            gameIsPaused = true;
+            gamePaused = true;
             pausedTime = (float)Math.Round(GameCountTimer);
-            identificationTime = (float)Math.Round(gameCountTimerIgnoringPause);
+            identificationTime = (float)Math.Round(gameTimerIgnoringPause);
             logManager.WriteToLogFile("Identification (Paused) Time: " + identificationTime);
+            cubeSpawner.CanSpawn = false;
+            cubeSpawner.StopMoving = true;
+            cubes = GameObject.FindGameObjectsWithTag("Cube");
+            foreach(GameObject cube in cubes)
+            {
+               // Debug.Log(cube.name);
+                cube.GetComponent<Cube>().StopMove();
+            }
             StopRayInteractoin();
         }
         else
         {
-            gameIsPaused = false;
-            logManager.WriteToLogFile("Resume Time: " + (float)Math.Round(gameCountTimerIgnoringPause));
+            gamePaused = false;
+            logManager.WriteToLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+            cubeSpawner.CanSpawn = true;
+            cubeSpawner.StopMoving = false;
+            cubes = GameObject.FindGameObjectsWithTag("Cube");
+            foreach (GameObject cube in cubes)
+            {
+              //  Debug.Log(cube.name);
+                cube.GetComponent<Cube>().StartMove();
+            }
             StartRayInteraction();
         }
     }
@@ -307,6 +312,8 @@ public class BeatSaberGameManager : MonoBehaviour
         notificationText.enabled = true;
         bystanderInteract = false;
         CanPauseGame = false;
+
+        cubeSpawner.CanSpawn = false;
 
         notificationText.text = "BRAVO!\nYOUR SCORE IS " + score +"!";
 
@@ -408,7 +415,7 @@ public class BeatSaberGameManager : MonoBehaviour
         string name = localDate.ToString(culture);
 
         Debug.Log("Eye focused: " + name);
-        eyeFocusedTime = (float)Math.Round(gameCountTimerIgnoringPause);
+        eyeFocusedTime = (float)Math.Round(gameTimerIgnoringPause);
         logManager.WriteToLogFile("Eye Focused Time: " + eyeFocusedTime);
     }
 

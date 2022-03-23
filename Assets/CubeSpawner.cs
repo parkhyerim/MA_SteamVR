@@ -10,14 +10,18 @@ public class CubeSpawner : MonoBehaviour
     public float beat = (60 / 150) * 2; // 1.142...
     private float timer = 0.0f;
     private float fastTimer;
+    public float speed = 4f;
     private bool canSpawn;
+    private bool stopSpawn;
+    private bool stopMoving;
     public bool CanSpawn { get => canSpawn; set => canSpawn = value; }
+    public bool StopSpawn { get => stopSpawn; set => stopSpawn = value; }
+    public bool StopMoving { get => stopMoving; set => stopMoving = value; }
 
     void Update()
     {
         if (CanSpawn)
         {
-            Debug.Log("Can Spawn in Cubespawner script is called");
             // Check if we have reached beyond beat(1.142..) seconds
             // Subtracting beat seconds is more accurate over time than resetting to zero.
             if (timer > beat)
@@ -27,10 +31,10 @@ public class CubeSpawner : MonoBehaviour
                 cube.transform.Rotate(transform.forward, 90 * Random.Range(0, 4));
                 // Remove the recorded beat seconds.
                 timer -= beat;
-            }
 
+            }
             timer += Time.deltaTime;
-        }
+        }  
     }
 
     public void SetSpawner()
