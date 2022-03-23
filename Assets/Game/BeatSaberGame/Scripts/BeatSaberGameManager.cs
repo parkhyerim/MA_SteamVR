@@ -181,7 +181,7 @@ public class BeatSaberGameManager : MonoBehaviour
     public void SetAvatarTimeStamp()
     {
         string curDateTime = GetCurrentTime();
-        logManager.WriteToLogFile("Bystander wants to interact: " + (float)Math.Round(gameTimerIgnoringPause) + " [" + curDateTime +"]");
+        logManager.WriteToLogFile("Bystander wants to interact (enter into 30-0 degrees): " + (float)Math.Round(gameTimerIgnoringPause) + " [" + curDateTime +"]");
     }
 
     //public void ShowCards()
