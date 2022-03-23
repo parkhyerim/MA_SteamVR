@@ -23,29 +23,32 @@ public class BeatSaberGameManager : MonoBehaviour
     public GameObject yellowCubeSliceEffectPrefab;
 
     [Header("GAME UI")]
-    public GameObject menuUICanvas;
-    public GameObject timeCanvas;
-    public GameObject scoreCanvas;
-    public GameObject instructionCanvas;
+    public GameObject menuUI;
+    public GameObject notificationUI;
+    public GameObject timeUI;
+    public GameObject scoreUI;
+    public GameObject instructionUI;
+    public GameObject surveryUI;
+
     public TMP_Text gameScoreText;
     public TMP_Text gameTimeText;
     // public GameObject interactionUI;
     public TMP_Text instructionText;
-    public GameObject notificationCanvas;
+
     public TMP_Text notificationText;
-    public Image notificationBGImage;
+   // public Image notificationBGImage;
    // public List<Image> notificationCheerImages;
-    public GameObject surveryUICanvas;
+
 
     [Header("TIME MANAGEMENT")]
     public float getReadyTime;
-    private float bufferingTimeBeforeStartGame = 1f;
+   // private float bufferingTimeBeforeStartGame = 1f;
     public int totalGameTime;
     public float gameCountTimerIgnoringPause;
 
     float gameCountTimer;
     int gameTimer;
-    private float readyTime, startTimeForSpawingCubes; // time to show Card images, time to turn backwards again
+    private float timeFromSceneLoading, startTimeForSpawingCubes; // time to show Card images, time to turn backwards again
     float beforeGameTimer = 0f;
     public float BystanderStartTime = 25f;
 
@@ -72,7 +75,7 @@ public class BeatSaberGameManager : MonoBehaviour
     public bool isPracticeGame;
     public bool isEndScene;
     private bool recordScore;
-    int currentLevelIndex;
+    int currentSceneIndex;
 
     public CubeSpawner cubeSpawner;
 
@@ -92,11 +95,11 @@ public class BeatSaberGameManager : MonoBehaviour
        // gameTimeText.text = "";
 
         // Game Notification
-        notificationCanvas.gameObject.SetActive(false);
-        surveryUICanvas.gameObject.SetActive(false);
-        timeCanvas.gameObject.SetActive(false);
-        scoreCanvas.gameObject.SetActive(false);
-        instructionCanvas.gameObject.SetActive(false);
+        notificationUI.gameObject.SetActive(false);
+        surveryUI.gameObject.SetActive(false);
+        timeUI.gameObject.SetActive(false);
+        scoreUI.gameObject.SetActive(false);
+        instructionUI.gameObject.SetActive(false);
 
         //foreach(Image img in notificationCheerImages)
         //{
@@ -109,9 +112,7 @@ public class BeatSaberGameManager : MonoBehaviour
 
         if (participantID == "" || participantID == null)
         {
-            string currentTime = GetCurrentTime();
-            participantID = "not assigned";
-            Debug.Log("participant name: " + participantID + " Current time: " + currentTime);
+            participantID = "ID not assigned";
         }
     }
 
@@ -119,21 +120,12 @@ public class BeatSaberGameManager : MonoBehaviour
     {
         if (CanStartGame)
         {
-            if (Time.time >= readyTime && Time.time <= startTimeForSpawingCubes) // Showing Time
+            if (Time.time >= timeFromSceneLoading && Time.time <= startTimeForSpawingCubes) // Showing Time
             {
-                Debug.Log("Update is called");
-                //if(Time.time == hideCardAgainInSec)
-                //{
-                //    gameProcessBackground.enabled = true;
-                //    gameProcessText.text = "Match a pair of cards!";
-                //}
-
-                //gameProcessBackground.enabled = false;
-                //gameProcessText.text = "";
-
                 beforeGameTimer += Time.fixedDeltaTime;
-                gameTimeText.text = Math.Round(getReadyTime - beforeGameTimer).ToString();
-            
+                // gameTimeText.text = Math.Round(getReadyTime - beforeGameTimer).ToString();
+                gameTimeText.text = ConvertToMinAndSeconds(getReadyTime - beforeGameTimer);
+
                 //if (isFrontCard == false)
                 //{
                 //    ShowCards();
@@ -150,7 +142,8 @@ public class BeatSaberGameManager : MonoBehaviour
                 if (!gameIsPaused)
                 {
                     GameCountTimer += Time.fixedDeltaTime; 
-                    gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
+                   // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
+                    gameTimeText.text = ConvertToMinAndSeconds(gameTimer - GameCountTimer);
                     cubeSpawner.CanSpawn = true;
                     if (Math.Round(GameCountTimer) == totalGameTime)
                     {
@@ -161,12 +154,32 @@ public class BeatSaberGameManager : MonoBehaviour
                 }
                 else
                 {
-                    gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
+                   // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
+                    gameTimeText.text = ConvertToMinAndSeconds(gameTimer - GameCountTimer);
                 }
             }
         }
     }
 
+    public void StartGame()
+    {
+        CanStartGame = true;
+        timeFromSceneLoading = Time.time;
+        startTimeForSpawingCubes = timeFromSceneLoading + getReadyTime;
+        Destroy(menuUI);
+
+        scoreUI.SetActive(true);
+        timeUI.SetActive(true);
+        instructionUI.SetActive(true);
+
+        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        // currentLevelIndex = 0;
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        logManager.WriteToLogFile("Study Order: " + currentSceneIndex + " , name: " + currentSceneName);
+
+        //Instantiate(tunnelEffectPrefab1);
+        //Instantiate(tunnelEffectPrefab2);
+    }
 
     public void SetAvatarTimeStamp()
     {
@@ -190,15 +203,15 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void showNotification()
     {
-        notificationCanvas.SetActive(true);
-        notificationBGImage.enabled = true;
+        notificationUI.SetActive(true);
+      //  notificationBGImage.enabled = true;
         notificationText.text = "GAME START!";
     }
     public void SpawnCubes() {
 
         cubeSpawner.CanSpawn = true;
 
-        notificationBGImage.enabled = false;
+     //   notificationBGImage.enabled = false;
         notificationText.enabled = false;
         instructionText.text = "";
     
@@ -289,8 +302,8 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void EndGame()
     {
-        notificationCanvas.SetActive(true);
-        notificationBGImage.enabled = true;
+        notificationUI.SetActive(true);
+       // notificationBGImage.enabled = true;
         notificationText.enabled = true;
         bystanderInteract = false;
         CanPauseGame = false;
@@ -313,16 +326,16 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void GoSurvey()
     {
-        surveryUICanvas.SetActive(true);
+        surveryUI.SetActive(true);
     }
     public void DoSurvey()
     { 
-        surveryUICanvas.SetActive(true);
+        surveryUI.SetActive(true);
         lineVisual.enabled = true;
         
         //lineVisual.gameObject.SetActive(true);
-        notificationCanvas.SetActive(false);
-        notificationBGImage.enabled = false;
+        notificationUI.SetActive(false);
+      //  notificationBGImage.enabled = false;
         notificationText.enabled = false;
         // menuUICanvas.SetActive(false);
 
@@ -347,26 +360,7 @@ public class BeatSaberGameManager : MonoBehaviour
         }
     }
 
-    public void StartGame()
-    {
-        CanStartGame = true;
-        readyTime = Time.time + bufferingTimeBeforeStartGame;
-        startTimeForSpawingCubes = readyTime + getReadyTime;
-        Destroy(menuUICanvas);
 
-        scoreCanvas.SetActive(true);
-        timeCanvas.SetActive(true);
-        instructionCanvas.SetActive(true);
-     
-
-        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
-        // currentLevelIndex = 0;
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        logManager.WriteToLogFile("Study Order: " + currentLevelIndex + " , name: " + currentSceneName);
-
-        //Instantiate(tunnelEffectPrefab1);
-        //Instantiate(tunnelEffectPrefab2);
-    }
 
     //public void WriteToLogFile(string message)
     //{
@@ -427,4 +421,11 @@ public class BeatSaberGameManager : MonoBehaviour
 
         return name;
     }
+
+    private string ConvertToMinAndSeconds(float totalTimeInSeconds)
+    {
+        string timeText = Mathf.Floor(totalTimeInSeconds / 60).ToString("00") + ":" + Mathf.FloorToInt(totalTimeInSeconds % 60).ToString("00");
+        return timeText;
+    }
+
 }
