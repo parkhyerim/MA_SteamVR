@@ -10848,9 +10848,9 @@ MonoBehaviour:
   pauseReference: {fileID: 6384917368766239539, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   audioSource: {fileID: 881797394}
   quesitionAudios:
-  - {fileID: 8300000, guid: 2d986199105311140aa7a4c79288cc37, type: 3}
-  - {fileID: 8300000, guid: b8755d5167de604458ae85b189fce30c, type: 3}
-  - {fileID: 8300000, guid: 087d635a6f9e22a40ae71b620ec10cea, type: 3}
+  - {fileID: 8300000, guid: 8fc94c9048784264aa7a3cae4a179ffc, type: 3}
+  - {fileID: 8300000, guid: 64dfe9d89f24f214583cb6eb67081b32, type: 3}
+  - {fileID: 8300000, guid: feab7e974d12add498fda3074059e2a9, type: 3}
   bgMusicAS: {fileID: 389390911}
   gameManager: {fileID: 894022212}
   bAvatar: {fileID: 995297013}
@@ -10883,7 +10883,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
