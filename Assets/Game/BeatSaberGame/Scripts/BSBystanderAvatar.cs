@@ -66,7 +66,7 @@ public class BSBystanderAvatar : MonoBehaviour
     public float fadeTime = 2f;
 
     [SerializeField]
-    private bool fromCriticalSection, enterCriticalSection;
+    private bool fromCriticalSection, inCriticalDegreesSection;
 
     public BSLogManager logManager;
     // Start is called before the first frame update
@@ -131,10 +131,10 @@ public class BSBystanderAvatar : MonoBehaviour
              ****************************************************/
             if (bystanderEulerYAxis >= 60 && bystanderEulerYAxis < 100) // 100 <- 90
             {
-                if (!enterCriticalSection)
+                if (!inCriticalDegreesSection)
                 {
                     BystanderEnterCriticalSection(); // enter 30 degrees
-                    enterCriticalSection = true;
+                    inCriticalDegreesSection = true;
                 }
 
                 if (isAnimojiSetting)
@@ -277,6 +277,7 @@ public class BSBystanderAvatar : MonoBehaviour
                 else if (isMixedSetting)
                 {
                     fromCriticalSection = true;
+                   
                     if (doInteraction)
                     {
                         bystanderAnim.SetBool("isInteracting", true);
@@ -381,6 +382,7 @@ public class BSBystanderAvatar : MonoBehaviour
             // B: 60 >= d > 30
             else if (bystanderEulerYAxis >= 30 && bystanderEulerYAxis < 60)
             {
+                inCriticalDegreesSection = false;
                 if (isAnimojiSetting)
                 {
                     float timeElapsedForTransparency = 0f;
@@ -581,6 +583,7 @@ public class BSBystanderAvatar : MonoBehaviour
             // B: 80 >= d > 60
             else if (bystanderEulerYAxis < 30 && bystanderEulerYAxis >= 10)
             {
+               
                 if (isAnimojiSetting)
                 {
                     fromCriticalSection = false;

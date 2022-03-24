@@ -7,12 +7,18 @@ public class BSRotateTracker : MonoBehaviour
     public bool doInteraction;
     public bool useTracker;
     public BSLogManager logManager;
+    public BeatSaberGameManager gameManager;
     // temporary
     public float rotateSpeed = 2;
     [SerializeField]
     private bool isHeadingTo30, isHeadingToFrontSeat, isHeadingToPlayer;
 
     public bool IsHeadingToPlayer { get => isHeadingToPlayer; set => isHeadingToPlayer = value; }
+
+    private void Start()
+    {
+        doInteraction = true;
+    }
 
     void Update()
     {
@@ -30,7 +36,7 @@ public class BSRotateTracker : MonoBehaviour
                 { // Heading towards the VR-Player
                     if (doInteraction)
                     {
-                        Invoke(nameof(HeadingBackTo30Degrees), 13f); // Stay in 13 seconds
+                        Invoke(nameof(HeadingBackTo30Degrees), 11f); // Stay in 11 seconds (13)
                     }
                     else
                     {
@@ -55,7 +61,7 @@ public class BSRotateTracker : MonoBehaviour
                         }
                         else
                         {
-                            Invoke(nameof(HeadingBacktoFrontSeat), 12.5f);
+                            Invoke(nameof(HeadingBacktoFrontSeat), 10.5f); //12.5
                         }
                     }
                 }
@@ -75,7 +81,6 @@ public class BSRotateTracker : MonoBehaviour
                     }
                 }
             }
-
             // Controll the tracker with arrow keys 
             // transform.Rotate(0, Input.GetAxis("Horizontal") * speed * Time.deltaTime, 0);
         }
@@ -83,7 +88,6 @@ public class BSRotateTracker : MonoBehaviour
 
     private void HeadingBackTo30Degrees()
     {
-        // Debug.Log(" Called: " + System.DateTime.Now + doInteraction);
         isHeadingTo30 = true;
         isHeadingToPlayer = false;
     }
@@ -93,5 +97,6 @@ public class BSRotateTracker : MonoBehaviour
         isHeadingTo30 = false;
         isHeadingToFrontSeat = true;
         isHeadingToPlayer = false;
+        gameManager.BystanderEnd();
     }
 }

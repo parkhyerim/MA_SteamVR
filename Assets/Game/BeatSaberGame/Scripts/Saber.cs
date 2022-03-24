@@ -28,7 +28,7 @@ public class Saber : MonoBehaviour
         {
             if(Vector3.Angle(transform.position - previousPos, hit.transform.up) > 110)
             {
-               Debug.Log(hit.transform.gameObject.name + ": Hit Destroy " + Vector3.Angle(transform.position - previousPos, hit.transform.up));
+             //  Debug.Log(hit.transform.gameObject.name + ": Hit Destroy " + Vector3.Angle(transform.position - previousPos, hit.transform.up));
 
                 gameMananger.CubeSliced(hit.transform.gameObject);
 

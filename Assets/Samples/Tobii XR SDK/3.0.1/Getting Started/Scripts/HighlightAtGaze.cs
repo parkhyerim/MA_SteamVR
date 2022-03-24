@@ -18,21 +18,33 @@ namespace Tobii.XR.Examples.GettingStarted
         private Renderer _renderer;
         private Color _originalColor;
         private Color _targetColor;
-
+        private bool isFocusOnRegistered;
+        private bool isFocusOffRegistered;
+        
         //The method of the "IGazeFocusable" interface, which will be called when this object receives or loses focus
         public void GazeFocusChanged(bool hasFocus)
         {
             //If this object received focus, fade the object's color to highlight color
             if (hasFocus)
             {
-                _targetColor = highlightColor;
-                gameManager.EyeFocused();
-                
+               
+                if (!isFocusOnRegistered)
+                {
+                    _targetColor = highlightColor;
+                    gameManager.EyeFocused(true);
+                    isFocusOnRegistered = true;
+                }     
             }
             //If this object lost focus, fade the object's color to it's original color
             else
             {
                 _targetColor = _originalColor;
+                if (isFocusOnRegistered)
+                {
+                   
+                    gameManager.EyeFocused(false);
+                    isFocusOnRegistered = false;
+                }
             }
         }
 

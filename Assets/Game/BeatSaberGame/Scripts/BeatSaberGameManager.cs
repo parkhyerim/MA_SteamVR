@@ -56,10 +56,13 @@ public class BeatSaberGameManager : MonoBehaviour
     private float timeFromSceneLoading, startTimeForSpawingCubes; // time to show Card images, time to turn backwards again
     float beforeGameTimer = 0f;
     public float BystanderStartTime = 25f;
+    public float bystanderInterval = 60f;
+    [SerializeField]
+    private float BystanderStartTime2, BystanderStartTime3;
 
     // public Button pauseBtn;
     [SerializeField]
-    private float pausedTime, identificationTime, eyeFocusedTime ;
+    private float pausedTime, identificationTime, eyeFocusTime ;
     bool gamePaused;
 
     [Header("SCORE")]
@@ -86,6 +89,7 @@ public class BeatSaberGameManager : MonoBehaviour
     public CubeSpawner cubeSpawner;
     public BSPauseController pauseController;
     public GameObject[] cubes;
+    private float mainCameraYAxis;
 
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
     public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
@@ -119,10 +123,18 @@ public class BeatSaberGameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        mainCameraYAxis = Camera.main.transform.eulerAngles.y;
+        BystanderStartTime2 = BystanderStartTime + bystanderInterval;
+        BystanderStartTime3 = BystanderStartTime2 + bystanderInterval;
+    }
+
     private void FixedUpdate()
     {
         if (CanStartGame)
         {
+            mainCameraYAxis = Camera.main.transform.eulerAngles.y;
             // Time Before Game Start
             if (Time.time >= timeFromSceneLoading && Time.time <= startTimeForSpawingCubes) // Showing Time
             {
@@ -189,7 +201,7 @@ public class BeatSaberGameManager : MonoBehaviour
     public void SetAvatarTimeStamp()
     {
         string curDateTime = GetCurrentTime();
-        logManager.WriteToLogFile("Bystander wants to interact (enter into 30-0 degrees): " + (float)Math.Round(gameTimerIgnoringPause) + " [" + curDateTime +"]");
+        logManager.WriteToLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
     }
 
     //public void ShowCards()
@@ -218,8 +230,10 @@ public class BeatSaberGameManager : MonoBehaviour
         CanPauseGame = true;
         //isFront = false;
         Invoke(nameof(BystanderStart), time: BystanderStartTime);
-       // interactionUI.SetActive(true);
-      //  pauseBtn.gameObject.SetActive(true);
+        Invoke(nameof(BystanderStart), time: BystanderStartTime2);
+        Invoke(nameof(BystanderStart), time: BystanderStartTime3);
+        // interactionUI.SetActive(true);
+        //  pauseBtn.gameObject.SetActive(true);
     }
 
     public void BystanderStart()
@@ -238,7 +252,7 @@ public class BeatSaberGameManager : MonoBehaviour
  
     public void CubeSliced(GameObject cube)
     {
-        Debug.Log(cube.name + " called the Method");
+      //  Debug.Log(cube.name + " called the Method");
         if(score % 8 == 0 && score > 0)
         {
             audioSource.PlayOneShot(cheerSound);
@@ -409,16 +423,17 @@ public class BeatSaberGameManager : MonoBehaviour
         Debug.Log("submit survey");
     }
 
-    public void EyeFocused()
+    public void EyeFocused(bool focus)
     {
-        DateTime localDate = DateTime.Now;
-        string cultureName = "de-DE"; // de-DE  en-GB en-US
-        var culture = new CultureInfo(cultureName);
-        string name = localDate.ToString(culture);
-
-        Debug.Log("Eye focused: " + name);
-        eyeFocusedTime = (float)Math.Round(gameTimerIgnoringPause);
-        logManager.WriteToLogFile("Eye Focused Time: " + eyeFocusedTime);
+        eyeFocusTime = (float)Math.Round(gameTimerIgnoringPause);
+        if (focus)
+        { 
+            logManager.WriteToLogFile("Receive FOCUS: " + eyeFocusTime);
+        }
+        else
+        {
+            logManager.WriteToLogFile("LOST FOCUS: " + eyeFocusTime);
+        }  
     }
 
     public string GetCurrentTime()
@@ -439,7 +454,7 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void MissCube()
     {
-        Debug.Log("missed ball");
+       // Debug.Log("missed ball");
         audioSource.PlayOneShot(missSound);
     }
 }
