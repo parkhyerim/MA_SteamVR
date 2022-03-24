@@ -83,18 +83,26 @@ public class BeatSaberGameManager : MonoBehaviour
     public bool isPracticeGame;
     public bool isEndScene;
     private bool recordScore;
+    private bool recordMaxMin;
+    private bool recordStartAxis;
     int currentSceneIndex;
     private bool askSpawnCubes;
 
     public CubeSpawner cubeSpawner;
     public BSPauseController pauseController;
     public GameObject[] cubes;
-    private float mainCameraYAxis;
+    [SerializeField]
+    private Vector3 maincameraAxis;
+    [SerializeField]
+    private float mainCameraYAxis, mainCameraXAxis, minYAxis, maxYAxis, minXAxis, maxXAxis;
+    public bool oneInteruption;
+    private bool bystanderCanHearAnswer;
 
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
     public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
     public bool CanPauseGame { get => canPauseGame; set => canPauseGame = value; }
     public float GameCountTimer { get => gameCountTimer; set => gameCountTimer = value; }
+    public bool BystanderCanHearAnswer { get => bystanderCanHearAnswer; set => bystanderCanHearAnswer = value; }
 
     private void Awake()
     {       
@@ -126,15 +134,44 @@ public class BeatSaberGameManager : MonoBehaviour
     private void Start()
     {
         mainCameraYAxis = Camera.main.transform.eulerAngles.y;
+        mainCameraXAxis = Camera.main.transform.eulerAngles.x;
+        maincameraAxis = Camera.main.transform.eulerAngles;
+        maxXAxis = mainCameraXAxis;
+        maxYAxis = mainCameraYAxis;
+        minYAxis = mainCameraXAxis;
         BystanderStartTime2 = BystanderStartTime + bystanderInterval;
         BystanderStartTime3 = BystanderStartTime2 + bystanderInterval;
     }
 
     private void FixedUpdate()
     {
+
         if (CanStartGame)
         {
-            mainCameraYAxis = Camera.main.transform.eulerAngles.y;
+            if (!recordStartAxis)
+            {
+                if (Camera.main.transform.localEulerAngles.y > 180 && Camera.main.transform.localEulerAngles.y <= 360)
+                {
+                    mainCameraYAxis = 360f - Camera.main.transform.localEulerAngles.y;
+                }
+                if (Camera.main.transform.localEulerAngles.y >= 0 && Camera.main.transform.localEulerAngles.y < 180)
+                {
+                    mainCameraYAxis = Camera.main.transform.localEulerAngles.y * -1f;
+                }
+                if (Camera.main.transform.localEulerAngles.x > 180 && Camera.main.transform.localEulerAngles.x <= 360)
+                {
+                    mainCameraXAxis = 360f - Camera.main.transform.localEulerAngles.x;
+                }
+                if (Camera.main.transform.localEulerAngles.x >= 0 && Camera.main.transform.localEulerAngles.x < 180)
+                {
+                    mainCameraXAxis = Camera.main.transform.localEulerAngles.x * -1f;
+                }
+
+                maincameraAxis = Camera.main.transform.localEulerAngles;
+                SetCameraAxisAtBeginning();
+                recordStartAxis = true;
+            }
+            
             // Time Before Game Start
             if (Time.time >= timeFromSceneLoading && Time.time <= startTimeForSpawingCubes) // Showing Time
             {
@@ -145,6 +182,35 @@ public class BeatSaberGameManager : MonoBehaviour
             // GAME TIME
             else if (Time.time > startTimeForSpawingCubes && GameCountTimer <= totalGameTime) // During the Game
             {
+                if (Camera.main.transform.localEulerAngles.y > 180 && Camera.main.transform.localEulerAngles.y <= 360)
+                {
+                    mainCameraYAxis = 360f - Camera.main.transform.localEulerAngles.y;
+                }
+                if (Camera.main.transform.localEulerAngles.y >= 0 && Camera.main.transform.localEulerAngles.y < 180)
+                {
+                    mainCameraYAxis = Camera.main.transform.localEulerAngles.y * -1f;
+                }
+
+                if (minYAxis > mainCameraYAxis)
+                    minYAxis = mainCameraYAxis;
+                if (maxYAxis < mainCameraYAxis)
+                    maxYAxis = mainCameraYAxis;
+
+
+                if (Camera.main.transform.localEulerAngles.x > 180 && Camera.main.transform.localEulerAngles.x <= 360)
+                {
+                    mainCameraXAxis = 360f - Camera.main.transform.localEulerAngles.x;
+                }
+                if (Camera.main.transform.localEulerAngles.x >= 0 && Camera.main.transform.localEulerAngles.x < 180)
+                {
+                    mainCameraXAxis = Camera.main.transform.localEulerAngles.x * -1f;
+                }
+
+                if (minXAxis > mainCameraXAxis)
+                    minXAxis = mainCameraXAxis;
+                if (maxXAxis < mainCameraXAxis)
+                    maxXAxis = mainCameraXAxis;
+
                 gameTimerIgnoringPause += Time.fixedDeltaTime;
 
                 if (!gamePaused)
@@ -193,15 +259,22 @@ public class BeatSaberGameManager : MonoBehaviour
         // currentLevelIndex = 0;
         string currentSceneName = SceneManager.GetActiveScene().name;
         logManager.WriteToLogFile("Study Order: " + currentSceneIndex + " , name: " + currentSceneName);
+       // mainCameraYAxis
+        logManager.WriteToLogFile("Head Rotation: ");
 
         //Instantiate(tunnelEffectPrefab1);
         //Instantiate(tunnelEffectPrefab2);
     }
 
-    public void SetAvatarTimeStamp()
+    public void SetTimeStampForAvatarInCriticalZone()
     {
-        string curDateTime = GetCurrentTime();
+        // string curDateTime = GetCurrentTime();
         logManager.WriteToLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
+    }
+
+    private void SetCameraAxisAtBeginning()
+    {
+        logManager.WriteToLogFile("Start Y-Axis: " + mainCameraYAxis + " X-Axis: " + mainCameraXAxis + " (" + maincameraAxis + ")");
     }
 
     //public void ShowCards()
@@ -230,8 +303,11 @@ public class BeatSaberGameManager : MonoBehaviour
         CanPauseGame = true;
         //isFront = false;
         Invoke(nameof(BystanderStart), time: BystanderStartTime);
-        Invoke(nameof(BystanderStart), time: BystanderStartTime2);
-        Invoke(nameof(BystanderStart), time: BystanderStartTime3);
+        if (!oneInteruption)
+        {
+            Invoke(nameof(BystanderStart), time: BystanderStartTime2);
+            Invoke(nameof(BystanderStart), time: BystanderStartTime3);
+        }  
         // interactionUI.SetActive(true);
         //  pauseBtn.gameObject.SetActive(true);
     }
@@ -241,13 +317,14 @@ public class BeatSaberGameManager : MonoBehaviour
         gameTimeText.text = "";
         bysTracker.IsHeadingToPlayer = true;
         BystanderInteract = true;
+        pauseController.OncePausedInSession = false;
         // logManager
+        bystanderCanHearAnswer = true;
     }
 
     public void BystanderEnd()
     {
-        BystanderInteract = false;
-        pauseController.OncePausedInSession = false;       
+        BystanderInteract = false;   
     }
  
     public void CubeSliced(GameObject cube)
@@ -342,11 +419,18 @@ public class BeatSaberGameManager : MonoBehaviour
             recordScore = true;
         }
 
-       // tunnelEffectPrefab2.SetActive(false);
-       // tunnelEffectPrefab1.SetActive(false);
+        if (!recordMaxMin)
+        {
+            logManager.WriteToLogFile("Max Y Axis (Toward Bystander): " + maxYAxis);
+            logManager.WriteToLogFile("Min Y Axis (Against Bystander): " + minYAxis);
+            recordMaxMin = true;
+        }
+       
+        // tunnelEffectPrefab2.SetActive(false);
+        // tunnelEffectPrefab1.SetActive(false);
 
-       // Invoke(nameof(GoToNextLevel), 2f);
-        Invoke(nameof(DoSurvey), 1f);
+        // Invoke(nameof(GoToNextLevel), 2f);
+        // Invoke(nameof(DoSurvey), 1f);
     }
 
     public void GoSurvey()

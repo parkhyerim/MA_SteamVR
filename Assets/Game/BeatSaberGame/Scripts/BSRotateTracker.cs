@@ -90,6 +90,8 @@ public class BSRotateTracker : MonoBehaviour
     {
         isHeadingTo30 = true;
         isHeadingToPlayer = false;
+        // gameManager.BystanderEnd();
+        gameManager.BystanderCanHearAnswer = false;
     }
 
     private void HeadingBacktoFrontSeat()
@@ -98,5 +100,6 @@ public class BSRotateTracker : MonoBehaviour
         isHeadingToFrontSeat = true;
         isHeadingToPlayer = false;
         gameManager.BystanderEnd();
+        gameManager.BystanderCanHearAnswer = false;
     }
 }

@@ -50,7 +50,7 @@ public class BSPauseController : MonoBehaviour
 
                 if (gameManager.BystanderInteract)
                 {
-                    if (!oncePausedInSession)
+                    if (!oncePausedInSession && gameManager.BystanderCanHearAnswer)
                     {
                         //  logManager.WriteToLogFile("Identify time");
                         // if (bAvatar.doInteraction)
@@ -60,7 +60,8 @@ public class BSPauseController : MonoBehaviour
                         //    // Debug.Log("still false in array");
                         //    Invoke(nameof(PlayQuestionAudio), 1f);
                         //}
-                       // Invoke(nameof(PlayQuestionAudio), 1f);
+                        // Invoke(nameof(PlayQuestionAudio), 1f);
+                        Invoke(nameof(PlayQuestionAudio), 1f);
                         oncePausedInSession = true;
                     }                   
                 }
@@ -70,7 +71,7 @@ public class BSPauseController : MonoBehaviour
                 //   // Debug.Log("still false in array");
                 //    Invoke(nameof(PlayQuestionAudio), 1f);
                 //}
-                Invoke(nameof(PlayQuestionAudio), 1f);
+            
                 pauseClicked = true;
                 gameManager.PauseGame();
             }
