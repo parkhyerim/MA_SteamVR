@@ -13,6 +13,7 @@ public class Saber : MonoBehaviour
     public GameObject greenEffect;
     public GameObject yellowEffect;
     public GameObject startEffect;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,24 +30,28 @@ public class Saber : MonoBehaviour
             {
                Debug.Log(hit.transform.gameObject.name + ": Hit Destroy " + Vector3.Angle(transform.position - previousPos, hit.transform.up));
 
-                
-                if(hit.transform.gameObject.name.Contains("Blue"))
-                {
-                   Instantiate(blueEffect, hit.transform.position, Quaternion.identity);
+                gameMananger.CubeSliced(hit.transform.gameObject);
+
+                //if (hit.transform.gameObject.name.Contains("Blue"))
+                //{
+                  
+                // // Instantiate(blueEffect, hit.transform.position, Quaternion.identity);
                     
-                }
-                else if(hit.transform.gameObject.name.Contains("GreenCube"))
-                {
-                    Instantiate(greenEffect, hit.transform.position, Quaternion.identity);
-                }
-                else if(hit.transform.gameObject.name.Contains("YellowCube"))
-                {
-                    Instantiate(yellowEffect, hit.transform.position, Quaternion.identity);
-                }
-                else
-                {
-                    Instantiate(startEffect, hit.transform.position, Quaternion.identity);
-                }
+                //}
+                //else if(hit.transform.gameObject.name.Contains("GreenCube"))
+                //{
+                    
+                //    // Instantiate(greenEffect, hit.transform.position, Quaternion.identity);
+                //}
+                //else if(hit.transform.gameObject.name.Contains("YellowCube"))
+                //{
+                  
+                //    // Instantiate(yellowEffect, hit.transform.position, Quaternion.identity);
+                //}
+                //else
+                //{
+                //   // Instantiate(startEffect, hit.transform.position, Quaternion.identity);
+                //}
                 Destroy(hit.transform.gameObject);
 
             }

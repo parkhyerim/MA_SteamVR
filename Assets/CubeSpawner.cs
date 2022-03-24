@@ -10,7 +10,6 @@ public class CubeSpawner : MonoBehaviour
     public float beat = (60 / 150) * 2; // 1.142...
     private float timer = 0.0f;
     private float fastTimer;
-    public float speed = 4f;
     private bool canSpawn;
     private bool stopSpawn;
     private bool stopMoving;

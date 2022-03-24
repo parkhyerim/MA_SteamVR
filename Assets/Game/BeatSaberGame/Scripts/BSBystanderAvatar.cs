@@ -402,7 +402,7 @@ public class BSBystanderAvatar : MonoBehaviour
                             //         guidePos.transform.position,
                             //         t);
 
-                            Debug.Log("transparency is called");
+                          //  Debug.Log("transparency is called");
 
                         }
                         //
@@ -416,7 +416,7 @@ public class BSBystanderAvatar : MonoBehaviour
 
                         if (timeElapsedForTransparency < fadeTime)
                         {
-                            Debug.Log("transparency is called2");
+                           // Debug.Log("transparency is called2");
                             float t = timeElapsedForGuiding / lerpDurationForAvatar;
                             t = t * t * (3f - 2f * t);
                             noInteractionFrontImage.enabled = true;

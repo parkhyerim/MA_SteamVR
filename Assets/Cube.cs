@@ -6,8 +6,15 @@ public class Cube : MonoBehaviour
 {
     public float speed = 4f;
     private bool stopMoving;
+    private GameObject gameManagerObject;
+    private BeatSaberGameManager bsGameManager;
 
-    // Update is called once per frame
+    private void Start()
+    {
+        gameManagerObject = GameObject.Find("GameManager");
+        bsGameManager = gameManagerObject.GetComponent<BeatSaberGameManager>();
+    }
+
     void Update()
     {
         if (!stopMoving)
@@ -25,6 +32,7 @@ public class Cube : MonoBehaviour
         if(other.gameObject.name == "PlayerBoundary")
         {
             Destroy(this.gameObject);
+            bsGameManager.MissCube();
         }
     }
 

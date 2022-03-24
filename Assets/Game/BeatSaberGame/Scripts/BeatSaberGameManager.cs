@@ -11,16 +11,21 @@ public class BeatSaberGameManager : MonoBehaviour
 {
     [Header("AUDIO")]
     public AudioSource audioSource;
+    public AudioSource bgAudioSource;
+    public AudioClip gameMusic;
+    public AudioSource lobbyMusic;
     public AudioClip rightSlice;
-    public AudioClip wrongSlice;
+    public AudioClip missSound;
     public AudioClip sliceSound;
+    public AudioClip cheerSound;
 
     [Header("EFFECT")]
     public GameObject rightSliceEffectPrefab;
     public GameObject wrongSliceEffectPrefab;
-    public GameObject blueCubeSliceEffetPrefab;
-    public GameObject greenCubeSliceEffectPrefab;
-    public GameObject yellowCubeSliceEffectPrefab;
+    public GameObject cheerEffect;
+    public GameObject blueEffect;
+    public GameObject greenEffect;
+    public GameObject yellowEffect;
 
     [Header("GAME UI")]
     public GameObject menuUI;
@@ -165,6 +170,9 @@ public class BeatSaberGameManager : MonoBehaviour
         startTimeForSpawingCubes = timeFromSceneLoading + getReadyTime;
         Destroy(menuUI);
 
+        lobbyMusic.Stop();
+        bgAudioSource.Play();
+
         scoreUI.SetActive(true);
         timeUI.SetActive(true);
         instructionUI.SetActive(true);
@@ -230,44 +238,40 @@ public class BeatSaberGameManager : MonoBehaviour
  
     public void CubeSliced(GameObject cube)
     {
-      //  audioSource.PlayOneShot(sliceSound);
-
         Debug.Log(cube.name + " called the Method");
-
-        if(cube.tag == "BlueCube")
+        if(score % 8 == 0 && score > 0)
         {
-            Debug.Log("Blue Cube Right Slice");
+            audioSource.PlayOneShot(cheerSound);
+            Instantiate(cheerEffect, cube.transform.position, Quaternion.identity);
+        }
+        else
+        {
             audioSource.PlayOneShot(rightSlice);
-            Instantiate(blueCubeSliceEffetPrefab, cube.transform.position, Quaternion.identity);
-            Destroy(cube);
+        }
+      
+        if (cube.name.Contains("Blue"))
+        {
+            audioSource.PlayOneShot(sliceSound);
+          
+            Instantiate(blueEffect, cube.transform.position, Quaternion.identity);
+           // Destroy(cube);
+            score += 1;
+            gameScoreText.text = score.ToString();
+        } 
+        else if (cube.name.Contains("GreenCube"))
+        {
+            audioSource.PlayOneShot(sliceSound);
+            
+            Instantiate(greenEffect, cube.transform.position, Quaternion.identity);
             score += 1;
             gameScoreText.text = score.ToString();
         }
-        
-        if(cube.tag == "GreenCube")
+       else if (cube.name.Contains("YellowCube"))
         {
-            Debug.Log("Green Cube Slice");
-            audioSource.PlayOneShot(rightSlice);
-            Instantiate(greenCubeSliceEffectPrefab, cube.transform.position, Quaternion.identity);
-            Destroy(cube);
-            if (score > 0)
-            {
-                score += 1;
-                gameScoreText.text = score.ToString();
-            }
-        }
-        
-        if(cube.tag == "YellowCube")
-        {
-            Debug.Log("YEllow Cube Slice");
-            audioSource.PlayOneShot(wrongSlice);
-            Instantiate(yellowCubeSliceEffectPrefab, cube.transform.position, Quaternion.identity);
-            Destroy(cube);
-            if (score > 0)
-            {
-                score += 1;
-                gameScoreText.text = score.ToString();
-            }
+            audioSource.PlayOneShot(sliceSound);
+            Instantiate(yellowEffect, cube.transform.position, Quaternion.identity);
+            score += 1;
+            gameScoreText.text = score.ToString();            
         }
     }
 
@@ -367,8 +371,6 @@ public class BeatSaberGameManager : MonoBehaviour
         }
     }
 
-
-
     //public void WriteToLogFile(string message)
     //{
     //    using (System.IO.StreamWriter logFile = 
@@ -435,4 +437,9 @@ public class BeatSaberGameManager : MonoBehaviour
         return timeText;
     }
 
+    public void MissCube()
+    {
+        Debug.Log("missed ball");
+        audioSource.PlayOneShot(missSound);
+    }
 }
