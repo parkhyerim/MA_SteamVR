@@ -11026,6 +11026,9 @@ MonoBehaviour:
   guidePos: {fileID: 1512761169}
   originalPos: {fileID: 1689116527}
   middlePos: {fileID: 399642669}
+  arrowPos: {fileID: 1377313534}
+  arrowPosForAvatar: {fileID: 0}
+  arrowOriginalPosForAvatar: {fileID: 902342422}
   guidingPosForAV: {fileID: 579672075}
   timeToReachTarget: 0.001
   currentMovementTime: 0
@@ -18711,7 +18714,6 @@ MonoBehaviour:
   cubes:
   - {fileID: 5799067942852652166, guid: 98633bc44dfc22f4786d2b499a19706b, type: 3}
   - {fileID: 339008623900831591, guid: d2b83fe3b8b91474cbb7c57e251f60ef, type: 3}
-  - {fileID: 339008623900831591, guid: 333dd27314d423145a4d76989545e989, type: 3}
   points:
   - {fileID: 776216552}
   - {fileID: 1851620137}

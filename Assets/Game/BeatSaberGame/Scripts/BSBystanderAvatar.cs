@@ -30,9 +30,9 @@ public class BSBystanderAvatar : MonoBehaviour
     public GameObject originalPos;
     public GameObject middlePos;
     private Transform guidingPos;
-   // public GameObject arrowPos;
-   // public GameObject arrowPosForAvatar;
-    // public GameObject arrowOriginalPosForAvatar;
+    public GameObject arrowPos;
+    public GameObject arrowPosForAvatar;
+    public GameObject arrowOriginalPosForAvatar;
     public GameObject guidingPosForAV;
 
     [Header("GOs for Mixed")]
@@ -313,8 +313,8 @@ public class BSBystanderAvatar : MonoBehaviour
                             // -> intensively guide to the seated positionZZZZ
                             else
                             {
-                                // arrowImage.enabled = true;
-                                // arrowImage.transform.position = arrowPos.transform.position;
+                                arrowImage.enabled = true;
+                                arrowImage.transform.position = arrowPos.transform.position;
 
                                 timeElapsedForFOVToSEAT += Time.deltaTime;
 
@@ -335,15 +335,15 @@ public class BSBystanderAvatar : MonoBehaviour
                                         Quaternion.Euler(new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV - 10) / 90) - bystanderEulerYAxis), 0)),
                                             t);
 
-                                    // arrowImage.transform.position = Vector3.Lerp(
-                                    //arrowPos.transform.position,
-                                    //new Vector3(guidingPosForAV.transform.position.x, arrowPos.transform.position.y, guidingPosForAV.transform.position.z),
-                                    //t);
+                                    arrowImage.transform.position = Vector3.Lerp(
+                                   arrowPos.transform.position,
+                                   new Vector3(guidingPosForAV.transform.position.x, arrowPos.transform.position.y, guidingPosForAV.transform.position.z),
+                                   t);
                                 }
                                 else
                                 {
                                     Debug.Log("stop: " + timeElapsedForFOVToSEAT);
-                                    transform.position = new Vector3(guidingPosForAV.transform.position.x, trackerTrans.position.y, guidingPosForAV.transform.position.z);
+                                    //transform.position = new Vector3(guidingPosForAV.transform.position.x, trackerTrans.position.y, guidingPosForAV.transform.position.z);
                                     // new Vector3(guidingPosForAV.transform.position.x, arrowPos.transform.position.y, guidingPosForAV.transform.position.z);
                                    // transform.position = new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV - 10) / 90) - bystanderEulerYAxis), 0);
                                 }
@@ -401,7 +401,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         transform.position = bystanderTracker.transform.position;
                         // +
                         bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderEulerYAxis, 0);
-                        //  arrowImage.enabled = false;                      
+                        arrowImage.enabled = false;                      
                     }
                 }
                 // UNCRITICAL ZONE: 80/85 >= Bystander's degrees > 60
@@ -422,7 +422,7 @@ public class BSBystanderAvatar : MonoBehaviour
                   
                     // Avatar's position = bystander's seating position
                     transform.position = bystanderTracker.transform.position;
-                    //  arrowImage.enabled = false;
+                    arrowImage.enabled = false;
                     
                 }
                 // NO ZONE:  Bystander's degrees > 80/85
@@ -481,7 +481,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         if (timeElapsedForSEATToFOV < lerpGuideTime)
                         {
                             //if(doInteraction)
-                            //    arrowImage.enabled = true;
+                            arrowImage.enabled = true;
                             float t = timeElapsedForSEATToFOV / lerpGuideTime;
                             t = t * t * (3f - 2f * t);
                             presenceAnimojiBoard.transform.position = Vector3.Lerp(
@@ -489,13 +489,12 @@ public class BSBystanderAvatar : MonoBehaviour
                                      guidePos.transform.position,
                                      t);
 
-                            //if (doInteraction)
-                            //{
-                            //    arrowImage.transform.position = Vector3.Lerp(
-                            //        originalArrowPos.transform.position,
-                            //        arrowPosition.transform.position,
-                            //       t);
-                            //}
+                         
+                                arrowImage.transform.position = Vector3.Lerp(
+                                    originalArrowPos.transform.position,
+                                    arrowPosition.transform.position,
+                                   t);
+                           
 
                         }
                         else
