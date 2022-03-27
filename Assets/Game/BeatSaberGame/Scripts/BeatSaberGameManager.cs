@@ -273,9 +273,9 @@ public class BeatSaberGameManager : MonoBehaviour
         logManager.WriteToLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
     }
 
-    public void SetTimeStampForAvatarInCriticalZone(string state)
+    public void SetTimeStampForAvatarInCriticalZoneWithMessage(string state)
     {
-        // string curDateTime = GetCurrentTime();
+        Debug.Log("Bystander Interaction: " + state + " " + (float)Math.Round(gameTimerIgnoringPause));
         logManager.WriteToLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause));
     }
 
