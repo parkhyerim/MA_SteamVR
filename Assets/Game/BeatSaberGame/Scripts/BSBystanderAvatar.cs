@@ -64,7 +64,7 @@ public class BSBystanderAvatar : MonoBehaviour
     [SerializeField]
     private bool inCriticalZone, inTransitionZone, inUncriticalZone, inNoZone;
     private bool fromCriticalSection;
-    private bool guidedOnceToSeated;
+    private bool lookedOnceSeatedPosition;
     private Color animojiBacksideColor;
     Color noTransparency, lowTransparency;
 
@@ -254,12 +254,12 @@ public class BSBystanderAvatar : MonoBehaviour
                     // The bystander is inside VR user's FOV
                     if (mainCameraYAxis >= 250 && mainCameraYAxis <= 310)
                     {
-                        Debug.Log("VRUser looks at the Seated position");
+                        Debug.Log("VRUser looks at the seated position");
                         // Avatar in seated position without manupulating angles
                         transform.position = bystanderTracker.transform.position;
                         bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderEulerYAxis, 0);
                         arrowImage.enabled = false;
-                        guidedOnceToSeated = true;
+                        lookedOnceSeatedPosition = true;
                        // isGuidingToSeated = true;
                         //currentMovementTime = 0;
                         //timeElapsedForAvatarGuide = 0;
@@ -274,25 +274,23 @@ public class BSBystanderAvatar : MonoBehaviour
                     {
                         currentMovementTime += Time.deltaTime;
 
-                        if (!guidedOnceToSeated) // Still not guided to the seated
+                        if (!lookedOnceSeatedPosition) // The VR user haven't look at the seated avatar
                         { 
-                            Debug.Log("is not guided");
+                            Debug.Log("The VR user haven't look at the seated avatar");
                             if (!isGuidingFOVToSeated)
                             {
                                 // bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV) / 90) - bystanderEulerYAxis), 0);
                                 // transform.position = new Vector3(FOVPos.transform.position.x, trackerTrans.position.y, FOVPos.transform.position.z);
 
                                 timeElapsedForSEATToFOV += Time.deltaTime;
-                                // Debug.Log("timeElapsedForGuiding [NOT guided]:1 " + timeElapsedForAvatarGuide);
-
                                 if (timeElapsedForSEATToFOV < lerpGuideTime) // lerpGuideTime:2
                                 {
-                                    Debug.Log("timeElapsedForGuiding [NOT guided]:2 " + timeElapsedForSEATToFOV);
+                                    Debug.Log("[NOT look at seated]:time elapsed: " + timeElapsedForSEATToFOV);
                                     float t = timeElapsedForSEATToFOV / lerpGuideTime;
                                     t = t * t * (3f - 2f * t);
                                     transform.position = Vector3.Lerp(
                                             new Vector3(trackerTrans.position.x, trackerTrans.position.y, trackerTrans.position.z),
-                                                new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z),
+                                            new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z),
                                                 t);
 
                                     //  new Vector3(guidingPosForAV.transform.position.x, tracker.position.y, guidingPosForAV.transform.position.z)
@@ -304,14 +302,11 @@ public class BSBystanderAvatar : MonoBehaviour
                                 }
                                 else
                                 {
-
-                                    Debug.Log("timeElapsedForGuiding [NOT guided]:3 " + timeElapsedForSEATToFOV);
+                                    Debug.Log("guide time passed: " + timeElapsedForSEATToFOV);
                                     // transform.position = new Vector3(guidingPosForAV.transform.position.x, trackerTrans.position.y, guidingPosForAV.transform.position.z);
 
                                     transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-
                                     // arrow
-
                                 }
                             }
                             // more than the expected guiding time
@@ -363,7 +358,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log("already guided: " + guidedOnceToSeated);
+                            Debug.Log("already guided: " + lookedOnceSeatedPosition);
                             transform.position = bystanderTracker.transform.position;
                             bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderEulerYAxis, 0);
                         }                                        
