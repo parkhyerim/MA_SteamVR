@@ -325,7 +325,7 @@ public class BSBystanderAvatar : MonoBehaviour
                                     t = t * t * (3f - 2f * t);
                                     transform.position = Vector3.Lerp(
                                                 new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z),
-                                                new Vector3(trackerTrans.position.x, trackerTrans.position.y, trackerTrans.position.z),
+                                                new Vector3(guidingPosForAV.transform.position.x, trackerTrans.position.y, guidingPosForAV.transform.position.z),
                                                 t);
 
                                     //  new Vector3(guidingPosForAV.transform.position.x, tracker.position.y, guidingPosForAV.transform.position.z)
@@ -343,9 +343,9 @@ public class BSBystanderAvatar : MonoBehaviour
                                 else
                                 {
                                     Debug.Log("stop: " + timeElapsedForFOVToSEAT);
-                                    //transform.position = new Vector3(guidingPosForAV.transform.position.x, trackerTrans.position.y, guidingPosForAV.transform.position.z);
+                                    transform.position = new Vector3(guidingPosForAV.transform.position.x, trackerTrans.position.y, guidingPosForAV.transform.position.z);
                                     // new Vector3(guidingPosForAV.transform.position.x, arrowPos.transform.position.y, guidingPosForAV.transform.position.z);
-                                    transform.position = new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV - 10) / 90) - bystanderEulerYAxis), 0);
+                                   // transform.position = new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV - 10) / 90) - bystanderEulerYAxis), 0);
                                 }
                             }
 
