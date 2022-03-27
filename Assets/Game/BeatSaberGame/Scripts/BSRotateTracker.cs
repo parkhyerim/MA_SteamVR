@@ -36,7 +36,7 @@ public class BSRotateTracker : MonoBehaviour
                 { // Heading towards the VR-Player
                     if (doInteraction)
                     {
-                        Invoke(nameof(HeadingBackTo30Degrees), 11f); // Stay in 11 seconds (13)
+                        Invoke(nameof(HeadingBackTo30Degrees), 9f); // Stay in 11 seconds (13)
                     }
                     else
                     {
@@ -61,7 +61,7 @@ public class BSRotateTracker : MonoBehaviour
                         }
                         else
                         {
-                            Invoke(nameof(HeadingBacktoFrontSeat), 10.5f); //12.5
+                            Invoke(nameof(HeadingBacktoFrontSeat), 8.5f); //12.5
                         }
                     }
                 }

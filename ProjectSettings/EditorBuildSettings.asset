@@ -6,20 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/Archive_2/Practice.unity
-    guid: d5a1bc660d6978c41b2d077343b63518
+    path: Assets/Game/BeatSaberGame/Scenes/BeatSaber_Anaimoji.unity
+    guid: c2b5ec7b86e300149a402e233bc9d917
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/Archive_2/MixedY.unity
-    guid: 471600b920bea06419e78347a633eb08
-  - enabled: 1
-    path: Assets/Game/Scenes/Levels/AnimojiY.unity
-    guid: 32680f81b4a6f0746b7314f5e823cf4a
-  - enabled: 1
-    path: Assets/Game/Scenes/Levels/Archive_2/EndScene.unity
-    guid: 5394d91b4237bec4bbe6bbdac31ee5f0
-  - enabled: 1
-    path: Assets/Game/Scenes/Levels/AnimojiY_ScriptChange_BeatSaber.unity
-    guid: 637f0ad29ec2fe3418d7c0d3a9de92e3
+    path: Assets/Game/BeatSaberGame/Scenes/BeatSaber_Avatar.unity
+    guid: ca9df022fd6b5484db17c362ccf4274f
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d367a92b0d4cf114c826faa81e847686, type: 2}
     Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: 06b947aecd64d04419eebef1f634e8e0, type: 2}

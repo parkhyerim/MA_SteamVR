@@ -269,7 +269,14 @@ public class BeatSaberGameManager : MonoBehaviour
     public void SetTimeStampForAvatarInCriticalZone()
     {
         // string curDateTime = GetCurrentTime();
+        Debug.Log("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
         logManager.WriteToLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
+    }
+
+    public void SetTimeStampForAvatarInCriticalZone(string state)
+    {
+        // string curDateTime = GetCurrentTime();
+        logManager.WriteToLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause));
     }
 
     private void SetCameraAxisAtBeginning()
@@ -429,7 +436,7 @@ public class BeatSaberGameManager : MonoBehaviour
         // tunnelEffectPrefab2.SetActive(false);
         // tunnelEffectPrefab1.SetActive(false);
 
-        // Invoke(nameof(GoToNextLevel), 2f);
+         Invoke(nameof(GoToNextLevel), 2f);
         // Invoke(nameof(DoSurvey), 1f);
     }
 
@@ -456,7 +463,7 @@ public class BeatSaberGameManager : MonoBehaviour
     }
 
     public void GoToNextLevel() {
-        LevelManager levelManager = FindObjectOfType<LevelManager>();
+        BSLevelManager levelManager = FindObjectOfType<BSLevelManager>();
         levelManager.LoadNextLevel();
     }
 

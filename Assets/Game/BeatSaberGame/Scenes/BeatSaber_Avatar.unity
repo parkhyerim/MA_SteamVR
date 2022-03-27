@@ -10062,7 +10062,7 @@ MonoBehaviour:
   bAvatar: {fileID: 995297013}
   logManager: {fileID: 1954239334}
   audioPlayed: 
-  audioOrder: 010000000200000003000000
+  audioOrder: 030000000100000002000000
 --- !u!4 &881797393
 Transform:
   m_ObjectHideFlags: 0
@@ -10420,9 +10420,9 @@ MonoBehaviour:
   instructionText: {fileID: 1549439647606221140}
   notificationText: {fileID: 773620315}
   getReadyTime: 1
-  totalGameTime: 120
+  totalGameTime: 60
   gameTimerIgnoringPause: 0
-  BystanderStartTime: 10
+  BystanderStartTime: 25
   bystanderInterval: 20
   BystanderStartTime2: 0
   BystanderStartTime3: 0
@@ -10432,7 +10432,7 @@ MonoBehaviour:
   score: 0
   bysTracker: {fileID: 202137951}
   lineVisual: {fileID: 3114112698391372045}
-  participantID: P100
+  participantID: P1
   logManager: {fileID: 1954239334}
   isPracticeGame: 0
   isEndScene: 0
@@ -10446,7 +10446,7 @@ MonoBehaviour:
   maxYAxis: 0
   minXAxis: 0
   maxXAxis: 0
-  oneInteruption: 0
+  oneInteruption: 1
 --- !u!114 &894022213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11004,8 +11004,8 @@ MonoBehaviour:
   timeToReachTarget: 0.001
   currentMovementTime: 0
   sitToLeft: 1
-  isAnimojiSetting: 1
-  isAvatarSetting: 0
+  isAnimojiSetting: 0
+  isAvatarSetting: 1
   isMixedSetting: 0
   isSeated: 0
   isInFOV: 0

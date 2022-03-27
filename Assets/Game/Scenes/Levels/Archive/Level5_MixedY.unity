@@ -1640,6 +1640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doInteraction: 1
   useTracker: 0
+  logManager: {fileID: 0}
   rotateSpeed: 20
   isHeadingTo30: 0
   isHeadingToFrontSeat: 0
@@ -4931,6 +4932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderTracker: {fileID: 202137948}
+  gameManager: {fileID: 0}
   tracker: {fileID: 0}
   bystanderAvatar: {fileID: 0}
   bystanderAnim: {fileID: 0}
@@ -4939,7 +4941,6 @@ MonoBehaviour:
   yesInteractionFrontImage: {fileID: 0}
   noInteractionFrontImage: {fileID: 0}
   backsideImage: {fileID: 0}
-  arrowImage: {fileID: 0}
   arrowPosition: {fileID: 0}
   originalArrowPos: {fileID: 0}
   FOVPos: {fileID: 0}
@@ -4962,6 +4963,9 @@ MonoBehaviour:
   isGuidingToSeated: 0
   isguided: 0
   lerpDurationForAvatar: 3
+  fromCriticalSection: 0
+  enterCriticalSection: 0
+  logManager: {fileID: 0}
 --- !u!1 &500187884
 GameObject:
   m_ObjectHideFlags: 0
@@ -8960,13 +8964,17 @@ MonoBehaviour:
   clipCardForward: {fileID: 8300000, guid: 7d702efe4ff071243a801432a5938080, type: 3}
   clipCardBackward: {fileID: 8300000, guid: 5ada0045560bd6f46a0acdda6ac0ea22, type: 3}
   clipCardMatch: {fileID: 8300000, guid: b8755d5167de604458ae85b189fce30c, type: 3}
-  clipCardUnmatch: {fileID: 8300000, guid: 79adc02fad7501744a19884553cf5193, type: 3}
+  clipCardDismatch: {fileID: 0}
   matchEffectPrefab: {fileID: 6734615717105759629, guid: 98fa4361e93332d4d8e162aa69214efa, type: 3}
   matchEffectPrefab2: {fileID: 6734615717105759629, guid: 5e3b5315011501143af39639d71a79c5, type: 3}
+  tunnelEffectPrefab1: {fileID: 0}
+  tunnelEffectPrefab2: {fileID: 0}
+  starEffectPrefab: {fileID: 0}
   menuUICanvas: {fileID: 2138297653}
   gameScoreText: {fileID: 1619224941}
-  timeText: {fileID: 348758832}
+  gameTimeText: {fileID: 0}
   instructionText: {fileID: 494615364}
+  notificationCanvas: {fileID: 0}
   notificationText: {fileID: 773620315}
   notificationBGImage: {fileID: 934709614}
   notificationCheerImages:
@@ -8977,8 +8985,7 @@ MonoBehaviour:
   - {fileID: 1447505961}
   - {fileID: 729858323}
   - {fileID: 151269761}
-  gameProcesCanvas: {fileID: 197975250}
-  interactionUI: {fileID: 336189057}
+  surveryUICanvas: {fileID: 0}
   allCards:
   - {fileID: 4109195129671627898}
   - {fileID: 4109195129426358807}
@@ -9000,20 +9007,22 @@ MonoBehaviour:
   - {fileID: 4109195128363426203}
   - {fileID: 4109195128801979823}
   - {fileID: 4109195128684901191}
-  allPositionsOfCards: []
-  AngleOfCards: {x: 0, y: 0, z: 0}
   firstSelectedCard: {fileID: 0}
   secondSelectedCard: {fileID: 0}
   memorizingTime: 8
   bufferBeforeStartingGame: 2
   totalGameTime: 70
-  gameTimer: 0
-  startShowingCards: 0
-  hideCardAgainInSec: 0
-  score: 0
-  rTracker: {fileID: 202137951}
-  pauseBtn: {fileID: 1374551979}
+  gameCountTimerIgnoringPause: 0
+  BystanderStartTime: 25
   pausedTime: 0
+  identificationTime: 0
+  eyeFocusedTime: 0
+  bysTracker: {fileID: 202137951}
+  lineVisual: {fileID: 0}
+  participantID: 
+  logManager: {fileID: 0}
+  isPracticeGame: 0
+  isEndScene: 0
 --- !u!114 &894022213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9026,6 +9035,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e94116c1b1bea4db3c3d871d1070f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  studyOrder: 
+  userStudyOrder: 000000000000000000000000000000000000000000000000
+  gameManager: {fileID: 0}
+  logManager: {fileID: 0}
 --- !u!1 &902342422
 GameObject:
   m_ObjectHideFlags: 0
@@ -9520,6 +9533,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderTracker: {fileID: 202137948}
+  gameManager: {fileID: 894022212}
   tracker: {fileID: 202137950}
   bystanderAvatar: {fileID: 2101755741847965763}
   bystanderAnim: {fileID: 2497403534718943324}
@@ -9528,7 +9542,6 @@ MonoBehaviour:
   yesInteractionFrontImage: {fileID: 2069349139}
   noInteractionFrontImage: {fileID: 323142556}
   backsideImage: {fileID: 428763760}
-  arrowImage: {fileID: 584168282}
   arrowPosition: {fileID: 1420300088}
   originalArrowPos: {fileID: 902342422}
   FOVPos: {fileID: 1175379520}
@@ -9536,7 +9549,7 @@ MonoBehaviour:
   originalPos: {fileID: 1689116527}
   middlePos: {fileID: 399642669}
   arrowPos: {fileID: 1377313534}
-  arrowPosForAvatar: {fileID: 0}
+  arrowPosForAvatar: {fileID: 1377313534}
   arrowOriginalPosForAvatar: {fileID: 0}
   guidingPosForAV: {fileID: 579672075}
   timeToReachTarget: 0.001
@@ -9551,6 +9564,9 @@ MonoBehaviour:
   isGuidingToSeated: 0
   isguided: 0
   lerpDurationForAvatar: 6
+  fromCriticalSection: 0
+  enterCriticalSection: 0
+  logManager: {fileID: 0}
 --- !u!4 &995297014
 Transform:
   m_ObjectHideFlags: 0
@@ -25624,6 +25640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderTracker: {fileID: 202137948}
+  gameManager: {fileID: 0}
   tracker: {fileID: 0}
   bystanderAvatar: {fileID: 3050217240593658542}
   bystanderAnim: {fileID: 0}
@@ -25632,7 +25649,6 @@ MonoBehaviour:
   yesInteractionFrontImage: {fileID: 0}
   noInteractionFrontImage: {fileID: 0}
   backsideImage: {fileID: 0}
-  arrowImage: {fileID: 0}
   arrowPosition: {fileID: 0}
   originalArrowPos: {fileID: 0}
   FOVPos: {fileID: 0}
@@ -25655,6 +25671,9 @@ MonoBehaviour:
   isGuidingToSeated: 0
   isguided: 0
   lerpDurationForAvatar: 3
+  fromCriticalSection: 0
+  enterCriticalSection: 0
+  logManager: {fileID: 0}
 --- !u!4 &2780380935429303479
 Transform:
   m_ObjectHideFlags: 0
