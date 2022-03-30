@@ -6,8 +6,8 @@ public class Saber : MonoBehaviour
 {
     public LayerMask layer;
     private Vector3 previousPos;
-    public Material warningMat;
-    public Material originalMat;
+   // public Material warningMat;
+  //  public Material originalMat;
     public BeatSaberGameManager gameMananger;
     public GameObject blueEffect;
     public GameObject greenEffect;
