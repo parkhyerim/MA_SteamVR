@@ -41,9 +41,10 @@ public class BeatSaberGameManager : MonoBehaviour
     public TMP_Text instructionText;
 
     public TMP_Text notificationText;
-   // public Image notificationBGImage;
-   // public List<Image> notificationCheerImages;
+    // public Image notificationBGImage;
+    // public List<Image> notificationCheerImages;
 
+    public GameObject saberObject;
 
     [Header("TIME MANAGEMENT")]
     public float getReadyTime;
@@ -141,6 +142,8 @@ public class BeatSaberGameManager : MonoBehaviour
         minYAxis = mainCameraXAxis;
         BystanderStartTime2 = BystanderStartTime + bystanderInterval;
         BystanderStartTime3 = BystanderStartTime2 + bystanderInterval;
+
+        saberObject.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -251,6 +254,8 @@ public class BeatSaberGameManager : MonoBehaviour
         lobbyMusic.Stop();
         bgAudioSource.Play();
 
+        saberObject.SetActive(true);
+
         scoreUI.SetActive(true);
         timeUI.SetActive(true);
         instructionUI.SetActive(true);
@@ -339,8 +344,8 @@ public class BeatSaberGameManager : MonoBehaviour
       //  Debug.Log(cube.name + " called the Method");
         if(score % 8 == 0 && score > 0)
         {
-            audioSource.PlayOneShot(cheerSound);
-            Instantiate(cheerEffect, cube.transform.position, Quaternion.identity);
+            //audioSource.PlayOneShot(cheerSound);
+            //Instantiate(cheerEffect, cube.transform.position, Quaternion.identity);
         }
         else
         {
@@ -352,7 +357,6 @@ public class BeatSaberGameManager : MonoBehaviour
             audioSource.PlayOneShot(sliceSound);
           
             Instantiate(blueEffect, cube.transform.position, Quaternion.identity);
-           // Destroy(cube);
             score += 1;
             gameScoreText.text = score.ToString();
         } 
@@ -416,6 +420,7 @@ public class BeatSaberGameManager : MonoBehaviour
         CanPauseGame = false;
 
         cubeSpawner.CanSpawn = false;
+        saberObject.SetActive(false);
 
         notificationText.text = "BRAVO!\nYOUR SCORE IS " + score +"!";
 
@@ -454,12 +459,6 @@ public class BeatSaberGameManager : MonoBehaviour
       //  notificationBGImage.enabled = false;
         notificationText.enabled = false;
         // menuUICanvas.SetActive(false);
-
-        //foreach (MemoryCard card in allCards)
-        //{
-        //    if (card != null)
-        //        card.gameObject.SetActive(false);
-        //}
     }
 
     public void GoToNextLevel() {
@@ -487,25 +486,11 @@ public class BeatSaberGameManager : MonoBehaviour
 
     void StopRayInteractoin()
     {
-        //foreach (MemoryCard card in allCards)
-        //{
-        //    if (card != null)
-        //    {
-        //        card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = false;
-        //      //  card.gameObject.SetActive(false);
-        //    }
-        //}
-
          lineVisual.enabled = false;
     }
 
     void StartRayInteraction()
     {
-        //foreach (MemoryCard card in allCards)
-        //{
-        //    if (card != null)
-        //        card.gameObject.GetComponent<XRSimpleInteractable>().interactionManager.enabled = true;
-        //}
         lineVisual.enabled = true;
     }
 

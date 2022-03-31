@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e9e046d2b95de724ebad1235f95d3f4b, type: 2}
+  - {fileID: 2100000, guid: 74076e81f0584e344937eff2d03c58ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 339008624431599983}
   - component: {fileID: 339008624431599977}
   - component: {fileID: 339008624431599982}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7cf2ee7018161c0488013a6efbea45f8, type: 2}
+  - {fileID: 2100000, guid: bb42599fec2c29b4b926010fab17c3af, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

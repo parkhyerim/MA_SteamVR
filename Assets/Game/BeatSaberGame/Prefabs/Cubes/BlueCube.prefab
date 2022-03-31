@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5799067942233200311}
   - component: {fileID: 5799067942233200309}
   - component: {fileID: 5799067942233200308}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8fe7830dff4b9374784c3a27856917c1, type: 2}
+  - {fileID: 2100000, guid: 8cbb2e1126ff35945bfb07fb898f8272, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -143,7 +143,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e9e046d2b95de724ebad1235f95d3f4b, type: 2}
+  - {fileID: 2100000, guid: 74076e81f0584e344937eff2d03c58ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

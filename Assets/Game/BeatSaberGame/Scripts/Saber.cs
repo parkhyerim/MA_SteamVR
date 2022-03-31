@@ -6,19 +6,11 @@ public class Saber : MonoBehaviour
 {
     public LayerMask layer;
     private Vector3 previousPos;
-   // public Material warningMat;
-  //  public Material originalMat;
     public BeatSaberGameManager gameMananger;
     public GameObject blueEffect;
     public GameObject greenEffect;
     public GameObject yellowEffect;
     public GameObject startEffect;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-       // originalMat = this.gameObject.GetComponent<Renderer>().material;
-    }
 
     // Update is called once per frame
     void Update()
