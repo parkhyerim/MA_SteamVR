@@ -45,6 +45,7 @@ public class BeatSaberGameManager : MonoBehaviour
     public TMP_Text notificationText;
     // public Image notificationBGImage;
     // public List<Image> notificationCheerImages;
+   // public Button TrialStartBtn;
 
     public GameObject saberObject;
 
@@ -98,8 +99,12 @@ public class BeatSaberGameManager : MonoBehaviour
     public CubeSpawner cubeSpawner;
     public BSPauseController pauseController;
     public GameObject[] cubes;
+    public GameObject[] trialCubes;
+    public CubeSpawner trialCubeSpawner;
 
-    public string instructionMsg;
+    private bool trialOncePaused;
+    private bool trialOnceResumed;
+    private string instructionMsg;
 
     [SerializeField]
     private Vector3 maincameraAxis;
@@ -117,13 +122,8 @@ public class BeatSaberGameManager : MonoBehaviour
 
     private void Awake()
     {       
-        // Time Management
         gameTimer = totalGameTime;
-
-        // Score
         score = 0;
-       // gameScoreText.text = "";
-       // gameTimeText.text = "";
 
         // Game Notification
         notificationUI.gameObject.SetActive(false);
@@ -133,11 +133,12 @@ public class BeatSaberGameManager : MonoBehaviour
         if (!isPracticeGame)
         {
             instructionUI.gameObject.SetActive(false);
-           // notificationUI.gameObject.SetActive(false);
+            practiceLobbyMenuUI.gameObject.SetActive(false);
         }
         else // Practice game
         {
             lobbymenuUI.gameObject.SetActive(false);
+           // TrialStartBtn.enabled = false;
         }
       //  instructionUI.gameObject.SetActive(false);
 
@@ -161,15 +162,12 @@ public class BeatSaberGameManager : MonoBehaviour
         minYAxis = mainCameraXAxis;
         BystanderStartTime2 = BystanderStartTime + bystanderInterval;
         BystanderStartTime3 = BystanderStartTime2 + bystanderInterval;
-
         saberObject.SetActive(false);
+
         if (isPracticeGame)
         {
-            StartCoroutine(Instructions());
             instructionText.text = "";
-           // instructionText.text = "Welcome to our user study! \n You can start the game by clicking the start button";
-           // notificationText.text = "HElooooooooooo";
-           // trialInstructionText.text = "You Can Start Trial Game by Clcking the Button below";
+            StartCoroutine(Instructions());
         }
     }
 
@@ -269,11 +267,12 @@ public class BeatSaberGameManager : MonoBehaviour
             }
         }
 
-        if (!isPracticeGame)
+        if (isPracticeGame && canStartTrial)
         {
             // Time Before Game Start
             if (Time.time >= timeFromSceneLoading && Time.time <= startTimeForSpawingCubes) // Showing Time
             {
+                Debug.Log("Practice is called " + startTimeForSpawingCubes);
                 beforeGameTimer += Time.fixedDeltaTime;
                 // gameTimeText.text = Math.Round(getReadyTime - beforeGameTimer).ToString();
                 gameTimeText.text = ConvertToMinAndSeconds(getReadyTimeForTrial - beforeGameTimer);
@@ -281,41 +280,12 @@ public class BeatSaberGameManager : MonoBehaviour
             // GAME TIME
             else if (Time.time > startTimeForSpawingCubes && GameCountTimer <= totalGameTime) // During the Game
             {
-                if (Camera.main.transform.localEulerAngles.y > 180 && Camera.main.transform.localEulerAngles.y <= 360)
-                {
-                    mainCameraYAxis = 360f - Camera.main.transform.localEulerAngles.y;
-                }
-                if (Camera.main.transform.localEulerAngles.y >= 0 && Camera.main.transform.localEulerAngles.y < 180)
-                {
-                    mainCameraYAxis = Camera.main.transform.localEulerAngles.y * -1f;
-                }
-
-                if (minYAxis > mainCameraYAxis)
-                    minYAxis = mainCameraYAxis;
-                if (maxYAxis < mainCameraYAxis)
-                    maxYAxis = mainCameraYAxis;
-
-
-                if (Camera.main.transform.localEulerAngles.x > 180 && Camera.main.transform.localEulerAngles.x <= 360)
-                {
-                    mainCameraXAxis = 360f - Camera.main.transform.localEulerAngles.x;
-                }
-                if (Camera.main.transform.localEulerAngles.x >= 0 && Camera.main.transform.localEulerAngles.x < 180)
-                {
-                    mainCameraXAxis = Camera.main.transform.localEulerAngles.x * -1f;
-                }
-
-                if (minXAxis > mainCameraXAxis)
-                    minXAxis = mainCameraXAxis;
-                if (maxXAxis < mainCameraXAxis)
-                    maxXAxis = mainCameraXAxis;
-
+                Debug.Log("Practice is called 2");
                 gameTimerIgnoringPause += Time.fixedDeltaTime;
 
                 if (!gamePaused)
                 {
                     GameCountTimer += Time.fixedDeltaTime;
-                    // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
                     gameTimeText.text = ConvertToMinAndSeconds(gameTimer - GameCountTimer);
 
                     if (askSpawnCubes == false)
@@ -326,7 +296,7 @@ public class BeatSaberGameManager : MonoBehaviour
 
                     if (Math.Round(GameCountTimer) == totalGameTime)
                     {
-                        cubeSpawner.CanSpawn = false;
+                        trialCubeSpawner.CanSpawn = false;
                         StopRayInteractoin();
                         EndGame();
                     }
@@ -343,12 +313,14 @@ public class BeatSaberGameManager : MonoBehaviour
     public void StartTrial()
     {
         Debug.Log("Click Trial");
-        CanStartTrial = true;
-        timeFromSceneLoading = Time.time;
-        startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
+      //  CanStartTrial = true;
+      //  timeFromSceneLoading = Time.time;
+      //  startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
         practiceLobbyMenuUI.SetActive(false);
-//        Destroy(practiceLobbyMenuUI.GetComponentInChildren<Button>());
-  //      practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
+        notificationUI.SetActive(true);
+        saberObject.SetActive(true);
+        StartCoroutine(InstructionsForCubeSlice());
+        timeUI.SetActive(true);
     }
 
     public void StartGame()
@@ -394,25 +366,40 @@ public class BeatSaberGameManager : MonoBehaviour
     }
 
     public void SpawnCubes() {
-
-        cubeSpawner.CanSpawn = true;
-
-     //   notificationBGImage.enabled = false;
-        notificationText.enabled = false;
-        instructionText.text = "";
-    
-        gameScoreText.text = "0";
-       // Vector3 backAngles = new Vector3(0, 180, 0);
-
-        CanPauseGame = true;
-        //isFront = false;
-        Invoke(nameof(BystanderStart), time: BystanderStartTime);
-        if (!oneInteruption)
+        if (!isPracticeGame)
         {
-            Invoke(nameof(BystanderStart), time: BystanderStartTime2);
-            Invoke(nameof(BystanderStart), time: BystanderStartTime3);
-        }  
-        // interactionUI.SetActive(true);
+            cubeSpawner.CanSpawn = true;
+
+            //   notificationBGImage.enabled = false;
+            notificationText.enabled = false;
+            instructionText.text = "";
+
+            gameScoreText.text = "0";
+            // Vector3 backAngles = new Vector3(0, 180, 0);
+
+            CanPauseGame = true;
+            //isFront = false;
+            Invoke(nameof(BystanderStart), time: BystanderStartTime);
+            if (!oneInteruption)
+            {
+                Invoke(nameof(BystanderStart), time: BystanderStartTime2);
+                Invoke(nameof(BystanderStart), time: BystanderStartTime3);
+            }
+            // interactionUI.SetActive(true);
+        }
+        else
+        {
+            trialCubeSpawner.CanSpawn = true;
+
+            //   notificationBGImage.enabled = false;
+          //  notificationText.enabled = false;
+           // instructionText.text = "";
+
+            gameScoreText.text = "0";
+            // Vector3 backAngles = new Vector3(0, 180, 0);
+
+            CanPauseGame = true;
+        }
     }
 
     public void BystanderStart()
@@ -451,7 +438,7 @@ public class BeatSaberGameManager : MonoBehaviour
             score += 1;
             gameScoreText.text = score.ToString();
         } 
-        else if (cube.name.Contains("GreenCube"))
+        else if (cube.name.Contains("Green"))
         {
             audioSource.PlayOneShot(sliceSound);
             
@@ -472,68 +459,147 @@ public class BeatSaberGameManager : MonoBehaviour
     {
         if (!gamePaused)
         {
-            gamePaused = true;
-            pausedTime = (float)Math.Round(GameCountTimer);
-            identificationTime = (float)Math.Round(gameTimerIgnoringPause);
-            logManager.WriteToLogFile("Identification (Paused) Time: " + identificationTime);
-            cubeSpawner.CanSpawn = false;
-            cubeSpawner.StopMoving = true;
-            cubes = GameObject.FindGameObjectsWithTag("Cube");
-            foreach(GameObject cube in cubes)
+            if (!isPracticeGame)
             {
-               // Debug.Log(cube.name);
-                cube.GetComponent<Cube>().StopMove();
+                gamePaused = true;
+                pausedTime = (float)Math.Round(GameCountTimer);
+                identificationTime = (float)Math.Round(gameTimerIgnoringPause);
+                logManager.WriteToLogFile("Identification (Paused) Time: " + identificationTime);
+                cubeSpawner.CanSpawn = false;
+                cubeSpawner.StopMoving = true;
+                cubes = GameObject.FindGameObjectsWithTag("Cube");
+                foreach (GameObject cube in cubes)
+                {
+                    // Debug.Log(cube.name);
+                    cube.GetComponent<Cube>().StopMove();
+                }
+                StopRayInteractoin();
             }
-            StopRayInteractoin();
+            // Practice Game
+            else
+            {
+                gamePaused = true;
+               // pausedTime = (float)Math.Round(GameCountTimer);
+               // identificationTime = (float)Math.Round(gameTimerIgnoringPause);
+               // logManager.WriteToLogFile("Identification (Paused) Time: " + identificationTime);
+                trialCubeSpawner.CanSpawn = false;
+                trialCubeSpawner.StopMoving = true;
+                trialCubes = GameObject.FindGameObjectsWithTag("Cube");
+                foreach (GameObject cube in trialCubes)
+                {
+                    cube.GetComponent<Cube>().StopMove();
+                }
+                StopRayInteractoin();
+                if (!trialOncePaused)
+                {
+                    instructionMsg = "You paused the game.\n You can resume the game by pressing the touchpad again!";
+                    trialOncePaused = true;
+                }
+                else
+                {
+                    instructionMsg = "You paused the game.";
+                }
+
+                notificationText.text = instructionMsg;
+              //  StartCoroutine(InstructionForPause());
+                // notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
+                //StartCoroutine(InstructionForPause());              
+            }        
         }
         else
         {
-            gamePaused = false;
-            logManager.WriteToLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
-            cubeSpawner.CanSpawn = true;
-            cubeSpawner.StopMoving = false;
-            cubes = GameObject.FindGameObjectsWithTag("Cube");
-            foreach (GameObject cube in cubes)
+            if (!isPracticeGame)
             {
-              //  Debug.Log(cube.name);
-                cube.GetComponent<Cube>().StartMove();
+                gamePaused = false;
+                logManager.WriteToLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+                cubeSpawner.CanSpawn = true;
+                cubeSpawner.StopMoving = false;
+                cubes = GameObject.FindGameObjectsWithTag("Cube");
+                foreach (GameObject cube in cubes)
+                {
+                    //  Debug.Log(cube.name);
+                    cube.GetComponent<Cube>().StartMove();
+                }
+                StartRayInteraction();
             }
-            StartRayInteraction();
+            else
+            {
+                gamePaused = false;
+                logManager.WriteToLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+                trialCubeSpawner.CanSpawn = true;
+                trialCubeSpawner.StopMoving = false;
+                trialCubes = GameObject.FindGameObjectsWithTag("Cube");
+                foreach (GameObject cube in trialCubes)
+                {
+                    //  Debug.Log(cube.name);
+                    cube.GetComponent<Cube>().StartMove();
+                }
+                if (!trialOnceResumed)
+                {
+                    instructionMsg = "You resumed the game! \n You can play the game and try to pause and resume game again!";
+                    trialOnceResumed = true;
+                }
+                else
+                {
+                    instructionMsg = "You resumed the game.";
+                }
+
+                instructionMsg = 
+                notificationText.text = instructionMsg;
+                notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
+                // notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
+                StartCoroutine(InstructionForPause());
+                
+                StartRayInteraction();
+            }        
         }
     }
 
     public void EndGame()
     {
-        notificationUI.SetActive(true);
-       // notificationBGImage.enabled = true;
-        notificationText.enabled = true;
-        bystanderInteract = false;
-        CanPauseGame = false;
-
-        cubeSpawner.CanSpawn = false;
-        saberObject.SetActive(false);
-
-        notificationText.text = "BRAVO!\nYOUR SCORE IS " + score +"!";
-
-        if (!recordScore)
+        if (!isPracticeGame)
         {
-            logManager.WriteToLogFile("Score: " + score);
-            logManager.WriteToLogFile("==============================");
-            recordScore = true;
-        }
+            notificationUI.SetActive(true);
+            notificationText.enabled = true;
+            bystanderInteract = false;
+            CanPauseGame = false;
 
-        if (!recordMaxMin)
+            cubeSpawner.CanSpawn = false;
+            saberObject.SetActive(false);
+            notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
+            //
+            scoreUI.SetActive(false);
+
+            notificationText.text = "BRAVO!\nYOUR SCORE IS " + score + "!";
+
+            gameTimeText.text = ConvertToMinAndSeconds(0);
+
+            if (!recordScore)
+            {
+                logManager.WriteToLogFile("Score: " + score);
+                logManager.WriteToLogFile("==============================");
+                recordScore = true;
+            }
+
+            if (!recordMaxMin)
+            {
+                logManager.WriteToLogFile("Max Y Axis (Toward Bystander): " + maxYAxis);
+                logManager.WriteToLogFile("Min Y Axis (Against Bystander): " + minYAxis);
+                recordMaxMin = true;
+            }
+
+            Invoke(nameof(GoToNextLevel), 4f);
+            // Invoke(nameof(DoSurvey), 1f);
+        }
+        else
         {
-            logManager.WriteToLogFile("Max Y Axis (Toward Bystander): " + maxYAxis);
-            logManager.WriteToLogFile("Min Y Axis (Against Bystander): " + minYAxis);
-            recordMaxMin = true;
+            CanPauseGame = false;
+            trialCubeSpawner.CanSpawn = false;
+            saberObject.SetActive(false);
+            notificationText.text = "Your Trial Game is finised!";
+            gameTimeText.text = ConvertToMinAndSeconds(0);
+            Invoke(nameof(GoToNextLevel), 4f);
         }
-       
-        // tunnelEffectPrefab2.SetActive(false);
-        // tunnelEffectPrefab1.SetActive(false);
-
-         Invoke(nameof(GoToNextLevel), 2f);
-        // Invoke(nameof(DoSurvey), 1f);
     }
 
     public void GoSurvey()
@@ -565,15 +631,6 @@ public class BeatSaberGameManager : MonoBehaviour
            // notificationCheerImages[randomNumForEffect].enabled = false;
         }
     }
-
-    //public void WriteToLogFile(string message)
-    //{
-    //    using (System.IO.StreamWriter logFile = 
-    //        new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID +".txt", append:true))
-    //    {
-    //        logFile.WriteLine(DateTime.Now + message);       
-    //    }  
-    //}
 
     void StopRayInteractoin()
     {
@@ -627,14 +684,42 @@ public class BeatSaberGameManager : MonoBehaviour
 
     IEnumerator Instructions()
     {
-        Debug.Log(practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].name);
+        // Debug.Log(practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].name);
         practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
         instructionMsg = "Welcome to our user study!";
         trialInstructionText.text = instructionMsg;
-        yield return new WaitForSeconds(5);
-        instructionMsg = "Start The Trial Game by pointing and clcking the Start Button below with the trigger";
-        practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
+        yield return new WaitForSeconds(7);
+        instructionMsg = "Please point and click the Start button below when you're ready.\n You can press the trigger button of the controller.";
         trialInstructionText.text = instructionMsg;
+        practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
+       // TrialStartBtn.enabled = true;
         yield return new WaitForSeconds(5);
+    }
+
+    IEnumerator InstructionsForCubeSlice()
+    {
+        instructionMsg = "You hold a lightsaber now! \n Slash the blocks by hitting the colored part with your saber! \n You don't have to click any button on the controller";
+        notificationText.text = instructionMsg;
+        notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
+        yield return new WaitForSeconds(9);
+        CanStartTrial = true;
+        timeFromSceneLoading = Time.time;
+        startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
+        notificationText.text = "";
+        yield return new WaitForSeconds(20);
+        notificationText.text = "Try to Pause the game.\n You can press the touchpad on the controller";
+        notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
+        yield return new WaitForSeconds(5);
+    }
+
+    IEnumerator InstructionForPause()
+    {
+        instructionMsg = "";
+        notificationText.text = instructionMsg;
+        notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
+        yield return new WaitForSeconds(10);
+        notificationText.text = "Try to Pause the game.\n You can press the touchpad on the controller";
+        notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
+        yield return new WaitForSeconds(3);
     }
 }

@@ -6,11 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Game/BeatSaberGame/Scenes/BeatSaber_Anaimoji.unity
+    path: Assets/Game/BeatSaberGame/Scenes/BeatSaber_Trial.unity
+    guid: 03948e07726b0714eba958085680677f
+  - enabled: 1
+    path: Assets/Game/BeatSaberGame/Scenes/BeatSaber_AnaimojiSetting.unity
     guid: c2b5ec7b86e300149a402e233bc9d917
   - enabled: 1
-    path: Assets/Game/BeatSaberGame/Scenes/BeatSaber_Avatar.unity
-    guid: ca9df022fd6b5484db17c362ccf4274f
+    path: Assets/Game/BeatSaberGame/Scenes/BeatSaber_AvatarSetting.unity
+    guid: c4b8766776900ac4281d0abf97226e63
+  - enabled: 1
+    path: Assets/Game/BeatSaberGame/Scenes/BeatSaber_MixedSetting.unity
+    guid: b0c68238da04faf4d97dd2806d0f989f
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d367a92b0d4cf114c826faa81e847686, type: 2}
     Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: 06b947aecd64d04419eebef1f634e8e0, type: 2}
