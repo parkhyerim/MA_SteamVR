@@ -18,6 +18,7 @@ public class BSRotateTracker : MonoBehaviour
     private void Start()
     {
         doInteraction = true;
+       // Debug.Log(transform.eulerAngles.y);
     }
 
     void Update()

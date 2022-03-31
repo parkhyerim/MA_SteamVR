@@ -29,9 +29,9 @@ public class BSLogManager : MonoBehaviour
         {
             currentDateTime = GetCurrentDateTime();
             currentTime = GetCurrentTime();
-            logFile.Write(message);
+            logFile.Write("[" + currentTime + "] ");
+            logFile.WriteLine(message);
            // logFile.WriteLine("              [" + currentDateTime + "] "); 
-            logFile.WriteLine("              [" + currentTime + "] ");
         }
     }
 
