@@ -18,6 +18,8 @@ public class BeatSaberGameManager : MonoBehaviour
     public AudioClip missSound;
     public AudioClip sliceSound;
     public AudioClip cheerSound;
+    public AudioClip[] questionAudios;
+    public AudioSource quesitionAudioSource;
 
     [Header("EFFECT")]
     public GameObject rightSliceEffectPrefab;
@@ -62,7 +64,7 @@ public class BeatSaberGameManager : MonoBehaviour
     public float BystanderStartTime = 25f;
     public float bystanderInterval = 60f;
     [SerializeField]
-    private float BystanderStartTime2, BystanderStartTime3;
+    private float BystanderStartTime2, BystanderStartTime3, BystanderStartTime4;
 
     // public Button pauseBtn;
     [SerializeField]
@@ -105,6 +107,7 @@ public class BeatSaberGameManager : MonoBehaviour
     private bool trialOncePaused;
     private bool trialOnceResumed;
     private string instructionMsg;
+    public BSBystanderAvatar bystanderAvatar;
 
     [SerializeField]
     private Vector3 maincameraAxis;
@@ -112,6 +115,8 @@ public class BeatSaberGameManager : MonoBehaviour
     private float mainCameraYAxis, mainCameraXAxis, minYAxis, maxYAxis, minXAxis, maxXAxis;
     public bool oneInteruption;
     private bool bystanderCanHearAnswer;
+    public int[] audioOrder = { 1, 2, 3 };
+    int questionCounter;
 
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
     public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
@@ -162,6 +167,7 @@ public class BeatSaberGameManager : MonoBehaviour
         minYAxis = mainCameraXAxis;
         BystanderStartTime2 = BystanderStartTime + bystanderInterval;
         BystanderStartTime3 = BystanderStartTime2 + bystanderInterval;
+        BystanderStartTime4 = BystanderStartTime3 + bystanderInterval;
         saberObject.SetActive(false);
 
         if (isPracticeGame)
@@ -384,6 +390,7 @@ public class BeatSaberGameManager : MonoBehaviour
             {
                 Invoke(nameof(BystanderStart), time: BystanderStartTime2);
                 Invoke(nameof(BystanderStart), time: BystanderStartTime3);
+                Invoke(nameof(BystanderStart), time: BystanderStartTime4);
             }
             // interactionUI.SetActive(true);
         }
@@ -410,6 +417,8 @@ public class BeatSaberGameManager : MonoBehaviour
         pauseController.OncePausedInSession = false;
         // logManager
         bystanderCanHearAnswer = true;
+        bystanderAvatar.LookedOnceSeatedPosition = false;
+        bystanderAvatar.IsGuidingFOVToSeatedExceed = false;
     }
 
     public void BystanderEnd()
@@ -497,7 +506,7 @@ public class BeatSaberGameManager : MonoBehaviour
                 }
                 else
                 {
-                    instructionMsg = "You paused the game.";
+                    instructionMsg = "You paused the game.\n Try to resume the game!";
                 }
 
                 notificationText.text = instructionMsg;
@@ -565,6 +574,12 @@ public class BeatSaberGameManager : MonoBehaviour
             CanPauseGame = false;
 
             cubeSpawner.CanSpawn = false;
+            cubes = GameObject.FindGameObjectsWithTag("Cube");
+            foreach (GameObject cube in cubes)
+            {
+                Debug.Log(cube.name + " Destrpy");
+                Destroy(cube);
+            }
             saberObject.SetActive(false);
             notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
             //
@@ -588,7 +603,7 @@ public class BeatSaberGameManager : MonoBehaviour
                 recordMaxMin = true;
             }
 
-            Invoke(nameof(GoToNextLevel), 4f);
+            Invoke(nameof(GoToNextLevel), 5f);
             // Invoke(nameof(DoSurvey), 1f);
         }
         else
@@ -598,7 +613,7 @@ public class BeatSaberGameManager : MonoBehaviour
             saberObject.SetActive(false);
             notificationText.text = "Your Trial Game is finised!";
             gameTimeText.text = ConvertToMinAndSeconds(0);
-            Invoke(nameof(GoToNextLevel), 4f);
+            Invoke(nameof(GoToNextLevel), 5f);
         }
     }
 
@@ -721,5 +736,30 @@ public class BeatSaberGameManager : MonoBehaviour
         notificationText.text = "Try to Pause the game.\n You can press the touchpad on the controller";
         notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
         yield return new WaitForSeconds(3);
+    }
+
+    public void AskQuestion()
+    {
+        Invoke(nameof(PlayQuestionAudio), 3f);
+    }
+
+    public void PlayQuestionAudio()
+    {
+
+        if (questionCounter < 4)
+        {
+            if(questionCounter == 0)
+            {
+
+            }
+            else
+            {
+                int index = audioOrder[questionCounter-1] - 1;
+                quesitionAudioSource.PlayOneShot(questionAudios[index]);
+                logManager.WriteToLogFile("Bystander ask the question " + audioOrder[questionCounter-1] + ": " + (float)Math.Round(gameTimerIgnoringPause));
+
+            }
+            questionCounter++;
+        }
     }
 }

@@ -26,11 +26,6 @@ public class BSPauseController : MonoBehaviour
     {
         pauseReference.action.started += PauseGame;
         audioPlayed = new bool[3] { false, false, false };
-        //Debug.Log(audioOrder);
-        //if (audioOrder == null)
-        //{
-        //    Debug.Log("audio order is null");
-        //}
     }
 
     private void OnDestroy()
@@ -52,25 +47,10 @@ public class BSPauseController : MonoBehaviour
                 {
                     if (!oncePausedInSession && gameManager.BystanderCanHearAnswer)
                     {
-                        //  logManager.WriteToLogFile("Identify time");
-                        // if (bAvatar.doInteraction)
-                        // Invoke(nameof(PlayQuestionAudio), 1f);
-                        //if (audioPlayed.Contains(false))
-                        //{
-                        //    // Debug.Log("still false in array");
-                        //    Invoke(nameof(PlayQuestionAudio), 1f);
-                        //}
-                        // Invoke(nameof(PlayQuestionAudio), 1f);
-                        Invoke(nameof(PlayQuestionAudio), 1f);
+                       // Invoke(nameof(PlayQuestionAudio), 1f);
                         oncePausedInSession = true;
                     }                   
                 }
-
-                //if (audioPlayed.Contains(false))
-                //{
-                //   // Debug.Log("still false in array");
-                //    Invoke(nameof(PlayQuestionAudio), 1f);
-                //}
             
                 pauseClicked = true;
                 gameManager.PauseGame();
@@ -87,24 +67,13 @@ public class BSPauseController : MonoBehaviour
 
     public void PlayQuestionAudio()
     {
-        // int index;
-        // index = GetRandomNumber(quesitionAudios.Length);
-        //// Debug.Log("random: " + index);
+        //if (counter < 3)
+        //{
+        //    int index = audioOrder[counter] - 1;
+        //    audioSource.PlayOneShot(quesitionAudios[index]);
+        //    counter++;
 
-        // if (audioPlayed[index] == false)
-        // {
-        //     audioPlayed[index] = true;
-        //     audioSource.PlayOneShot(quesitionAudios[index]);
-        // }        
-        // else
-        //     PlayQuestionAudio();
-        if (counter < 3)
-        {
-            int index = audioOrder[counter] - 1;
-            audioSource.PlayOneShot(quesitionAudios[index]);
-            counter++;
-
-        }
+        //}
     }
 
     private int GetRandomNumber(int length)

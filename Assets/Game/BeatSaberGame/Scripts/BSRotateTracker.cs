@@ -12,6 +12,7 @@ public class BSRotateTracker : MonoBehaviour
     public float rotateSpeed = 2;
     [SerializeField]
     private bool isHeadingTo30, isHeadingToFrontSeat, isHeadingToPlayer;
+    private bool askedQuestion;
 
     public bool IsHeadingToPlayer { get => isHeadingToPlayer; set => isHeadingToPlayer = value; }
 
@@ -35,6 +36,12 @@ public class BSRotateTracker : MonoBehaviour
 
                 if (Mathf.Round(transform.eulerAngles.y) == 90)
                 { // Heading towards the VR-Player
+                    if (!askedQuestion)
+                    {
+                        gameManager.AskQuestion();
+                        askedQuestion = true;
+                    }
+
                     if (doInteraction)
                     {
                         Invoke(nameof(HeadingBackTo30Degrees), 9f); // Stay in 11 seconds (13)
@@ -102,5 +109,6 @@ public class BSRotateTracker : MonoBehaviour
         isHeadingToPlayer = false;
         gameManager.BystanderEnd();
         gameManager.BystanderCanHearAnswer = false;
+        askedQuestion = false;
     }
 }

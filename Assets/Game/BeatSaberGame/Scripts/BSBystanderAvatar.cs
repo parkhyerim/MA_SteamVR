@@ -50,14 +50,14 @@ public class BSBystanderAvatar : MonoBehaviour
    // public bool isSeatedAndInFOV;
 
     private float mainCameraYAxis;
-    public bool isGuidingFOVToSeatedExceed;
+    private bool isGuidingFOVToSeatedExceed;
     public bool isguided;
 
     private float angleinFOV = 50f;
 
     private float guidingLength;
     private float guidingSpeed = 1.0f;
-    private float timeElapsedForSEATToFOV, timeElapsedForFOVToSEAT;
+    private float timeElapsedForSEATToFOV, timeElapsedForFOVToSEAT, timeElapsedForGuideToSEAT;
     public float guideTimeForAvatar = 3f;
     public float fadeTime = 2f;
     float timeElapsedForAnimoji = 0f;
@@ -69,6 +69,12 @@ public class BSBystanderAvatar : MonoBehaviour
     private Color animojiBacksideColor;
     Color noTransparency, lowTransparency;
     public bool askedQuestion;
+    private bool firstQuestioned, secondQuestioned, thirdQuestioned;
+
+
+
+    public bool LookedOnceSeatedPosition { get => lookedOnceSeatedPosition; set => lookedOnceSeatedPosition = value; }
+    public bool IsGuidingFOVToSeatedExceed { get => isGuidingFOVToSeatedExceed; set => isGuidingFOVToSeatedExceed = value; }
 
     // Start is called before the first frame update
     void Start()
@@ -257,10 +263,9 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [AVATAR]  CRITICAL ZONE: 30-0 degrees to the VR user
                 if (bystanderEulerYAxis >= 60 && bystanderEulerYAxis < 100)
                 {
-
                     if (!inCriticalZone && inTransitionZone) // From transition zone to critical zone
                     {
-                        Debug.Log("Enter Critical Zone");
+                       // Debug.Log("Enter Critical Zone");
                         BystanderShiftZone("Enter_CZ");// enter 30 degrees
                         inCriticalZone = true;
                     }
@@ -271,7 +276,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     // VR user is looking at the bystander('s seated position): in the far peripheral zone
                     if (mainCameraYAxis >= 250 && mainCameraYAxis <= 300) //310 -> 300
                     {
-                        Debug.Log("VRUser looks at the seated position");
+                       // Debug.Log("VRUser looks at the seated position");
                         // Avatar in seated position without manupulating angles
                         transform.position = bystanderTracker.transform.position;
                         bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderEulerYAxis, 0);
@@ -432,6 +437,9 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [AVATAR] UNCRITICAL ZONE: 85 >= Bystander's degrees > 60
                 else if (bystanderEulerYAxis < 60 && bystanderEulerYAxis >= 5)
                 {
+                    currentMovementTime = 0f;
+                    timeElapsedForSEATToFOV = 0f;
+                    timeElapsedForFOVToSEAT = 0f;
                     Debug.Log("Enter Unciritcalzone");
                     //Debug.Log(transform.position);
                     //Debug.Log(bystanderAvatar.transform.position);
@@ -550,7 +558,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     inTransitionZone = true;
                     inNoZone = false;
                     timeElapsedForMixedTransition = 0;
-
+                    presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
                     // VR user is looking at the game -> The bystander's avatar is outside the VR user's FOV
                     // ANIMOJI Visualisation
                     if (mainCameraYAxis >= 320 || (mainCameraYAxis > 0 && mainCameraYAxis <= 90))
@@ -605,7 +613,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     inCriticalZone = false;
                     yesInteractionFrontImage.enabled = false;
                     noInteractionFrontImage.enabled = false;
-
+                    presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
                     // VR user is looking at the game -> The bystander's avatar is outside the VR user's FOV
                     // Animoji Visualisation
                     if (mainCameraYAxis >= 320 || (mainCameraYAxis > 0 && mainCameraYAxis <= 90))
@@ -692,6 +700,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     yesInteractionFrontImage.enabled = false;
                     noInteractionFrontImage.enabled = false;
                     arrowImage.enabled = false;
+                    timeElapsedForMixedTransition = 0;
                 }
             }
         }
