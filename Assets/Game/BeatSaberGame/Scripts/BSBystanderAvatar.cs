@@ -7,8 +7,8 @@ public class BSBystanderAvatar : MonoBehaviour
 {
     public GameObject bystanderTracker;
     private Transform trackerTransform;
-    public BeatSaberGameManager bsgameManager;
-    public BSLogManager logManager;
+    BeatSaberGameManager bsgameManager;
+    BSLogManager logManager;
     private float bystanderEulerYAxis;  // bystander's euler y-axis -> tracker y
     public GameObject bystanderAvatar;
     public Animator bystanderAnim;
@@ -47,7 +47,7 @@ public class BSBystanderAvatar : MonoBehaviour
     public bool isPractice;
 
     [Header("Avatar Sub-Settings")]
-   // public bool isSeatedAndInFOV;
+    // public bool isSeatedAndInFOV;
 
     private float mainCameraYAxis;
     private bool isGuidingFOVToSeatedExceed;
@@ -71,11 +71,14 @@ public class BSBystanderAvatar : MonoBehaviour
     public bool askedQuestion;
     private bool firstQuestioned, secondQuestioned, thirdQuestioned;
 
-
-
     public bool LookedOnceSeatedPosition { get => lookedOnceSeatedPosition; set => lookedOnceSeatedPosition = value; }
     public bool IsGuidingFOVToSeatedExceed { get => isGuidingFOVToSeatedExceed; set => isGuidingFOVToSeatedExceed = value; }
 
+    private void Awake()
+    {
+        bsgameManager = FindObjectOfType<BeatSaberGameManager>();
+        logManager = FindObjectOfType<BSLogManager>();
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -110,7 +113,7 @@ public class BSBystanderAvatar : MonoBehaviour
 
     void Update()
     {
-       // transform.position = trackerTrans.position;
+        // transform.position = trackerTrans.position;
         bystanderEulerYAxis = trackerTransform.eulerAngles.y;
         mainCameraYAxis = Camera.main.transform.eulerAngles.y;
 
@@ -176,7 +179,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         noInteractionFrontImage.enabled = false;
                         inCriticalZone = false;
                     }
-                    if(inUncriticalZone) // From Uncritical Zone: backside -> small animoji
+                    if (inUncriticalZone) // From Uncritical Zone: backside -> small animoji
                     {
                         Debug.Log("From_UZ_to_TZ");
                         BystanderShiftZone("From_UZ_to_TZ");
@@ -189,7 +192,7 @@ public class BSBystanderAvatar : MonoBehaviour
                 }
                 // [Animoji] UNCRITICAL ZONE: 85 >= Bystander's degrees > 60
                 else if (bystanderEulerYAxis < 30 && bystanderEulerYAxis >= 5)
-                {                
+                {
                     inUncriticalZone = true;
 
                     yesInteractionFrontImage.enabled = false;
@@ -197,30 +200,30 @@ public class BSBystanderAvatar : MonoBehaviour
 
                     if (inNoZone && !inTransitionZone) // From No-Zone : Full transparency to No transparency
                     {
-                       //Debug.Log("FROM_NZ_to_UCZ");
-                       // BystanderShiftZone("FROM_NZ_to_UCZ");
+                        //Debug.Log("FROM_NZ_to_UCZ");
+                        // BystanderShiftZone("FROM_NZ_to_UCZ");
                         timeElapsedForAnimoji += Time.deltaTime;
 
                         if (timeElapsedForAnimoji < fadeTime) // fadetime: 2f (default)
                         {
-                          //  Debug.Log("timeForAnimoji (fade in): " + timeElapsedForAnimoji);
+                            //  Debug.Log("timeForAnimoji (fade in): " + timeElapsedForAnimoji);
                             float t = timeElapsedForAnimoji / fadeTime;
                             t = t * t * (3f - 2f * t);
                             backsideImage.enabled = true;
-                            backsideImage.color = Color.Lerp(lowTransparency, noTransparency, t); 
+                            backsideImage.color = Color.Lerp(lowTransparency, noTransparency, t);
                         }
                         else // more than fadetime(2f) 
                         {
                             backsideImage.color = noTransparency;
                             inNoZone = false;
-                          //  Debug.Log("Transparency is full and NoZone is set " + inNoZone);
+                            //  Debug.Log("Transparency is full and NoZone is set " + inNoZone);
                         }
                     }
 
                     if (inTransitionZone && !inNoZone) // From Transition Zone: No transparency to Full transparency
                     {
-                      //  Debug.Log("FROM_TZ_to_UCZ");
-                      //  BystanderShiftZone("FROM_TZ_to_UCZ");
+                        //  Debug.Log("FROM_TZ_to_UCZ");
+                        //  BystanderShiftZone("FROM_TZ_to_UCZ");
                         timeElapsedForAnimoji += Time.deltaTime;
 
                         if (timeElapsedForAnimoji < fadeTime)
@@ -235,12 +238,12 @@ public class BSBystanderAvatar : MonoBehaviour
                         {
                             backsideImage.color = lowTransparency;
                             inTransitionZone = false;
-                           // Debug.Log("Transparency is 0 and Shift-Zone is set " + inTransitionZone);
+                            // Debug.Log("Transparency is 0 and Shift-Zone is set " + inTransitionZone);
                         }
-                    }                
+                    }
                 }
-               // [Animoji] NO ZONE:  Bystander's degrees > 85
-                else 
+                // [Animoji] NO ZONE:  Bystander's degrees > 85
+                else
                 {
                     //Debug.Log("ENTER_NZ");
                     // Set flags
@@ -265,7 +268,7 @@ public class BSBystanderAvatar : MonoBehaviour
                 {
                     if (!inCriticalZone && inTransitionZone) // From transition zone to critical zone
                     {
-                       // Debug.Log("Enter Critical Zone");
+                        // Debug.Log("Enter Critical Zone");
                         BystanderShiftZone("Enter_CZ");// enter 30 degrees
                         inCriticalZone = true;
                     }
@@ -276,7 +279,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     // VR user is looking at the bystander('s seated position): in the far peripheral zone
                     if (mainCameraYAxis >= 250 && mainCameraYAxis <= 300) //310 -> 300
                     {
-                       // Debug.Log("VRUser looks at the seated position");
+                        // Debug.Log("VRUser looks at the seated position");
                         // Avatar in seated position without manupulating angles
                         transform.position = bystanderTracker.transform.position;
                         bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderEulerYAxis, 0);
@@ -293,14 +296,14 @@ public class BSBystanderAvatar : MonoBehaviour
                         currentMovementTime += Time.deltaTime;
                         if (currentMovementTime > (guideTimeForAvatar + 2f)) // 2+ 2f
                         {
-                           //  Debug.Log("currentmove: " + currentMovementTime);
+                            //  Debug.Log("currentmove: " + currentMovementTime);
                             isGuidingFOVToSeatedExceed = true;
                         }
 
                         // The VR user haven't look at the seated avatar yet
                         if (!lookedOnceSeatedPosition)
                         {
-                           // Debug.Log("The VR user haven't look at the seated avatar");
+                            // Debug.Log("The VR user haven't look at the seated avatar");
                             // 1
                             if (!isGuidingFOVToSeatedExceed)
                             {
@@ -310,7 +313,7 @@ public class BSBystanderAvatar : MonoBehaviour
                                 timeElapsedForSEATToFOV += Time.deltaTime;
                                 if (timeElapsedForSEATToFOV < guideTimeForAvatar) // lerpGuideTime:2
                                 {
-                                   // Debug.Log("[NOT look at seated]:time elapsed: " + timeElapsedForSEATToFOV);
+                                    // Debug.Log("[NOT look at seated]:time elapsed: " + timeElapsedForSEATToFOV);
                                     float t = timeElapsedForSEATToFOV / guideTimeForAvatar;
                                     t = t * t * (3f - 2f * t);
                                     // guiding from tracker position -> fov position
@@ -324,14 +327,14 @@ public class BSBystanderAvatar : MonoBehaviour
                                     bystanderAvatar.transform.rotation = Quaternion.Lerp(
                                          // Quaternion.Euler(new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV - 10) / 90) - bystanderEulerYAxis), 0)),
                                          Quaternion.Euler(new Vector3(0, bystanderEulerYAxis, 0)),
-                                       // Quaternion.Euler(new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV) / 90) - bystanderEulerYAxis), 0)),
+                                         // Quaternion.Euler(new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV) / 90) - bystanderEulerYAxis), 0)),
                                          Quaternion.Euler(new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (100 + angleinFOV) / 90) - bystanderEulerYAxis), 0)),
                                             t);
                                 }
                                 else // more than guiding Time (2 sec)
                                 {
-                                  Debug.Log("guide time passed: " + timeElapsedForSEATToFOV);
-                                  //transform.position = new Vector3(guidingPosForAV.transform.position.x, trackerTrans.position.y, guidingPosForAV.transform.position.z);
+                                    Debug.Log("guide time passed: " + timeElapsedForSEATToFOV);
+                                    //transform.position = new Vector3(guidingPosForAV.transform.position.x, trackerTrans.position.y, guidingPosForAV.transform.position.z);
 
                                     transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
                                     // arrow
@@ -353,7 +356,7 @@ public class BSBystanderAvatar : MonoBehaviour
                                     t = t * t * (3f - 2f * t);
                                     transform.position = Vector3.Lerp(
                                                 new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z),
-                                               // new Vector3(transform.position.x, transform.position.y, transform.position.z),
+                                                // new Vector3(transform.position.x, transform.position.y, transform.position.z),
                                                 new Vector3(guidingPosForAV.transform.position.x, trackerTransform.position.y, guidingPosForAV.transform.position.z),
                                                 t);
                                     // Angles
@@ -454,7 +457,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     bystanderAnim.SetBool("isInteracting", false);
                     transform.position = bystanderTracker.transform.position;
                     transform.localEulerAngles = new Vector3(0, bystanderEulerYAxis, 0); // tracker y-axis
-                    arrowImage.enabled = false;         
+                    arrowImage.enabled = false;
                 }
                 // [AVATAR] NO ZONE:  Bystander's degrees > 85
                 else
@@ -464,7 +467,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     inUncriticalZone = false;
                     inTransitionZone = false;
                     inCriticalZone = false;
-                    
+
                     // TODO: Is the avatar shown when the bystander is at an angle greater than 90 degrees towards the VR user?
                     // If No -> no Avatar
                     transform.position = bystanderTracker.transform.position;
@@ -488,7 +491,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         Debug.Log("Enter CZ");
                         BystanderShiftZone("Enter CZ");
                         inCriticalZone = true;
-                       // inTransitionZone = false;
+                        // inTransitionZone = false;
                     }
                     // presenceAnimojiBoard.transform.position = new Vector3(Camera.main.transform.position.x - 0.4f, presenceAnimojiBoard.transform.position.y - 0.2f, presenceAnimojiBoard.transform.position.z);
 
@@ -502,7 +505,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         //presenceAnimojiBoard.transform.position = guidePos.transform.position;
                         presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
                         timeElapsedForMixedTransition += Time.deltaTime;
-                      
+
 
                         if (timeElapsedForMixedTransition < guideTimeForAvatar)
                         {
@@ -514,7 +517,7 @@ public class BSBystanderAvatar : MonoBehaviour
                                 originalAnimojiPanelPos.transform.position,
                                 guidePosForMixed.transform.position,
                                 t);
-               
+
                             arrowImage.transform.position = Vector3.Lerp(
                                 originalArrowPos.transform.position,
                                 arrowPositionForMixed.transform.position,
@@ -549,7 +552,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         if (!askedQuestion) // Avatar with FE
                             bystanderAnim.SetBool("isInteracting", true);
                         else // Avatar without FE
-                            bystanderAnim.SetBool("isInteracting", false);    
+                            bystanderAnim.SetBool("isInteracting", false);
                     }
                 }
                 // [MIXED] TRANSITION ZONE: 60 >= [Bystander's degrees] > 30
@@ -579,7 +582,7 @@ public class BSBystanderAvatar : MonoBehaviour
                             noInteractionFrontImage.enabled = false;
                             inCriticalZone = false;
                         }
-                        if(inUncriticalZone) // From Uncritical Zone
+                        if (inUncriticalZone) // From Uncritical Zone
                         {
                             Debug.Log("From_UCZ_to_TZ");
                             BystanderShiftZone("From_UCZ_to_TZ");
@@ -624,13 +627,13 @@ public class BSBystanderAvatar : MonoBehaviour
                         presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
                         arrowImage.enabled = false;
 
-                        if(inNoZone && !inTransitionZone) // From No-Zone: Full-transparency to No-transparency
+                        if (inNoZone && !inTransitionZone) // From No-Zone: Full-transparency to No-transparency
                         {
                             timeElapsedForMixedTransition += Time.deltaTime;
 
-                            if(timeElapsedForMixedTransition < fadeTime) // fadeTime: 2f (default)
+                            if (timeElapsedForMixedTransition < fadeTime) // fadeTime: 2f (default)
                             {
-                               //  Debug.Log("TimeForMixed (fade in): " + timeElapsedForMixed);
+                                //  Debug.Log("TimeForMixed (fade in): " + timeElapsedForMixed);
                                 float t = timeElapsedForMixedTransition / fadeTime;
                                 t = t * t * (3f - 2f * t);
                                 backsideImage.enabled = true;
@@ -640,7 +643,7 @@ public class BSBystanderAvatar : MonoBehaviour
                             {
                                 backsideImage.color = noTransparency;
                                 inNoZone = false;
-                               // Debug.Log("Transparence is full and nozone is set as: " + inNoZone);
+                                // Debug.Log("Transparence is full and nozone is set as: " + inNoZone);
                             }
                         }
 
@@ -649,7 +652,7 @@ public class BSBystanderAvatar : MonoBehaviour
                             timeElapsedForMixedTransition += Time.deltaTime;
                             if (timeElapsedForMixedTransition < fadeTime)
                             {
-                               // Debug.Log("TimeForMixed (fade out): " + timeElapsedForMixed);
+                                // Debug.Log("TimeForMixed (fade out): " + timeElapsedForMixed);
                                 float t = timeElapsedForMixedTransition / fadeTime;
                                 t = t * t * (3f - 2f * t);
                                 backsideImage.enabled = true;
@@ -659,7 +662,7 @@ public class BSBystanderAvatar : MonoBehaviour
                             {
                                 backsideImage.color = lowTransparency;
                                 inTransitionZone = false;
-                               // Debug.Log("Transparence is 0 and shift zone is set as: " + inTransitionZone);
+                                // Debug.Log("Transparence is 0 and shift zone is set as: " + inTransitionZone);
                             }
                         }
                     }
@@ -673,8 +676,8 @@ public class BSBystanderAvatar : MonoBehaviour
                         transform.position = trackerTransform.position;
                         transform.localEulerAngles = new Vector3(0, bystanderEulerYAxis, 0);
 
-                       // noInteractionFrontImage.enabled = false;
-                       // yesInteractionFrontImage.enabled = false;
+                        // noInteractionFrontImage.enabled = false;
+                        // yesInteractionFrontImage.enabled = false;
                         backsideImage.enabled = false;
                         arrowImage.enabled = false;
                     }
@@ -686,8 +689,8 @@ public class BSBystanderAvatar : MonoBehaviour
                     if (!inNoZone)
                     {
                         inNoZone = true;
-                       // Debug.Log("in No Zone");
-                      //  BystanderShiftZone("NZ");
+                        // Debug.Log("in No Zone");
+                        //  BystanderShiftZone("NZ");
                     }
                     inUncriticalZone = false;
                     inTransitionZone = false;

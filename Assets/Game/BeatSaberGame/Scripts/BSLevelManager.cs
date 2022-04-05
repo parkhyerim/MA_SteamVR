@@ -5,25 +5,50 @@ using UnityEngine.SceneManagement;
 
 public class BSLevelManager : MonoBehaviour
 {
+    [SerializeField]
+    float sceneLoadDelay = 2f;
     int currentLevelIndex; // practice 0
 
-    public List<int> studyOrder;
+    [SerializeField]
+    private int[] studyOrder;
 
     private static BSLevelManager instance;
 
-    public int[] userStudyOrder = new int[6];
-    private string[] randomedOrder = new string[] { "AnimojiY", "AnimojiN", "AvatarY", "AvatarN", "MixedY", "MixedN" };
+    BeatSaberGameManager gameManager;
+    BSLogManager logManager;
+    UserStudyManager userstudyManager;
 
-    public BeatSaberGameManager gameManager;
-    public BSLogManager logManager;
+    private void Awake()
+    {
+        gameManager = FindObjectOfType<BeatSaberGameManager>();
+        logManager = FindObjectOfType<BSLogManager>();
+        userstudyManager = FindObjectOfType<UserStudyManager>();
 
+        studyOrder = userstudyManager.GetStudyOrder();
+    }
     private void Start()
     {
+        if (studyOrder == null || studyOrder.Length == 0 || studyOrder.Length < 3)
+        {
+            Debug.Log("study order array is empty");
+            int[] studyOrder = new int[3];
+            for (int i = 0; i < studyOrder.Length; i++)
+            {
+                studyOrder[i] = i + 1;
+                Debug.Log("study order set: " + studyOrder[i]);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < studyOrder.Length; i++)
+            {
+                Debug.Log("study order: " + studyOrder[i]);
+            }
+        }
+
         currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
         // currentLevelIndex = 0;
         string currentSceneName = SceneManager.GetActiveScene().name;
-        // Debug.Log(currentSceneName);
-        // gameManager.WriteToLogFile("Index: " + currentLevelIndex + currentSceneName);
         //  logManager.WriteToLogFile("Study Order: " + currentLevelIndex + " , name: " + currentSceneName);
     }
 
@@ -49,9 +74,25 @@ public class BSLevelManager : MonoBehaviour
     {
         SceneManager.LoadScene(indexScene);
     }
-
-    public void ExitGame()
+    public void LoadMainMenu()
     {
+        SceneManager.LoadScene("");
+    }
+    public void LoadGameOver()
+    {
+        // SceneManager.LoadScene("GameOverScene");
+        StartCoroutine(WaitAndLoad("GameOver", sceneLoadDelay));
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("Quitting Game...");
         Application.Quit();
+    }
+
+    IEnumerator WaitAndLoad(string sceneName, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(sceneName);
     }
 }

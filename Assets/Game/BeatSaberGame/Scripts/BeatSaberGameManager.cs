@@ -10,66 +10,56 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class BeatSaberGameManager : MonoBehaviour
 {
     [Header("AUDIO")]
-    public AudioSource audioSource;
-    public AudioSource bgAudioSource;
-    public AudioClip gameMusic;
-    public AudioSource lobbyMusic;
+    public AudioSource gameEffectAudioSource;
+    public AudioSource bgMusicAudioSource;
+    public AudioSource lobbyMusicAudioSource;
+    public AudioSource quesitionAudioSource;
     public AudioClip rightSlice;
-    public AudioClip missSound;
+    public AudioClip missCubeSound;
     public AudioClip sliceSound;
     public AudioClip cheerSound;
     public AudioClip[] questionAudios;
-    public AudioSource quesitionAudioSource;
 
-    [Header("EFFECT")]
-    public GameObject rightSliceEffectPrefab;
-    public GameObject wrongSliceEffectPrefab;
+    [Header("Particle EFFECT")]
     public GameObject cheerEffect;
     public GameObject blueEffect;
     public GameObject greenEffect;
     public GameObject yellowEffect;
 
     [Header("GAME UI")]
-    public GameObject lobbymenuUI;
+    public GameObject lobbyMenuUI;
     public GameObject practiceLobbyMenuUI;
     public GameObject notificationUI;
     public GameObject timeUI;
     public GameObject scoreUI;
     public GameObject instructionUI;
-    public GameObject surveryUI;
+    // public GameObject surveryUI;
 
     public TMP_Text gameScoreText;
     public TMP_Text gameTimeText;
-    // public GameObject interactionUI;
     public TMP_Text instructionText;
     public TMP_Text trialInstructionText;
 
     public TMP_Text notificationText;
-    // public Image notificationBGImage;
-    // public List<Image> notificationCheerImages;
-   // public Button TrialStartBtn;
 
+    [Header("GAME COMPONENTS")]
     public GameObject saberObject;
 
-    [Header("TIME MANAGEMENT")]
-    public float getReadyTime;
-   // private float bufferingTimeBeforeStartGame = 1f;
+    [Header("TIME INPUT")]
     public int totalGameTime;
-    public float gameTimerIgnoringPause;
-
-    float gameCountTimer;
-    int gameTimer;
-    private float timeFromSceneLoading, startTimeForSpawingCubes; // time to show Card images, time to turn backwards again
-    float beforeGameTimer = 0f;
+    public float getReadyTime;
     public float BystanderStartTime = 25f;
     public float bystanderInterval = 60f;
+    [Header("TIME INFO.")]
+    [SerializeField]
+    private float gameTimerIgnoringPause, gameCountTimer;
+    int gameTimerToZero;
+    private float timeFromSceneLoading, startTimeForSpawingCubes; // time to show Card images, time to turn backwards again
+    float beforeGameTimer = 0f;
     [SerializeField]
     private float BystanderStartTime2, BystanderStartTime3, BystanderStartTime4;
-
-    // public Button pauseBtn;
     [SerializeField]
-    private float pausedTime, identificationTime, eyeFocusTime ;
-    bool gamePaused;
+    private float pausedTime, identificationTime, eyeFocusTime;
 
     [Header("TRIAL TIME MNG)")]
     public float getReadyTimeForTrial;
@@ -77,19 +67,22 @@ public class BeatSaberGameManager : MonoBehaviour
     [Header("SCORE")]
     [SerializeField]
     private int score;
+
+    [Header("BOOLEADN")]
     private bool canStartGame;
-    private bool canPauseGame;
-    private bool canStartTrial;
+    [SerializeField]
+    private bool canPauseGame, canStartTrial, gamePaused;
 
     [Header("TRACKER")]
-    public BSRotateTracker bysTracker;
+    BSRotateTracker bysTracker;
     public XRInteractorLineVisual lineVisual;
     [Header("PARTICIPANT")]
-    public string participantID;
+    [SerializeField]
+    private string participantID;
 
     private int randomNumForEffect;
     private bool bystanderInteract;
-    public BSLogManager logManager;
+
     public bool isPracticeGame;
     public bool isEndScene;
     private bool recordScore;
@@ -98,16 +91,19 @@ public class BeatSaberGameManager : MonoBehaviour
     int currentSceneIndex;
     private bool askSpawnCubes;
 
+    private GameObject[] cubes;
+    private GameObject[] trialCubes;
     public CubeSpawner cubeSpawner;
-    public BSPauseController pauseController;
-    public GameObject[] cubes;
-    public GameObject[] trialCubes;
     public CubeSpawner trialCubeSpawner;
 
     private bool trialOncePaused;
     private bool trialOnceResumed;
     private string instructionMsg;
-    public BSBystanderAvatar bystanderAvatar;
+    BSBystanderAvatar bystanderAvatar;
+    BSLevelManager levelManager;
+    UserStudyManager userstudyManager;
+    BSLogManager logManager;
+    BSPauseController pauseController;
 
     [SerializeField]
     private Vector3 maincameraAxis;
@@ -126,13 +122,18 @@ public class BeatSaberGameManager : MonoBehaviour
     public bool CanStartTrial { get => canStartTrial; set => canStartTrial = value; }
 
     private void Awake()
-    {       
-        gameTimer = totalGameTime;
-        score = 0;
+    {
+        // Create references to other game objects and components
+        levelManager = FindObjectOfType<BSLevelManager>();
+        userstudyManager = FindObjectOfType<UserStudyManager>();
+        logManager = FindObjectOfType<BSLogManager>();
+        pauseController = FindObjectOfType<BSPauseController>();
+        bystanderAvatar = FindObjectOfType<BSBystanderAvatar>();
+        bysTracker = FindObjectOfType<BSRotateTracker>();
 
         // Game Notification
         notificationUI.gameObject.SetActive(false);
-        surveryUI.gameObject.SetActive(false);
+        // surveryUI.gameObject.SetActive(false);
         timeUI.gameObject.SetActive(false);
         scoreUI.gameObject.SetActive(false);
         if (!isPracticeGame)
@@ -142,69 +143,71 @@ public class BeatSaberGameManager : MonoBehaviour
         }
         else // Practice game
         {
-            lobbymenuUI.gameObject.SetActive(false);
-           // TrialStartBtn.enabled = false;
+            lobbyMenuUI.gameObject.SetActive(false);
+            // TrialStartBtn.enabled = false;
         }
-      //  instructionUI.gameObject.SetActive(false);
+        //  instructionUI.gameObject.SetActive(false);
 
-        // canMusicPlay = true;
-        //  interactionUI.SetActive(false);
-        // pauseBtn.gameObject.SetActive(false);
+        saberObject.SetActive(false);
+        participantID = userstudyManager.GetID();
+    }
+
+    private void Start()
+    {
+        gameTimerToZero = totalGameTime; // set time for the game e.g., 150
+        score = 0;
+
+        // Interruption Time of Bystander
+        BystanderStartTime2 = BystanderStartTime + bystanderInterval;
+        BystanderStartTime3 = BystanderStartTime2 + bystanderInterval;
+        BystanderStartTime4 = BystanderStartTime3 + bystanderInterval;
+
+        // X, Y Yxis of VR User
+        mainCameraYAxis = Camera.main.transform.eulerAngles.y;
+        mainCameraXAxis = Camera.main.transform.eulerAngles.x;
+        maincameraAxis = Camera.main.transform.eulerAngles;
+        maxXAxis = mainCameraXAxis;
+        minXAxis = mainCameraXAxis;
+        maxYAxis = mainCameraYAxis;
+        minYAxis = mainCameraYAxis;
 
         if (participantID == "" || participantID == null)
         {
             participantID = "ID not assigned";
         }
-    }
 
-    private void Start()
-    {
-        mainCameraYAxis = Camera.main.transform.eulerAngles.y;
-        mainCameraXAxis = Camera.main.transform.eulerAngles.x;
-        maincameraAxis = Camera.main.transform.eulerAngles;
-        maxXAxis = mainCameraXAxis;
-        maxYAxis = mainCameraYAxis;
-        minYAxis = mainCameraXAxis;
-        BystanderStartTime2 = BystanderStartTime + bystanderInterval;
-        BystanderStartTime3 = BystanderStartTime2 + bystanderInterval;
-        BystanderStartTime4 = BystanderStartTime3 + bystanderInterval;
-        saberObject.SetActive(false);
-
-        if (isPracticeGame)
-        {
-            instructionText.text = "";
-            StartCoroutine(Instructions());
-        }
+        Debug.Log("ID: " + participantID);
     }
 
     private void FixedUpdate()
     {
         if (CanStartGame)
         {
+            maincameraAxis = Camera.main.transform.localEulerAngles;
+
             if (!recordStartAxis)
             {
-                if (Camera.main.transform.localEulerAngles.y > 180 && Camera.main.transform.localEulerAngles.y <= 360)
+                if (maincameraAxis.y > 180 && maincameraAxis.y <= 360)
                 {
-                    mainCameraYAxis = 360f - Camera.main.transform.localEulerAngles.y;
+                    mainCameraYAxis = 360f - maincameraAxis.y;
                 }
-                if (Camera.main.transform.localEulerAngles.y >= 0 && Camera.main.transform.localEulerAngles.y < 180)
+                if (maincameraAxis.y >= 0 && maincameraAxis.y < 180)
                 {
-                    mainCameraYAxis = Camera.main.transform.localEulerAngles.y * -1f;
+                    mainCameraYAxis = maincameraAxis.y * -1f;
                 }
-                if (Camera.main.transform.localEulerAngles.x > 180 && Camera.main.transform.localEulerAngles.x <= 360)
+                if (maincameraAxis.x > 180 && maincameraAxis.x <= 360)
                 {
-                    mainCameraXAxis = 360f - Camera.main.transform.localEulerAngles.x;
+                    mainCameraXAxis = 360f - maincameraAxis.x;
                 }
-                if (Camera.main.transform.localEulerAngles.x >= 0 && Camera.main.transform.localEulerAngles.x < 180)
+                if (maincameraAxis.x >= 0 && maincameraAxis.x < 180)
                 {
-                    mainCameraXAxis = Camera.main.transform.localEulerAngles.x * -1f;
+                    mainCameraXAxis = maincameraAxis.x * -1f;
                 }
 
-                maincameraAxis = Camera.main.transform.localEulerAngles;
                 SetCameraAxisAtBeginning();
                 recordStartAxis = true;
             }
-            
+
             // Time Before Game Start
             if (Time.time >= timeFromSceneLoading && Time.time <= startTimeForSpawingCubes) // Showing Time
             {
@@ -215,13 +218,13 @@ public class BeatSaberGameManager : MonoBehaviour
             // GAME TIME
             else if (Time.time > startTimeForSpawingCubes && GameCountTimer <= totalGameTime) // During the Game
             {
-                if (Camera.main.transform.localEulerAngles.y > 180 && Camera.main.transform.localEulerAngles.y <= 360)
+                if (maincameraAxis.y > 180 && maincameraAxis.y <= 360)
                 {
-                    mainCameraYAxis = 360f - Camera.main.transform.localEulerAngles.y;
+                    mainCameraYAxis = 360f - maincameraAxis.y;
                 }
-                if (Camera.main.transform.localEulerAngles.y >= 0 && Camera.main.transform.localEulerAngles.y < 180)
+                if (maincameraAxis.y >= 0 && maincameraAxis.y < 180)
                 {
-                    mainCameraYAxis = Camera.main.transform.localEulerAngles.y * -1f;
+                    mainCameraYAxis = maincameraAxis.y * -1f;
                 }
 
                 if (minYAxis > mainCameraYAxis)
@@ -230,13 +233,13 @@ public class BeatSaberGameManager : MonoBehaviour
                     maxYAxis = mainCameraYAxis;
 
 
-                if (Camera.main.transform.localEulerAngles.x > 180 && Camera.main.transform.localEulerAngles.x <= 360)
+                if (maincameraAxis.x > 180 && maincameraAxis.x <= 360)
                 {
-                    mainCameraXAxis = 360f - Camera.main.transform.localEulerAngles.x;
+                    mainCameraXAxis = 360f - maincameraAxis.x;
                 }
-                if (Camera.main.transform.localEulerAngles.x >= 0 && Camera.main.transform.localEulerAngles.x < 180)
+                if (maincameraAxis.x >= 0 && maincameraAxis.x < 180)
                 {
-                    mainCameraXAxis = Camera.main.transform.localEulerAngles.x * -1f;
+                    mainCameraXAxis = maincameraAxis.x * -1f;
                 }
 
                 if (minXAxis > mainCameraXAxis)
@@ -248,16 +251,16 @@ public class BeatSaberGameManager : MonoBehaviour
 
                 if (!gamePaused)
                 {
-                    GameCountTimer += Time.fixedDeltaTime; 
-                   // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimer - GameCountTimer);
-                   
-                    if(askSpawnCubes == false)
+                    GameCountTimer += Time.fixedDeltaTime;
+                    // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
+                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+
+                    if (askSpawnCubes == false)
                     {
                         SpawnCubes();
                         askSpawnCubes = true;
                     }
-                    
+
                     if (Math.Round(GameCountTimer) == totalGameTime)
                     {
                         cubeSpawner.CanSpawn = false;
@@ -267,8 +270,8 @@ public class BeatSaberGameManager : MonoBehaviour
                 }
                 else
                 {
-                   // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimer - GameCountTimer);
+                    // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
+                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
                 }
             }
         }
@@ -292,7 +295,7 @@ public class BeatSaberGameManager : MonoBehaviour
                 if (!gamePaused)
                 {
                     GameCountTimer += Time.fixedDeltaTime;
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimer - GameCountTimer);
+                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
 
                     if (askSpawnCubes == false)
                     {
@@ -310,7 +313,7 @@ public class BeatSaberGameManager : MonoBehaviour
                 else
                 {
                     // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimer - GameCountTimer);
+                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
                 }
             }
         }
@@ -319,13 +322,13 @@ public class BeatSaberGameManager : MonoBehaviour
     public void StartTrial()
     {
         Debug.Log("Click Trial");
-      //  CanStartTrial = true;
-      //  timeFromSceneLoading = Time.time;
-      //  startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
+        //  CanStartTrial = true;
+        //  timeFromSceneLoading = Time.time;
+        //  startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
         practiceLobbyMenuUI.SetActive(false);
         notificationUI.SetActive(true);
         saberObject.SetActive(true);
-        StartCoroutine(InstructionsForCubeSlice());
+
         timeUI.SetActive(true);
     }
 
@@ -334,10 +337,10 @@ public class BeatSaberGameManager : MonoBehaviour
         CanStartGame = true;
         timeFromSceneLoading = Time.time;
         startTimeForSpawingCubes = timeFromSceneLoading + getReadyTime;
-        Destroy(lobbymenuUI);
+        Destroy(lobbyMenuUI);
 
-        lobbyMusic.Stop();
-        bgAudioSource.Play();
+        lobbyMusicAudioSource.Stop();
+        bgMusicAudioSource.Play();
 
         saberObject.SetActive(true);
 
@@ -349,7 +352,7 @@ public class BeatSaberGameManager : MonoBehaviour
         // currentLevelIndex = 0;
         string currentSceneName = SceneManager.GetActiveScene().name;
         logManager.WriteToLogFile("Study Order: " + currentSceneIndex + " , name: " + currentSceneName);
-       // mainCameraYAxis
+        // mainCameraYAxis
         logManager.WriteToLogFile("Head Rotation: ");
     }
 
@@ -371,7 +374,8 @@ public class BeatSaberGameManager : MonoBehaviour
         logManager.WriteToLogFile("Start Y-Axis: " + mainCameraYAxis + " X-Axis: " + mainCameraXAxis + " (" + maincameraAxis + ")");
     }
 
-    public void SpawnCubes() {
+    public void SpawnCubes()
+    {
         if (!isPracticeGame)
         {
             cubeSpawner.CanSpawn = true;
@@ -399,8 +403,8 @@ public class BeatSaberGameManager : MonoBehaviour
             trialCubeSpawner.CanSpawn = true;
 
             //   notificationBGImage.enabled = false;
-          //  notificationText.enabled = false;
-           // instructionText.text = "";
+            //  notificationText.enabled = false;
+            // instructionText.text = "";
 
             gameScoreText.text = "0";
             // Vector3 backAngles = new Vector3(0, 180, 0);
@@ -423,44 +427,45 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void BystanderEnd()
     {
-        BystanderInteract = false;   
+        BystanderInteract = false;
     }
- 
+
     public void CubeSliced(GameObject cube)
     {
-      //  Debug.Log(cube.name + " called the Method");
-        if(score % 8 == 0 && score > 0)
+        //  Debug.Log(cube.name + " called the Method");
+        if (score % 8 == 0 && score > 0)
         {
-            //audioSource.PlayOneShot(cheerSound);
-            //Instantiate(cheerEffect, cube.transform.position, Quaternion.identity);
+            //ToDo: Short Effect
+            gameEffectAudioSource.PlayOneShot(cheerSound);
+            Instantiate(cheerEffect, cube.transform.position, Quaternion.identity);
         }
         else
         {
-            audioSource.PlayOneShot(rightSlice);
+            gameEffectAudioSource.PlayOneShot(rightSlice);
         }
-      
+
         if (cube.name.Contains("Blue"))
         {
-            audioSource.PlayOneShot(sliceSound);
-          
+            gameEffectAudioSource.PlayOneShot(sliceSound);
+
             Instantiate(blueEffect, cube.transform.position, Quaternion.identity);
             score += 1;
             gameScoreText.text = score.ToString();
-        } 
+        }
         else if (cube.name.Contains("Green"))
         {
-            audioSource.PlayOneShot(sliceSound);
-            
+            gameEffectAudioSource.PlayOneShot(sliceSound);
+
             Instantiate(greenEffect, cube.transform.position, Quaternion.identity);
             score += 1;
             gameScoreText.text = score.ToString();
         }
-       else if (cube.name.Contains("YellowCube"))
+        else if (cube.name.Contains("YellowCube"))
         {
-            audioSource.PlayOneShot(sliceSound);
+            gameEffectAudioSource.PlayOneShot(sliceSound);
             Instantiate(yellowEffect, cube.transform.position, Quaternion.identity);
             score += 1;
-            gameScoreText.text = score.ToString();            
+            gameScoreText.text = score.ToString();
         }
     }
 
@@ -488,9 +493,9 @@ public class BeatSaberGameManager : MonoBehaviour
             else
             {
                 gamePaused = true;
-               // pausedTime = (float)Math.Round(GameCountTimer);
-               // identificationTime = (float)Math.Round(gameTimerIgnoringPause);
-               // logManager.WriteToLogFile("Identification (Paused) Time: " + identificationTime);
+                // pausedTime = (float)Math.Round(GameCountTimer);
+                // identificationTime = (float)Math.Round(gameTimerIgnoringPause);
+                // logManager.WriteToLogFile("Identification (Paused) Time: " + identificationTime);
                 trialCubeSpawner.CanSpawn = false;
                 trialCubeSpawner.StopMoving = true;
                 trialCubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -510,10 +515,10 @@ public class BeatSaberGameManager : MonoBehaviour
                 }
 
                 notificationText.text = instructionMsg;
-              //  StartCoroutine(InstructionForPause());
+                //  StartCoroutine(InstructionForPause());
                 // notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
                 //StartCoroutine(InstructionForPause());              
-            }        
+            }
         }
         else
         {
@@ -553,14 +558,12 @@ public class BeatSaberGameManager : MonoBehaviour
                     instructionMsg = "You resumed the game.";
                 }
 
-                instructionMsg = 
+                instructionMsg =
                 notificationText.text = instructionMsg;
                 notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
-                // notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
-                StartCoroutine(InstructionForPause());
-                
+                // notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;                
                 StartRayInteraction();
-            }        
+            }
         }
     }
 
@@ -577,7 +580,7 @@ public class BeatSaberGameManager : MonoBehaviour
             cubes = GameObject.FindGameObjectsWithTag("Cube");
             foreach (GameObject cube in cubes)
             {
-                Debug.Log(cube.name + " Destrpy");
+                // Debug.Log(cube.name + " Destrpy");
                 Destroy(cube);
             }
             saberObject.SetActive(false);
@@ -605,6 +608,9 @@ public class BeatSaberGameManager : MonoBehaviour
 
             Invoke(nameof(GoToNextLevel), 5f);
             // Invoke(nameof(DoSurvey), 1f);
+
+            //TODO:
+            // levelManager.LoadGameOver();
         }
         else
         {
@@ -619,37 +625,38 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void GoSurvey()
     {
-        surveryUI.SetActive(true);
+        // surveryUI.SetActive(true);
     }
     public void DoSurvey()
-    { 
-        surveryUI.SetActive(true);
+    {
+        // surveryUI.SetActive(true);
         lineVisual.enabled = true;
-        
+
         //lineVisual.gameObject.SetActive(true);
         notificationUI.SetActive(false);
-      //  notificationBGImage.enabled = false;
+        //  notificationBGImage.enabled = false;
         notificationText.enabled = false;
         // menuUICanvas.SetActive(false);
     }
 
-    public void GoToNextLevel() {
-        BSLevelManager levelManager = FindObjectOfType<BSLevelManager>();
+    public void GoToNextLevel()
+    {
+        //BSLevelManager levelManager = FindObjectOfType<BSLevelManager>();
         levelManager.LoadNextLevel();
     }
 
     public IEnumerator ShowRandomImage()
     {
         while (true)
-        {   
+        {
             yield return new WaitForSeconds(1);
-           // notificationCheerImages[randomNumForEffect].enabled = false;
+            // notificationCheerImages[randomNumForEffect].enabled = false;
         }
     }
 
     void StopRayInteractoin()
     {
-         lineVisual.enabled = false;
+        lineVisual.enabled = false;
     }
 
     void StartRayInteraction()
@@ -666,13 +673,13 @@ public class BeatSaberGameManager : MonoBehaviour
     {
         eyeFocusTime = (float)Math.Round(gameTimerIgnoringPause);
         if (focus)
-        { 
+        {
             logManager.WriteToLogFile("Receive FOCUS: " + eyeFocusTime);
         }
         else
         {
             logManager.WriteToLogFile("LOST FOCUS: " + eyeFocusTime);
-        }  
+        }
     }
 
     public string GetCurrentTime()
@@ -693,49 +700,8 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void MissCube()
     {
-       // Debug.Log("missed ball");
-        audioSource.PlayOneShot(missSound);
-    }
-
-    IEnumerator Instructions()
-    {
-        // Debug.Log(practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].name);
-        practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
-        instructionMsg = "Welcome to our user study!";
-        trialInstructionText.text = instructionMsg;
-        yield return new WaitForSeconds(7);
-        instructionMsg = "Please point and click the Start button below when you're ready.\n You can press the trigger button of the controller.";
-        trialInstructionText.text = instructionMsg;
-        practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
-       // TrialStartBtn.enabled = true;
-        yield return new WaitForSeconds(5);
-    }
-
-    IEnumerator InstructionsForCubeSlice()
-    {
-        instructionMsg = "You hold a lightsaber now! \n Slash the blocks by hitting the colored part with your saber! \n You don't have to click any button on the controller";
-        notificationText.text = instructionMsg;
-        notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
-        yield return new WaitForSeconds(9);
-        CanStartTrial = true;
-        timeFromSceneLoading = Time.time;
-        startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
-        notificationText.text = "";
-        yield return new WaitForSeconds(20);
-        notificationText.text = "Try to Pause the game.\n You can press the touchpad on the controller";
-        notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
-        yield return new WaitForSeconds(5);
-    }
-
-    IEnumerator InstructionForPause()
-    {
-        instructionMsg = "";
-        notificationText.text = instructionMsg;
-        notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
-        yield return new WaitForSeconds(10);
-        notificationText.text = "Try to Pause the game.\n You can press the touchpad on the controller";
-        notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
-        yield return new WaitForSeconds(3);
+        // Debug.Log("missed ball");
+        gameEffectAudioSource.PlayOneShot(missCubeSound);
     }
 
     public void AskQuestion()
@@ -748,15 +714,15 @@ public class BeatSaberGameManager : MonoBehaviour
 
         if (questionCounter < 4)
         {
-            if(questionCounter == 0)
+            if (questionCounter == 0)
             {
 
             }
             else
             {
-                int index = audioOrder[questionCounter-1] - 1;
+                int index = audioOrder[questionCounter - 1] - 1;
                 quesitionAudioSource.PlayOneShot(questionAudios[index]);
-                logManager.WriteToLogFile("Bystander ask the question " + audioOrder[questionCounter-1] + ": " + (float)Math.Round(gameTimerIgnoringPause));
+                logManager.WriteToLogFile("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause));
 
             }
             questionCounter++;

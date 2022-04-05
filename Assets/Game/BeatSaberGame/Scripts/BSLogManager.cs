@@ -4,17 +4,26 @@ using System.Globalization;
 
 public class BSLogManager : MonoBehaviour
 {
-    public BeatSaberGameManager bsGameManager;
+    BeatSaberGameManager bsGameManager;
+    UserStudyManager userstudyManager;
     private string participantID;
     private string currentDateTime;
     private string currentTime;
+
+    private void Awake()
+    {
+        userstudyManager = FindObjectOfType<UserStudyManager>();
+        bsGameManager = FindObjectOfType<BeatSaberGameManager>();
+    }
+
     void Start()
     {
-        if (bsGameManager.participantID != "" || bsGameManager.participantID != null)
-            participantID = bsGameManager.participantID;
-        else
-            participantID = "not assigned";
+        //if (bsGameManager.participantID != "" || bsGameManager.participantID != null)
+        //    participantID = bsGameManager.participantID;
+        //else
+        //    participantID = "not assigned";
 
+        participantID = userstudyManager.GetID();
         currentDateTime = GetCurrentDateTime();
         
         WriteToLogFile("=================================\n" +

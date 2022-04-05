@@ -9,10 +9,10 @@ EditorBuildSettings:
     path: Assets/Game/BeatSaberGame/Scenes/AnimojiSetting.unity
     guid: 4199db8d65c3d294f8a6ceb438dc169d
   - enabled: 1
-    path: Assets/Game/BeatSaberGame/Scenes/AvatarSetting.unity
+    path: Assets/Game/BeatSaberGame/Scenes/Test1/AvatarSetting.unity
     guid: 1c681b3318566fc4b8b6abc85708d7ed
   - enabled: 1
-    path: Assets/Game/BeatSaberGame/Scenes/MixedSetting.unity
+    path: Assets/Game/BeatSaberGame/Scenes/Test1/MixedSetting.unity
     guid: 9c5e14059796b8841937ff192b3d8e22
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d367a92b0d4cf114c826faa81e847686, type: 2}

@@ -11,9 +11,9 @@ public class BSPauseController : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip[] quesitionAudios;
     public AudioSource bgMusicAS;
-    public BeatSaberGameManager gameManager;
-    public BSBystanderAvatar bAvatar;
-    public BSLogManager logManager;
+    BeatSaberGameManager gameManager;
+    BSBystanderAvatar bAvatar;
+    BSLogManager logManager;
     [SerializeField]
     private bool[] audioPlayed;
     bool pauseClicked;
@@ -24,6 +24,10 @@ public class BSPauseController : MonoBehaviour
 
     private void Awake()
     {
+        gameManager = FindObjectOfType<BeatSaberGameManager>();
+        bAvatar = FindObjectOfType<BSBystanderAvatar>();
+        logManager = FindObjectOfType<BSLogManager>();
+
         pauseReference.action.started += PauseGame;
         audioPlayed = new bool[3] { false, false, false };
     }
