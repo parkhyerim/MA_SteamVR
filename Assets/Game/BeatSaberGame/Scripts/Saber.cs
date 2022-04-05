@@ -22,7 +22,7 @@ public class Saber : MonoBehaviour
             {
              //  Debug.Log(hit.transform.gameObject.name + ": Hit Destroy " + Vector3.Angle(transform.position - previousPos, hit.transform.up));
 
-                gameMananger.CubeSliced(hit.transform.gameObject);
+                gameMananger.SliceCube(hit.transform.gameObject);
 
                 //if (hit.transform.gameObject.name.Contains("Blue"))
                 //{
