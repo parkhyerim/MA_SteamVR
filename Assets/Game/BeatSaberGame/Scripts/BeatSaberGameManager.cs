@@ -346,7 +346,7 @@ public class BeatSaberGameManager : MonoBehaviour
 
         scoreUI.SetActive(true);
         timeUI.SetActive(true);
-        instructionUI.SetActive(true);
+      //  instructionUI.SetActive(true);
 
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         // currentLevelIndex = 0;
