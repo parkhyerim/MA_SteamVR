@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BSBystanderAvatar : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class BSBystanderAvatar : MonoBehaviour
     private Transform trackerTransform;
     BeatSaberGameManager bsgameManager;
     BSLogManager logManager;
-    private float bystanderEulerYAxis;  // bystander's euler y-axis -> tracker y
+    UserStudyManager userstudyManager;
+    private float bysTrackerEulerYAxis;  // bystander's euler y-axis -> tracker y
     public GameObject bystanderAvatar;
     public Animator bystanderAnim;
     [SerializeField]
@@ -64,13 +66,14 @@ public class BSBystanderAvatar : MonoBehaviour
 
     [SerializeField]
     private bool inCriticalZone, inTransitionZone, inUncriticalZone, inNoZone;
-    private bool fromCriticalSection;
     private bool lookedOnceSeatedPosition;
     private Color animojiBacksideColor;
     Color noTransparency, lowTransparency;
     public bool askedQuestion;
     private bool firstQuestioned, secondQuestioned, thirdQuestioned;
-
+    private int[] studyOrder = new int[3];
+    int currentLevelIndex; // practice 0
+    int order;
     public bool LookedOnceSeatedPosition { get => lookedOnceSeatedPosition; set => lookedOnceSeatedPosition = value; }
     public bool IsGuidingFOVToSeatedExceed { get => isGuidingFOVToSeatedExceed; set => isGuidingFOVToSeatedExceed = value; }
 
@@ -78,6 +81,7 @@ public class BSBystanderAvatar : MonoBehaviour
     {
         bsgameManager = FindObjectOfType<BeatSaberGameManager>();
         logManager = FindObjectOfType<BSLogManager>();
+        userstudyManager = FindObjectOfType<UserStudyManager>();
     }
     // Start is called before the first frame update
     void Start()
@@ -86,11 +90,39 @@ public class BSBystanderAvatar : MonoBehaviour
         sitToLeft = true;
         guidingPos = GetComponent<Transform>(); // For Avatar Setting (FOV -> Seated)
         bystanderAnim.SetBool("isInteracting", false);
+       // Debug.Log("studyorder in avatarscript[b]: " + studyOrder[0] + studyOrder[1] + studyOrder[2] + " length: " + studyOrder.Length);
+        studyOrder = userstudyManager.studyOrder;
+       // Debug.Log("studyorder in avatarscript[a]: " + studyOrder[0] + studyOrder[1] + studyOrder[2] + " length: " + studyOrder.Length);
+        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+       // Debug.Log(currentLevelIndex);
 
+        for(int i = 0; i < studyOrder.Length; i++)
+        {
+            int index = studyOrder[i];
+           // Debug.Log(i + " index: " + index);
+            if (i == currentLevelIndex)
+                order = index;
+        }
+
+      //  Debug.Log("order: " + order);
+
+        if(order == 1)
+        {
+            isAnimojiSetting = true;
+        }else if(order == 2)
+        {
+            isAvatarSetting = true;
+        }else if(order == 3)
+        {
+            isMixedSetting = true;
+        }
+
+        
         // Default setting: Avatar setting
         if (!(isAnimojiSetting || isMixedSetting || isAvatarSetting) && !bsgameManager.isPracticeGame)
             isAvatarSetting = true;
 
+       // Debug.Log("Animoji: " + isAnimojiSetting + " Avatar: " + isAvatarSetting + " Mixed: " + isMixedSetting);
         yesInteractionFrontImage.enabled = false;
         noInteractionFrontImage.enabled = false;
         backsideImage.enabled = false;
@@ -99,7 +131,7 @@ public class BSBystanderAvatar : MonoBehaviour
 
         trackerTransform = bystanderTracker.transform;
         transform.position = trackerTransform.position;
-        bystanderEulerYAxis = trackerTransform.eulerAngles.y;
+        bysTrackerEulerYAxis = trackerTransform.eulerAngles.y;
         // bystanderRotationOffset = bystanderEulerYAxis - 0f;
         mainCameraYAxis = Camera.main.transform.eulerAngles.y;
 
@@ -114,7 +146,7 @@ public class BSBystanderAvatar : MonoBehaviour
     void Update()
     {
         // transform.position = trackerTrans.position;
-        bystanderEulerYAxis = trackerTransform.eulerAngles.y;
+        bysTrackerEulerYAxis = trackerTransform.eulerAngles.y;
         mainCameraYAxis = Camera.main.transform.eulerAngles.y;
 
         // For animoji? Avatar? guiding
@@ -135,7 +167,7 @@ public class BSBystanderAvatar : MonoBehaviour
             if (isAnimojiSetting)
             {
                 //  [Animoji]  CRITICAL ZONE: 30 >= [Bystander's degrees] > 0 to the VR user
-                if (bystanderEulerYAxis >= 60 && bystanderEulerYAxis < 100)
+                if (bysTrackerEulerYAxis >= 60 && bysTrackerEulerYAxis < 100)
                 {
                     if (!inCriticalZone && inTransitionZone) // From Transition Zone (60-30 degrees)
                     {
@@ -163,7 +195,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     }
                 }
                 // [Animoji] TRANSITION ZONE: 60 >= [Bystander's degrees] > 30
-                else if (bystanderEulerYAxis >= 30 && bystanderEulerYAxis < 60)
+                else if (bysTrackerEulerYAxis >= 30 && bysTrackerEulerYAxis < 60)
                 {
                     inTransitionZone = true;
                     inNoZone = false;
@@ -191,7 +223,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     }
                 }
                 // [Animoji] UNCRITICAL ZONE: 85 >= Bystander's degrees > 60
-                else if (bystanderEulerYAxis < 30 && bystanderEulerYAxis >= 5)
+                else if (bysTrackerEulerYAxis < 30 && bysTrackerEulerYAxis >= 5)
                 {
                     inUncriticalZone = true;
 
@@ -264,7 +296,7 @@ public class BSBystanderAvatar : MonoBehaviour
             if (isAvatarSetting)
             {
                 // [AVATAR]  CRITICAL ZONE: 30-0 degrees to the VR user
-                if (bystanderEulerYAxis >= 60 && bystanderEulerYAxis < 100)
+                if (bysTrackerEulerYAxis >= 60 && bysTrackerEulerYAxis < 100)
                 {
                     if (!inCriticalZone && inTransitionZone) // From transition zone to critical zone
                     {
@@ -282,7 +314,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         // Debug.Log("VRUser looks at the seated position");
                         // Avatar in seated position without manupulating angles
                         transform.position = bystanderTracker.transform.position;
-                        bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderEulerYAxis, 0);
+                        bystanderAvatar.transform.eulerAngles = new Vector3(0, bysTrackerEulerYAxis, 0);
                         arrowImage.enabled = false;
                         lookedOnceSeatedPosition = true;
                     }
@@ -326,9 +358,9 @@ public class BSBystanderAvatar : MonoBehaviour
                                     // Avatar's rotation angle
                                     bystanderAvatar.transform.rotation = Quaternion.Lerp(
                                          // Quaternion.Euler(new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV - 10) / 90) - bystanderEulerYAxis), 0)),
-                                         Quaternion.Euler(new Vector3(0, bystanderEulerYAxis, 0)),
+                                         Quaternion.Euler(new Vector3(0, bysTrackerEulerYAxis, 0)),
                                          // Quaternion.Euler(new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV) / 90) - bystanderEulerYAxis), 0)),
-                                         Quaternion.Euler(new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (100 + angleinFOV) / 90) - bystanderEulerYAxis), 0)),
+                                         Quaternion.Euler(new Vector3(0, bysTrackerEulerYAxis + ((bysTrackerEulerYAxis * (100 + angleinFOV) / 90) - bysTrackerEulerYAxis), 0)),
                                             t);
                                 }
                                 else // more than guiding Time (2 sec)
@@ -361,8 +393,8 @@ public class BSBystanderAvatar : MonoBehaviour
                                                 t);
                                     // Angles
                                     bystanderAvatar.transform.rotation = Quaternion.Lerp(
-                                        Quaternion.Euler(new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (100 + angleinFOV) / 90) - bystanderEulerYAxis), 0)),
-                                        Quaternion.Euler(new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV - 10) / 90) - bystanderEulerYAxis), 0)),
+                                        Quaternion.Euler(new Vector3(0, bysTrackerEulerYAxis + ((bysTrackerEulerYAxis * (100 + angleinFOV) / 90) - bysTrackerEulerYAxis), 0)),
+                                        Quaternion.Euler(new Vector3(0, bysTrackerEulerYAxis + ((bysTrackerEulerYAxis * (90 + angleinFOV - 10) / 90) - bysTrackerEulerYAxis), 0)),
                                             t);
 
                                     arrowImage.transform.position = Vector3.Lerp(
@@ -386,7 +418,7 @@ public class BSBystanderAvatar : MonoBehaviour
                             // transform.position = bystanderTracker.transform.position;
                             //bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderEulerYAxis, 0);
                             transform.position = new Vector3(FOVPos.transform.position.x, bystanderTracker.transform.position.y, FOVPos.transform.position.z);
-                            bystanderAvatar.transform.eulerAngles = new Vector3(0, bystanderEulerYAxis + ((bystanderEulerYAxis * (90 + angleinFOV) / 90) - bystanderEulerYAxis), 0);
+                            bystanderAvatar.transform.eulerAngles = new Vector3(0, bysTrackerEulerYAxis + ((bysTrackerEulerYAxis * (90 + angleinFOV) / 90) - bysTrackerEulerYAxis), 0);
                         }
                     }
                 }
@@ -438,32 +470,41 @@ public class BSBystanderAvatar : MonoBehaviour
                 //    }
                 //}
                 // [AVATAR] UNCRITICAL ZONE: 85 >= Bystander's degrees > 60
-                else if (bystanderEulerYAxis < 60 && bystanderEulerYAxis >= 5)
+                else if (bysTrackerEulerYAxis < 60 && bysTrackerEulerYAxis >= 5)
                 {
-                    currentMovementTime = 0f;
-                    timeElapsedForSEATToFOV = 0f;
-                    timeElapsedForFOVToSEAT = 0f;
-                    Debug.Log("Enter Unciritcalzone");
-                    //Debug.Log(transform.position);
-                    //Debug.Log(bystanderAvatar.transform.position);
-                    //Debug.Log(trackerTransform.position);
                     // avatar in the bystander's seated position with No FE
-                    inUncriticalZone = true;
+                    if (!inUncriticalZone)
+                    {
+                        Debug.Log("Avatar: Enter UCZ");
+                        BystanderShiftZone("UCZ");
+                        inUncriticalZone = true;
+                    }
                     inNoZone = false;
                     inTransitionZone = false;
                     inCriticalZone = false;
 
+                    // Position
+                    transform.position = bystanderTracker.transform.position;
+                    transform.localEulerAngles = new Vector3(0, bysTrackerEulerYAxis, 0); // tracker y-axis
+                    // Visualisation ON
                     bystanderAvatar.SetActive(true);
                     bystanderAnim.SetBool("isInteracting", false);
-                    transform.position = bystanderTracker.transform.position;
-                    transform.localEulerAngles = new Vector3(0, bystanderEulerYAxis, 0); // tracker y-axis
+                    
                     arrowImage.enabled = false;
+
+                    currentMovementTime = 0f;
+                    timeElapsedForSEATToFOV = 0f;
+                    timeElapsedForFOVToSEAT = 0f;
                 }
                 // [AVATAR] NO ZONE:  Bystander's degrees > 85
                 else
                 {
-                    //Debug.Log("No Zone");
-                    inNoZone = true;
+                    if (!inNoZone)
+                    {
+                        Debug.Log("Avatar: Enter NZ");
+                        BystanderShiftZone("NZ");
+                        inNoZone = true;
+                    }
                     inUncriticalZone = false;
                     inTransitionZone = false;
                     inCriticalZone = false;
@@ -471,7 +512,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     // TODO: Is the avatar shown when the bystander is at an angle greater than 90 degrees towards the VR user?
                     // If No -> no Avatar
                     transform.position = bystanderTracker.transform.position;
-                    transform.localEulerAngles = new Vector3(0, bystanderEulerYAxis, 0); // tracker y-axis
+                    transform.localEulerAngles = new Vector3(0, bysTrackerEulerYAxis, 0); // tracker y-axis
                     bystanderAvatar.SetActive(false);
                     // If yes
                     //bystanderAnim.SetBool("isInteracting", false);
@@ -484,7 +525,7 @@ public class BSBystanderAvatar : MonoBehaviour
             if (isMixedSetting)
             {
                 // [MIXED] CRITICAL ZONE: 30 >= [Bystander's degrees] > 0 to the VR user
-                if (bystanderEulerYAxis >= 60 && bystanderEulerYAxis < 100) // 100 <- 90
+                if (bysTrackerEulerYAxis >= 60 && bysTrackerEulerYAxis < 100) // 100 <- 90
                 {
                     if (!inCriticalZone && inTransitionZone)
                     {
@@ -547,7 +588,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         arrowImage.enabled = false;
                         bystanderAvatar.SetActive(true);
                         transform.position = trackerTransform.position;
-                        transform.localEulerAngles = new Vector3(0, bystanderEulerYAxis, 0);
+                        transform.localEulerAngles = new Vector3(0, bysTrackerEulerYAxis, 0);
                         // TODO: AskedQuestion
                         if (!askedQuestion) // Avatar with FE
                             bystanderAnim.SetBool("isInteracting", true);
@@ -556,7 +597,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     }
                 }
                 // [MIXED] TRANSITION ZONE: 60 >= [Bystander's degrees] > 30
-                else if (bystanderEulerYAxis >= 30 && bystanderEulerYAxis < 60)
+                else if (bysTrackerEulerYAxis >= 30 && bysTrackerEulerYAxis < 60)
                 {
                     inTransitionZone = true;
                     inNoZone = false;
@@ -601,7 +642,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         bystanderAnim.SetBool("isInteracting", false);
 
                         transform.position = trackerTransform.position;
-                        transform.localEulerAngles = new Vector3(0, bystanderEulerYAxis, 0);
+                        transform.localEulerAngles = new Vector3(0, bysTrackerEulerYAxis, 0);
 
                         noInteractionFrontImage.enabled = false;
                         yesInteractionFrontImage.enabled = false;
@@ -610,7 +651,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     }
                 }
                 // [MIXED] UNCRITICAL ZONE: 85 >= Bystander's degrees > 60
-                else if (bystanderEulerYAxis < 30 && bystanderEulerYAxis >= 5)
+                else if (bysTrackerEulerYAxis < 30 && bysTrackerEulerYAxis >= 5)
                 {
                     inUncriticalZone = true;
                     inCriticalZone = false;
@@ -674,7 +715,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         bystanderAvatar.SetActive(true);
                         bystanderAnim.SetBool("isInteracting", false);
                         transform.position = trackerTransform.position;
-                        transform.localEulerAngles = new Vector3(0, bystanderEulerYAxis, 0);
+                        transform.localEulerAngles = new Vector3(0, bysTrackerEulerYAxis, 0);
 
                         // noInteractionFrontImage.enabled = false;
                         // yesInteractionFrontImage.enabled = false;

@@ -117,7 +117,7 @@ public class HeadMovement : MonoBehaviour
                 conv_curEulerY = curEulerY * (-1f);
             }
              
-            if (checkTimer >= 0.2f) // every 0.2 secs
+            if (checkTimer >= period) // every 0.2 secs
             {
                 num += 1;
                 if (num > 0)

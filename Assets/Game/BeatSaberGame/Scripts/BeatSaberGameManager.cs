@@ -422,8 +422,8 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void SetTimeStampForAvatarInCriticalZoneWithMessage(string state)
     {
-        Debug.Log("Bystander Interaction: " + state + " " + (float)Math.Round(gameTimerIgnoringPause));
-        logManager.WriteToLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause));
+        Debug.Log("Bystander Interaction: " + state + " " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
+        logManager.WriteToLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
     }
 
     private void SetCameraAxisAtBeginning()
