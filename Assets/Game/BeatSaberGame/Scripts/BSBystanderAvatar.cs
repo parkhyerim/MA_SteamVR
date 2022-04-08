@@ -164,6 +164,9 @@ public class BSBystanderAvatar : MonoBehaviour
         // The bystander is sitting to the left of the VR Player.
         if (sitToLeft)
         {
+   /**********************************************************************************************
+   ***************************** ANIMOJI SETTING *************************************************                                                              
+   *********************************************************************************************/
             if (isAnimojiSetting)
             {
                 //  [Animoji]  CRITICAL ZONE: 30 >= [Bystander's degrees] > 0 to the VR user
@@ -290,9 +293,9 @@ public class BSBystanderAvatar : MonoBehaviour
                     timeElapsedForAnimoji = 0f;
                 }
             }
-            /*****************************
-             *** AVATAR SETTING
-             ****************************/
+   /**********************************************************************************************
+    ***************************** AVATAR SETTING *************************************************                                                              
+    *********************************************************************************************/
             if (isAvatarSetting)
             {
                 // [AVATAR]  CRITICAL ZONE: 30-0 degrees to the VR user
@@ -508,7 +511,6 @@ public class BSBystanderAvatar : MonoBehaviour
                     // Visualisation ON (No FE)
                     bystanderAvatar.SetActive(true);
                     bystanderAnim.SetBool("isInteracting", false);
-                    Debug.Log(transform.position);
                     arrowImage.enabled = false;
 
                     currentMovementTime = 0f;
@@ -538,9 +540,9 @@ public class BSBystanderAvatar : MonoBehaviour
                     //bystanderAvatar.SetActive(true);
                 }
             }
-            /*****************************
-             *** MIXED SETTING
-             ****************************/
+    /**********************************************************************************************
+    ***************************** MIXED SETTING *************************************************                                                              
+    *********************************************************************************************/
             if (isMixedSetting)
             {
                 // [MIXED] CRITICAL ZONE: 30 >= [Bystander's degrees] > 0 to the VR user
