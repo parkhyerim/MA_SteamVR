@@ -30,19 +30,19 @@ public class BSLevelManager : MonoBehaviour
     {
         if (studyOrder == null || studyOrder.Length == 0 || studyOrder.Length < 3)
         {
-            Debug.Log("study order array is empty");
+           // Debug.Log("study order array is empty");
             int[] studyOrder = new int[3];
             for (int i = 0; i < studyOrder.Length; i++)
             {
                 studyOrder[i] = i + 1;
-                Debug.Log("study order set: " + studyOrder[i]);
+               // Debug.Log("study order set: " + studyOrder[i]);
             }
         }
         else
         {
             for (int i = 0; i < studyOrder.Length; i++)
             {
-                Debug.Log("study order: " + studyOrder[i]);
+                //Debug.Log("study order: " + studyOrder[i]);
             }
         }
 

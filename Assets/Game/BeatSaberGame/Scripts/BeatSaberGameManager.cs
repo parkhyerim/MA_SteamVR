@@ -104,6 +104,17 @@ public class BeatSaberGameManager : MonoBehaviour
     UserStudyManager userstudyManager;
     BSLogManager logManager;
     BSPauseController pauseController;
+    HeadMovement headMovement;
+
+    float testTime;
+    int checkCounter;
+    [SerializeField]
+    private float currentYAxis, diffYAxis, previousYAxis;
+    private int num;
+    private float checkPointTime = 0.0f;
+    public float period = 0.2f;
+    [SerializeField]
+    private Vector3 cameraAxis;
 
     [SerializeField]
     private Vector3 maincameraAxis, maxYVectorAxis, minYVecotorAxis, maxXVectorAxis, minXVectorAxis;
@@ -130,6 +141,7 @@ public class BeatSaberGameManager : MonoBehaviour
         pauseController = FindObjectOfType<BSPauseController>();
         bystanderAvatar = FindObjectOfType<BSBystanderAvatar>();
         bysTracker = FindObjectOfType<BSRotateTracker>();
+        headMovement = FindObjectOfType<HeadMovement>();
 
         // Game Notification
         notificationUI.gameObject.SetActive(false);
@@ -163,9 +175,10 @@ public class BeatSaberGameManager : MonoBehaviour
         BystanderStartTime4 = BystanderStartTime3 + bystanderInterval;
 
         // X, Y Yxis of VR User
+        maincameraAxis = Camera.main.transform.eulerAngles;
         mainCameraYAxis = Camera.main.transform.eulerAngles.y;
         mainCameraXAxis = Camera.main.transform.eulerAngles.x;
-        maincameraAxis = Camera.main.transform.eulerAngles;
+       
         maxXAxis = mainCameraXAxis;
         minXAxis = mainCameraXAxis;
         maxYAxis = mainCameraYAxis;
@@ -176,13 +189,37 @@ public class BeatSaberGameManager : MonoBehaviour
             participantID = "ID not assigned";
         }
 
-        Debug.Log("ID: " + participantID);
+        // Debug.Log("ID: " + participantID);
+
+        //cameraAxis = Camera.main.transform.eulerAngles;
+        //previousYAxis = cameraAxis.y;
+        //currentYAxis = cameraAxis.y;
+
+        //Debug.Log("cameraAxis: " + cameraAxis);
+        //Debug.Log("prev: " + previousYAxis);
+        //Debug.Log("curr: " + currentYAxis);
     }
 
     private void FixedUpdate()
     {
+        //checkPointTime += Time.deltaTime;
+        //cameraAxis = Camera.main.transform.eulerAngles;
+
+        //if (checkPointTime >= period)
+        //{
+        //    currentYAxis = cameraAxis.y;
+        //    diffYAxis = previousYAxis - currentYAxis;
+        //    num += 1;
+        //    //  Debug.Log("Time passed" + " " + Time.time + " checkPointTime: " + checkPointTime);
+        //    //  Debug.Log("checked Point Time: " + checkPointTime);
+        //    Debug.Log("Time:" + Time.time + " period: " + checkPointTime + " prev:" + previousYAxis + " cur: " + currentYAxis + " diffYAxis: " + diffYAxis + " num: " + num);
+
+        //    checkPointTime = 0f;
+        //}
+
         if (CanStartGame)
         {
+      
             maincameraAxis = Camera.main.transform.localEulerAngles;
 
             // Head Movement
@@ -352,9 +389,11 @@ public class BeatSaberGameManager : MonoBehaviour
     public void StartGame()
     {
         CanStartGame = true;
-        timeFromSceneLoading = Time.time;
+        timeFromSceneLoading = Time.time; // Time.time returns the amount of time in seconds since the project started playing
         startTimeForSpawingCubes = timeFromSceneLoading + getReadyTime;
         Destroy(lobbyMenuUI);
+        headMovement.CanMeasure = true;
+        headMovement.InGame = true;
 
         // Music 
         lobbyMusicAudioSource.Stop();
@@ -590,6 +629,10 @@ public class BeatSaberGameManager : MonoBehaviour
             notificationText.enabled = true;
             bystanderInteract = false;
             CanPauseGame = false;
+            headMovement.CanMeasure = false;
+            headMovement.InGame = false;
+            float avgValue = headMovement.GetResultHeadMovement();
+            logManager.WriteToLogFile("Head Movement Avg. (every 0.20s): " + avgValue);
 
             cubeSpawner.CanSpawn = false;
             cubes = GameObject.FindGameObjectsWithTag("Cube");
