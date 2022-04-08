@@ -132,11 +132,9 @@ public class HeadMovement : MonoBehaviour
                     avgEulerY = sumEulerY / num;
                     conv_avgEulerY = conv_sumEulerY / num;
 
-                    //  Debug.Log("Time passed" + " " + Time.time + " checkPointTime: " + checkPointTime);
-                    //  Debug.Log("checked Point Time: " + checkPointTime);
-                    Debug.Log("Time:" + Time.time + " period: " + checkTimer +
-                        " prev:" + conv_prevEulerY + " cur: " + conv_curEulerY + " diffYAxis: " + conv_diffEulerY +
-                        " num: " + num + " sum: " + conv_sumEulerY + " avg: " + conv_avgEulerY);
+                    //Debug.Log("Time:" + Time.time + " period: " + checkTimer +
+                    //    " prev:" + conv_prevEulerY + " cur: " + conv_curEulerY + " diffYAxis: " + conv_diffEulerY +
+                    //    " num: " + num + " sum: " + conv_sumEulerY + " avg: " + conv_avgEulerY);
                     // previousYAxis = currentYAxis;
               
                 }
