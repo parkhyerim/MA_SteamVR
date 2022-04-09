@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class BeatSaberGameManager : MonoBehaviour
+public class BSTrialManager : MonoBehaviour
 {
     [Header("AUDIO")]
     public AudioSource gameEffectAudioSource;
@@ -61,9 +61,6 @@ public class BeatSaberGameManager : MonoBehaviour
     private float BystanderStartTime2, BystanderStartTime3, BystanderStartTime4;
     [SerializeField]
     private float pausedTime, identificationTime, eyeFocusTime;
-
-    [Header("TRIAL TIME MNG)")]
-    public float getReadyTimeForTrial;
 
     [Header("SCORE")]
     [SerializeField]
@@ -180,7 +177,7 @@ public class BeatSaberGameManager : MonoBehaviour
         maincameraAxis = Camera.main.transform.eulerAngles;
         mainCameraYAxis = Camera.main.transform.eulerAngles.y;
         mainCameraXAxis = Camera.main.transform.eulerAngles.x;
-       
+
         maxXAxis = mainCameraXAxis;
         minXAxis = mainCameraXAxis;
         maxYAxis = mainCameraYAxis;
@@ -196,36 +193,12 @@ public class BeatSaberGameManager : MonoBehaviour
     {
         if (CanStartGame)
         {
-      
             maincameraAxis = Camera.main.transform.localEulerAngles;
-
-            // Head Movement
-            if (!recordStartAxis)
-            {
-                if (maincameraAxis.y > 180 && maincameraAxis.y <= 360)
-                {
-                    mainCameraYAxis = 360f - maincameraAxis.y;
-                }
-                if (maincameraAxis.y >= 0 && maincameraAxis.y < 180)
-                {
-                    mainCameraYAxis = maincameraAxis.y * -1f;
-                }
-                if (maincameraAxis.x > 180 && maincameraAxis.x <= 360)
-                {
-                    mainCameraXAxis = 360f - maincameraAxis.x;
-                }
-                if (maincameraAxis.x >= 0 && maincameraAxis.x < 180)
-                {
-                    mainCameraXAxis = maincameraAxis.x * -1f;
-                }
-
-                LogCameraAxisAtStart();
-                recordStartAxis = true;
-            }
 
             // Time Before Game Start
             if (Time.time >= timeFromSceneLoading && Time.time <= startTimeForSpawingCubes) // Showing Time
             {
+                Debug.Log("Practice is called " + startTimeForSpawingCubes);
                 beforeGameTimer += Time.fixedDeltaTime;
                 // gameTimeText.text = Math.Round(getReadyTime - beforeGameTimer).ToString();
                 gameTimeText.text = ConvertToMinAndSeconds(getReadyTime - beforeGameTimer);
@@ -233,51 +206,6 @@ public class BeatSaberGameManager : MonoBehaviour
             // GAME TIME
             else if (Time.time > startTimeForSpawingCubes && GameCountTimer <= totalGameTime) // During the Game
             {
-                if (maincameraAxis.y > 180 && maincameraAxis.y <= 360)
-                {
-                    mainCameraYAxis = 360f - maincameraAxis.y;
-                }
-                if (maincameraAxis.y >= 0 && maincameraAxis.y < 180)
-                {
-                    mainCameraYAxis = maincameraAxis.y * -1f;
-                }
-
-                // Set Max. & Min. Value
-                if (minYAxis > mainCameraYAxis)
-                {
-                    minYAxis = mainCameraYAxis;
-                    minYVecotorAxis = maincameraAxis;
-                }
-                   
-                if (maxYAxis < mainCameraYAxis)
-                {
-                    maxYAxis = mainCameraYAxis;
-                    maxYVectorAxis = maincameraAxis;
-                }
-                   
-
-
-                if (maincameraAxis.x > 180 && maincameraAxis.x <= 360)
-                {
-                    mainCameraXAxis = 360f - maincameraAxis.x;
-                }
-                if (maincameraAxis.x >= 0 && maincameraAxis.x < 180)
-                {
-                    mainCameraXAxis = maincameraAxis.x * -1f;
-                }
-
-                if (minXAxis > mainCameraXAxis)
-                {
-                    minXAxis = mainCameraXAxis;
-                    minXVectorAxis = maincameraAxis;               
-                }
-                   
-                if (maxXAxis < mainCameraXAxis)
-                {
-                    maxXAxis = mainCameraXAxis;
-                    maxXVectorAxis = maincameraAxis;
-                }
-
                 gameTimerIgnoringPause += Time.fixedDeltaTime;
 
                 if (!gamePaused)
@@ -287,48 +215,6 @@ public class BeatSaberGameManager : MonoBehaviour
                     gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
 
                     if (!askSpawnCubes)
-                    {
-                        SpawnCubes();
-                        askSpawnCubes = true;
-                    }
-
-                    if (Math.Round(GameCountTimer) == totalGameTime)
-                    {
-                        cubeSpawner.CanSpawn = false;
-                        StopRayInteractoin();
-                        EndGame();
-                    }
-                }
-                else
-                {
-                    // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
-                }
-            }
-        }
-
-        if (isPracticeGame && canStartTrial)
-        {
-            // Time Before Game Start
-            if (Time.time >= timeFromSceneLoading && Time.time <= startTimeForSpawingCubes) // Showing Time
-            {
-                Debug.Log("Practice is called " + startTimeForSpawingCubes);
-                beforeGameTimer += Time.fixedDeltaTime;
-                // gameTimeText.text = Math.Round(getReadyTime - beforeGameTimer).ToString();
-                gameTimeText.text = ConvertToMinAndSeconds(getReadyTimeForTrial - beforeGameTimer);
-            }
-            // GAME TIME
-            else if (Time.time > startTimeForSpawingCubes && GameCountTimer <= totalGameTime) // During the Game
-            {
-                Debug.Log("Practice is called 2");
-                gameTimerIgnoringPause += Time.fixedDeltaTime;
-
-                if (!gamePaused)
-                {
-                    GameCountTimer += Time.fixedDeltaTime;
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
-
-                    if (askSpawnCubes == false)
                     {
                         SpawnCubes();
                         askSpawnCubes = true;
@@ -350,19 +236,6 @@ public class BeatSaberGameManager : MonoBehaviour
         }
     }
 
-    public void StartTrial()
-    {
-        Debug.Log("Click Trial");
-        //  CanStartTrial = true;
-        //  timeFromSceneLoading = Time.time;
-        //  startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
-        practiceLobbyMenuUI.SetActive(false);
-        notificationUI.SetActive(true);
-        saberObject.SetActive(true);
-
-        timeUI.SetActive(true);
-    }
-
     public void StartGame()
     {
         CanStartGame = true;
@@ -378,24 +251,23 @@ public class BeatSaberGameManager : MonoBehaviour
 
         // UI GameObject 
         saberObject.SetActive(true);
-        scoreUI.SetActive(true);
+        practiceLobbyMenuUI.SetActive(false);
+        notificationUI.SetActive(true);
+        //scoreUI.SetActive(true);
         timeUI.SetActive(true);
-        Destroy(lobbyMenuUI);
+        //Destroy(lobbyMenuUI);
 
         // Scene Management
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         string currentSceneName = SceneManager.GetActiveScene().name;
 
         // Logging Game-Start
-        logManager.WriteLogFile("Game Start: ");
-        logManager.WriteLogForHeadMovement("Game Start: ");
-        logManager.WriteLogForVRUserHead("Game Start: ");
-        logManager.WriteLogFile("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
-        logManager.WriteLogForHeadMovement("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
-        logManager.WriteLogForVRUserHead("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
-       
-        // mainCameraYAxis
-        // logManager.WriteToLogFile("Head Movement (Rotation): X: ");
+        //logManager.WriteLogFile("Game Start: ");
+        //logManager.WriteLogForHeadMovement("Game Start: ");
+        //logManager.WriteLogForVRUserHead("Game Start: ");
+        //logManager.WriteLogFile("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
+        //logManager.WriteLogForHeadMovement("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
+        //logManager.WriteLogForVRUserHead("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
     }
 
     public void SetTimeStampForAvatarInCriticalZone()
@@ -411,12 +283,12 @@ public class BeatSaberGameManager : MonoBehaviour
         logManager.WriteLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
     }
 
-    private void LogCameraAxisAtStart()
-    {
-        logManager.WriteLogFile("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxis);
-        logManager.WriteLogForVRUserHead("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxis);
-        // TODO: Head Movement Start Value
-    }
+    //private void LogCameraAxisAtStart()
+    //{
+    //    logManager.WriteLogFile("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxis);
+    //    logManager.WriteLogForVRUserHead("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxis);
+    //    // TODO: Head Movement Start Value
+    //}
 
     public void SpawnCubes()
     {
