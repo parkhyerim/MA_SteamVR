@@ -21,38 +21,52 @@ public class BSLogManager : MonoBehaviour
         participantID = userstudyManager.GetID();
         currentDateAndTime = GetCurrentDateAndTime();
         
-        WriteToLogFile("=====================================================" +
+        WriteLogFile("==============GAME LOG=======================================" +
             "\nLOG STRAT: " + currentDateAndTime +
             "\nID: " + participantID);
 
-        WriteToLogFileForHeadMovement("=====================================================" +
+        WriteLogForHeadMovement("===============HEAD MOVEMENT PER 0.2 SEC======================================" +
+          "\nLOG STRAT: " + currentDateAndTime +
+          "\nID: " + participantID);
+
+        WriteLogForVRUserHead("===============HEAD MAX. & MIN. VALUES======================================" +
           "\nLOG STRAT: " + currentDateAndTime +
           "\nID: " + participantID);
     }
 
-    public void WriteToLogFile(string message)
+    public void WriteLogFile(string message)
     {
         using (System.IO.StreamWriter logFile =
             new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + ".txt", append: true))
         {
-            // currentDateAndTime = GetCurrentDateAndTime();
             currentTime = GetCurrentTime();
             logFile.Write("[" + currentTime + "] ");
             logFile.WriteLine(message);
         }
     }
 
-    public void WriteToLogFileForHeadMovement(string message)
+    public void WriteLogForHeadMovement(string message)
     {
         using (System.IO.StreamWriter logFile =
            new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_HeadMovement.txt", append: true))
         {
-            // currentDateAndTime = GetCurrentDateAndTime();
             currentTime = GetCurrentTime();
             logFile.Write("[" + currentTime + "] ");
             logFile.WriteLine(message);
         }
     }
+
+    public void WriteLogForVRUserHead(string message)
+    {
+        using (System.IO.StreamWriter logFile =
+                   new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_Head.txt", append: true))
+        {
+            currentTime = GetCurrentTime();
+            logFile.Write("[" + currentTime + "] ");
+            logFile.WriteLine(message);
+        }
+    }
+
     private string GetCurrentDateAndTime()
     {
         DateTime localDate = DateTime.Now;

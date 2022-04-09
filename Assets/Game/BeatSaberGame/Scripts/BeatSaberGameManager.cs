@@ -188,35 +188,10 @@ public class BeatSaberGameManager : MonoBehaviour
         {
             participantID = "ID not assigned";
         }
-
-        // Debug.Log("ID: " + participantID);
-
-        //cameraAxis = Camera.main.transform.eulerAngles;
-        //previousYAxis = cameraAxis.y;
-        //currentYAxis = cameraAxis.y;
-
-        //Debug.Log("cameraAxis: " + cameraAxis);
-        //Debug.Log("prev: " + previousYAxis);
-        //Debug.Log("curr: " + currentYAxis);
     }
 
     private void FixedUpdate()
     {
-        //checkPointTime += Time.deltaTime;
-        //cameraAxis = Camera.main.transform.eulerAngles;
-
-        //if (checkPointTime >= period)
-        //{
-        //    currentYAxis = cameraAxis.y;
-        //    diffYAxis = previousYAxis - currentYAxis;
-        //    num += 1;
-        //    //  Debug.Log("Time passed" + " " + Time.time + " checkPointTime: " + checkPointTime);
-        //    //  Debug.Log("checked Point Time: " + checkPointTime);
-        //    Debug.Log("Time:" + Time.time + " period: " + checkPointTime + " prev:" + previousYAxis + " cur: " + currentYAxis + " diffYAxis: " + diffYAxis + " num: " + num);
-
-        //    checkPointTime = 0f;
-        //}
-
         if (CanStartGame)
         {
       
@@ -242,7 +217,7 @@ public class BeatSaberGameManager : MonoBehaviour
                     mainCameraXAxis = maincameraAxis.x * -1f;
                 }
 
-                SetCameraAxisAtBeginning();
+                LogCameraAxisAtStart();
                 recordStartAxis = true;
             }
 
@@ -391,7 +366,7 @@ public class BeatSaberGameManager : MonoBehaviour
         CanStartGame = true;
         timeFromSceneLoading = Time.time; // Time.time returns the amount of time in seconds since the project started playing
         startTimeForSpawingCubes = timeFromSceneLoading + getReadyTime;
-        Destroy(lobbyMenuUI);
+
         headMovement.CanMeasure = true;
         headMovement.InGame = true;
 
@@ -399,36 +374,46 @@ public class BeatSaberGameManager : MonoBehaviour
         lobbyMusicAudioSource.Stop();
         bgMusicAudioSource.Play();
 
-        // GameObject 
+        // UI GameObject 
         saberObject.SetActive(true);
         scoreUI.SetActive(true);
         timeUI.SetActive(true);
+        Destroy(lobbyMenuUI);
 
         // Scene Management
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         string currentSceneName = SceneManager.GetActiveScene().name;
-        logManager.WriteToLogFile("Condition : " + currentSceneName + " , Order: " + (currentSceneIndex + 1));
+
+        // Logging Game-Start
+        logManager.WriteLogFile("Game Start: ");
+        logManager.WriteLogForHeadMovement("Game Start: ");
+        logManager.WriteLogForVRUserHead("Game Start: ");
+        logManager.WriteLogFile("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
+        logManager.WriteLogForHeadMovement("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
+        logManager.WriteLogForVRUserHead("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
        
         // mainCameraYAxis
-       // logManager.WriteToLogFile("Head Movement (Rotation): X: ");
+        // logManager.WriteToLogFile("Head Movement (Rotation): X: ");
     }
 
     public void SetTimeStampForAvatarInCriticalZone()
     {
         // string curDateTime = GetCurrentTime();
         Debug.Log("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
-        logManager.WriteToLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
     }
 
     public void SetTimeStampForAvatarInCriticalZoneWithMessage(string state)
     {
         Debug.Log("Bystander Interaction: " + state + " " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
-        logManager.WriteToLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
+        logManager.WriteLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
     }
 
-    private void SetCameraAxisAtBeginning()
+    private void LogCameraAxisAtStart()
     {
-        logManager.WriteToLogFile("Head Movement: [START] " + "Y-Axis: " + mainCameraYAxis + " X-Axis: " + mainCameraXAxis + " Vector:" + maincameraAxis);
+        logManager.WriteLogFile("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxis);
+        logManager.WriteLogForVRUserHead("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxis);
+        // TODO: Head Movement Start Value
     }
 
     public void SpawnCubes()
@@ -441,13 +426,13 @@ public class BeatSaberGameManager : MonoBehaviour
             notificationText.enabled = false;
             gameScoreText.text = "0";
 
-            Invoke(nameof(BystanderStart), time: BystanderStartTime);
+            Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime);
 
             if (!oneInteruption)
             {
-                Invoke(nameof(BystanderStart), time: BystanderStartTime2);
-                Invoke(nameof(BystanderStart), time: BystanderStartTime3);
-                Invoke(nameof(BystanderStart), time: BystanderStartTime4);
+                Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime2);
+                Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime3);
+                Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime4);
             }
             // interactionUI.SetActive(true);
         }
@@ -466,14 +451,14 @@ public class BeatSaberGameManager : MonoBehaviour
         }
     }
 
-    public void BystanderStart()
+    public void BystanderStartTurningToVRPlayer()
     {
-        // gameTimeText.text = "";
         bysTracker.IsHeadingToPlayer = true;
         BystanderInteract = true;
         pauseController.OncePausedInSession = false;
         // logManager
-        logManager.WriteToLogFile("Bystander starts to rotate towards VR user: " +(float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogFile("Bystander starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause));
+
         bystanderCanHearAnswer = true;
         bystanderAvatar.LookedOnceSeatedPosition = false;
         bystanderAvatar.IsGuidingFOVToSeatedExceed = false;
@@ -532,7 +517,7 @@ public class BeatSaberGameManager : MonoBehaviour
                 gamePaused = true;
                 pausedTime = (float)Math.Round(GameCountTimer);
                 identificationTime = (float)Math.Round(gameTimerIgnoringPause);
-                logManager.WriteToLogFile("Identification (Paused) Time: " + identificationTime);
+                logManager.WriteLogFile("Identification (Paused) Time: " + identificationTime);
                 cubeSpawner.CanSpawn = false;
                 cubeSpawner.StopMoving = true;
                 cubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -579,7 +564,7 @@ public class BeatSaberGameManager : MonoBehaviour
             if (!isPracticeGame)
             {
                 gamePaused = false;
-                logManager.WriteToLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+                logManager.WriteLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
                 cubeSpawner.CanSpawn = true;
                 cubeSpawner.StopMoving = false;
                 cubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -593,7 +578,7 @@ public class BeatSaberGameManager : MonoBehaviour
             else
             {
                 gamePaused = false;
-                logManager.WriteToLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+                logManager.WriteLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
                 trialCubeSpawner.CanSpawn = true;
                 trialCubeSpawner.StopMoving = false;
                 trialCubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -632,7 +617,7 @@ public class BeatSaberGameManager : MonoBehaviour
             headMovement.CanMeasure = false;
             headMovement.InGame = false;
             float avgValue = headMovement.GetResultHeadMovement();
-            logManager.WriteToLogFile("Head Movement Avg. (every 0.20s): " + avgValue);
+            logManager.WriteLogFile("Head Movement Avg. (every 0.20s): " + avgValue);
 
             cubeSpawner.CanSpawn = false;
             cubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -653,17 +638,18 @@ public class BeatSaberGameManager : MonoBehaviour
 
             if (!recordScore)
             {
-                logManager.WriteToLogFile("Score: " + score);
+                logManager.WriteLogFile("Score: " + score);
                 recordScore = true;
             }
 
             if (!recordMaxMin)
             {
-                logManager.WriteToLogFile("Max Y Axis (Toward Bystander): " + maxYAxis + " Vector: " + maxYVectorAxis);
-                logManager.WriteToLogFile("Min Y Axis (Against Bystander): " + minYAxis + " Vector: " + minYVecotorAxis);
-                logManager.WriteToLogFile("Max X Axis: " + maxXAxis + " Vector: " + maxXVectorAxis);
-                logManager.WriteToLogFile("Min X Axis: " + minXAxis + " Vector: " + minXVectorAxis);
-                logManager.WriteToLogFile("================================\n=================");
+                //logManager.WriteLogFile("Max Y Axis (Toward Bystander): " + maxYAxis + " Vector: " + maxYVectorAxis);
+                //logManager.WriteLogFile("Min Y Axis (Against Bystander): " + minYAxis + " Vector: " + minYVecotorAxis);
+                //logManager.WriteLogFile("Max X Axis: " + maxXAxis + " Vector: " + maxXVectorAxis);
+                //logManager.WriteLogFile("Min X Axis: " + minXAxis + " Vector: " + minXVectorAxis);
+                //logManager.WriteLogFile("================================\n=================");
+                LogVRHeadsetAxis();
                 recordMaxMin = true;
             }
 
@@ -684,6 +670,14 @@ public class BeatSaberGameManager : MonoBehaviour
         }
     }
 
+    private void LogVRHeadsetAxis()
+    {
+        logManager.WriteLogFile("Head Movement [END]: Max Y-Axis (Toward Bystander): " + maxYAxis + " Vector: " + maxYVectorAxis);
+        logManager.WriteLogFile("Head Movement [END]:  Min Y-Axis (Against Bystander): " + minYAxis + " Vector: " + minYVecotorAxis);
+        logManager.WriteLogFile("Head Movement [END]:  Max X-Axis: " + maxXAxis + " Vector: " + maxXVectorAxis);
+        logManager.WriteLogFile("Head Movement [END]:  Min X-Axis: " + minXAxis + " Vector: " + minXVectorAxis);
+        logManager.WriteLogFile("================================\n=================");
+    }
     public void GoSurvey()
     {
         // surveryUI.SetActive(true);
@@ -735,11 +729,11 @@ public class BeatSaberGameManager : MonoBehaviour
         eyeFocusTime = (float)Math.Round(gameTimerIgnoringPause);
         if (focus)
         {
-            logManager.WriteToLogFile("Receive FOCUS: " + eyeFocusTime);
+            logManager.WriteLogFile("Receive FOCUS: " + eyeFocusTime);
         }
         else
         {
-            logManager.WriteToLogFile("LOST FOCUS: " + eyeFocusTime);
+            logManager.WriteLogFile("LOST FOCUS: " + eyeFocusTime);
         }
     }
 
@@ -783,7 +777,7 @@ public class BeatSaberGameManager : MonoBehaviour
             {
                 int index = audioOrder[questionCounter - 1] - 1;
                 quesitionAudioSource.PlayOneShot(questionAudios[index]);
-                logManager.WriteToLogFile("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause));
+                logManager.WriteLogFile("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause));
 
             }
             questionCounter++;

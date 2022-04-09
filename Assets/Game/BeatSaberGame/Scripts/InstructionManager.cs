@@ -351,27 +351,27 @@ public class InstructionManager : MonoBehaviour
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         // currentLevelIndex = 0;
         string currentSceneName = SceneManager.GetActiveScene().name;
-        logManager.WriteToLogFile("Study Order: " + currentSceneIndex + " , name: " + currentSceneName);
+        logManager.WriteLogFile("Study Order: " + currentSceneIndex + " , name: " + currentSceneName);
         // mainCameraYAxis
-        logManager.WriteToLogFile("Head Rotation: ");
+        logManager.WriteLogFile("Head Rotation: ");
     }
 
     public void SetTimeStampForAvatarInCriticalZone()
     {
         // string curDateTime = GetCurrentTime();
         Debug.Log("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
-        logManager.WriteToLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
     }
 
     public void SetTimeStampForAvatarInCriticalZoneWithMessage(string state)
     {
         Debug.Log("Bystander Interaction: " + state + " " + (float)Math.Round(gameTimerIgnoringPause));
-        logManager.WriteToLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause));
     }
 
     private void SetCameraAxisAtBeginning()
     {
-        logManager.WriteToLogFile("Start Y-Axis: " + mainCameraYAxis + " X-Axis: " + mainCameraXAxis + " (" + maincameraAxis + ")");
+        logManager.WriteLogFile("Start Y-Axis: " + mainCameraYAxis + " X-Axis: " + mainCameraXAxis + " (" + maincameraAxis + ")");
     }
 
     public void SpawnCubes()
@@ -478,7 +478,7 @@ public class InstructionManager : MonoBehaviour
                 gamePaused = true;
                 pausedTime = (float)Math.Round(GameCountTimer);
                 identificationTime = (float)Math.Round(gameTimerIgnoringPause);
-                logManager.WriteToLogFile("Identification (Paused) Time: " + identificationTime);
+                logManager.WriteLogFile("Identification (Paused) Time: " + identificationTime);
                 cubeSpawner.CanSpawn = false;
                 cubeSpawner.StopMoving = true;
                 cubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -525,7 +525,7 @@ public class InstructionManager : MonoBehaviour
             if (!isPracticeGame)
             {
                 gamePaused = false;
-                logManager.WriteToLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+                logManager.WriteLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
                 cubeSpawner.CanSpawn = true;
                 cubeSpawner.StopMoving = false;
                 cubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -539,7 +539,7 @@ public class InstructionManager : MonoBehaviour
             else
             {
                 gamePaused = false;
-                logManager.WriteToLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+                logManager.WriteLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
                 trialCubeSpawner.CanSpawn = true;
                 trialCubeSpawner.StopMoving = false;
                 trialCubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -594,15 +594,15 @@ public class InstructionManager : MonoBehaviour
 
             if (!recordScore)
             {
-                logManager.WriteToLogFile("Score: " + score);
-                logManager.WriteToLogFile("==============================");
+                logManager.WriteLogFile("Score: " + score);
+                logManager.WriteLogFile("==============================");
                 recordScore = true;
             }
 
             if (!recordMaxMin)
             {
-                logManager.WriteToLogFile("Max Y Axis (Toward Bystander): " + maxYAxis);
-                logManager.WriteToLogFile("Min Y Axis (Against Bystander): " + minYAxis);
+                logManager.WriteLogFile("Max Y Axis (Toward Bystander): " + maxYAxis);
+                logManager.WriteLogFile("Min Y Axis (Against Bystander): " + minYAxis);
                 recordMaxMin = true;
             }
 
@@ -674,11 +674,11 @@ public class InstructionManager : MonoBehaviour
         eyeFocusTime = (float)Math.Round(gameTimerIgnoringPause);
         if (focus)
         {
-            logManager.WriteToLogFile("Receive FOCUS: " + eyeFocusTime);
+            logManager.WriteLogFile("Receive FOCUS: " + eyeFocusTime);
         }
         else
         {
-            logManager.WriteToLogFile("LOST FOCUS: " + eyeFocusTime);
+            logManager.WriteLogFile("LOST FOCUS: " + eyeFocusTime);
         }
     }
 
@@ -722,7 +722,7 @@ public class InstructionManager : MonoBehaviour
             {
                 int index = audioOrder[questionCounter - 1] - 1;
                 quesitionAudioSource.PlayOneShot(questionAudios[index]);
-                logManager.WriteToLogFile("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause));
+                logManager.WriteLogFile("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause));
 
             }
             questionCounter++;
