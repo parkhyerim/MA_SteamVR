@@ -28,11 +28,12 @@ public class BeatSaberGameManager : MonoBehaviour
 
     [Header("GAME UI")]
     public GameObject lobbyMenuUI;
+    // practice
     public GameObject practiceLobbyMenuUI;
-    public GameObject notificationUI;
+    public GameObject instructionUI;
     public GameObject timeUI;
     public GameObject scoreUI;
-    public GameObject instructionUI;
+   // public GameObject instructionUI;
     // public GameObject surveryUI;
     public GameObject processUI;
 
@@ -40,7 +41,7 @@ public class BeatSaberGameManager : MonoBehaviour
     public TMP_Text gameTimeText;
     public TMP_Text instructionText;
     public TMP_Text trialInstructionText;
-
+    public GameObject trialStartButton;
     public TMP_Text notificationText;
 
     [Header("GAME COMPONENTS")]
@@ -145,22 +146,22 @@ public class BeatSaberGameManager : MonoBehaviour
         headMovement = FindObjectOfType<HeadMovement>();
 
         // Game Notification
-        notificationUI.gameObject.SetActive(false);
+        instructionUI.SetActive(false);
         // surveryUI.gameObject.SetActive(false);
-        timeUI.gameObject.SetActive(false);
-        scoreUI.gameObject.SetActive(false);
-        processUI.gameObject.SetActive(false);
+        timeUI.SetActive(false);
+        scoreUI.SetActive(false);
+        processUI.SetActive(false);
+
         if (!isPracticeGame)
         {
-            instructionUI.gameObject.SetActive(false);
-            practiceLobbyMenuUI.gameObject.SetActive(false);
+            practiceLobbyMenuUI.SetActive(false);
+           
         }
         else // Practice game
         {
-            lobbyMenuUI.gameObject.SetActive(false);
-            // TrialStartBtn.enabled = false;
+            lobbyMenuUI.SetActive(false);
+            trialStartButton.SetActive(false);
         }
-        //  instructionUI.gameObject.SetActive(false);
 
         saberObject.SetActive(false);
         participantID = userstudyManager.GetID();
@@ -189,6 +190,13 @@ public class BeatSaberGameManager : MonoBehaviour
         if (participantID == "" || participantID == null)
         {
             participantID = "ID not assigned";
+        }
+
+        // TRIAL_GAME
+        if (isPracticeGame)
+        {
+            StartCoroutine(WelcomeInstruction());
+            instructionText.text = "";
         }
     }
 
@@ -350,17 +358,22 @@ public class BeatSaberGameManager : MonoBehaviour
         }
     }
 
+    // TRIAL_GAME
     public void StartTrial()
     {
-        Debug.Log("Click Trial");
-        //  CanStartTrial = true;
-        //  timeFromSceneLoading = Time.time;
-        //  startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
+        //Debug.Log("Click Trial");
+        CanStartTrial = true;
+
+        timeFromSceneLoading = Time.time;
+        startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
+
         practiceLobbyMenuUI.SetActive(false);
-        notificationUI.SetActive(true);
-        saberObject.SetActive(true);
+        instructionUI.SetActive(true);
 
         timeUI.SetActive(true);
+        scoreUI.SetActive(true);
+
+        saberObject.SetActive(true);
     }
 
     public void StartGame()
@@ -601,7 +614,7 @@ public class BeatSaberGameManager : MonoBehaviour
 
                 instructionMsg =
                 notificationText.text = instructionMsg;
-                notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
+                instructionUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
                 // notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;                
                 StartRayInteraction();
             }
@@ -612,7 +625,7 @@ public class BeatSaberGameManager : MonoBehaviour
     {
         if (!isPracticeGame)
         {
-            notificationUI.SetActive(true);
+            instructionUI.SetActive(true);
             notificationText.enabled = true;
             bystanderInteract = false;
             CanPauseGame = false;
@@ -629,7 +642,7 @@ public class BeatSaberGameManager : MonoBehaviour
                 Destroy(cube);
             }
             saberObject.SetActive(false);
-            notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
+            instructionUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
             //
             scoreUI.SetActive(false);
             timeUI.SetActive(false);
@@ -690,7 +703,7 @@ public class BeatSaberGameManager : MonoBehaviour
         lineVisual.enabled = true;
 
         //lineVisual.gameObject.SetActive(true);
-        notificationUI.SetActive(false);
+        instructionUI.SetActive(false);
         //  notificationBGImage.enabled = false;
         notificationText.enabled = false;
         // menuUICanvas.SetActive(false);
@@ -784,5 +797,20 @@ public class BeatSaberGameManager : MonoBehaviour
             }
             questionCounter++;
         }
+    }
+
+    IEnumerator WelcomeInstruction()
+    {
+      //  Debug.Log(practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].name);
+        practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = false; // trackpad image
+
+        instructionMsg = "Welcome to our user study!";
+        trialInstructionText.text = instructionMsg;
+        yield return new WaitForSeconds(5);
+        instructionMsg = "Start The Trial Game by pointing and clcking the Start Button below with the trigger";
+        practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
+        trialInstructionText.text = instructionMsg;
+        trialStartButton.SetActive(true);
+        yield return new WaitForSeconds(5);
     }
 }
