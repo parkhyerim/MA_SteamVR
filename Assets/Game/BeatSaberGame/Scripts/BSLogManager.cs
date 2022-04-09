@@ -7,7 +7,7 @@ public class BSLogManager : MonoBehaviour
     BeatSaberGameManager bsGameManager;
     UserStudyManager userstudyManager;
     private string participantID;
-    private string currentDateTime;
+    private string currentDateAndTime;
     private string currentTime;
 
     private void Awake()
@@ -18,17 +18,16 @@ public class BSLogManager : MonoBehaviour
 
     void Start()
     {
-        //if (bsGameManager.participantID != "" || bsGameManager.participantID != null)
-        //    participantID = bsGameManager.participantID;
-        //else
-        //    participantID = "not assigned";
-
         participantID = userstudyManager.GetID();
-        currentDateTime = GetCurrentDateTime();
+        currentDateAndTime = GetCurrentDateAndTime();
         
-        WriteToLogFile("=================================\n" +
-            "LOG STRAT: "+ currentDateTime +
+        WriteToLogFile("=====================================================" +
+            "\nLOG STRAT: " + currentDateAndTime +
             "\nID: " + participantID);
+
+        WriteToLogFileForHeadMovement("=====================================================" +
+          "\nLOG STRAT: " + currentDateAndTime +
+          "\nID: " + participantID);
     }
 
     public void WriteToLogFile(string message)
@@ -36,15 +35,25 @@ public class BSLogManager : MonoBehaviour
         using (System.IO.StreamWriter logFile =
             new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + ".txt", append: true))
         {
-            currentDateTime = GetCurrentDateTime();
+            // currentDateAndTime = GetCurrentDateAndTime();
             currentTime = GetCurrentTime();
             logFile.Write("[" + currentTime + "] ");
             logFile.WriteLine(message);
-           // logFile.WriteLine("              [" + currentDateTime + "] "); 
         }
     }
 
-    private string GetCurrentDateTime()
+    public void WriteToLogFileForHeadMovement(string message)
+    {
+        using (System.IO.StreamWriter logFile =
+           new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_HeadMovement.txt", append: true))
+        {
+            // currentDateAndTime = GetCurrentDateAndTime();
+            currentTime = GetCurrentTime();
+            logFile.Write("[" + currentTime + "] ");
+            logFile.WriteLine(message);
+        }
+    }
+    private string GetCurrentDateAndTime()
     {
         DateTime localDate = DateTime.Now;
         string cultureName = "de-DE"; // de-DE  en-GB en-US
@@ -57,8 +66,6 @@ public class BSLogManager : MonoBehaviour
     private string GetCurrentTime()
     {
         DateTime localDate = DateTime.Now;
-       // string cultureName = "de-DE"; // de-DE  en-GB en-US
-      //  var culture = new CultureInfo(cultureName);
         string name = localDate.ToString("HH:mm:ss");
 
         return name;

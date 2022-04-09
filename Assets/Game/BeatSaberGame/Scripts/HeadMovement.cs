@@ -23,10 +23,15 @@ public class HeadMovement : MonoBehaviour
     private int num;
     bool canMeasure;
     bool inGame;
+    BSLogManager logManager;
 
     public bool CanMeasure { get => canMeasure; set => canMeasure = value; }
     public bool InGame { get => inGame; set => inGame = value; }
 
+    private void Awake()
+    {
+        logManager = FindObjectOfType<BSLogManager>();
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -43,11 +48,13 @@ public class HeadMovement : MonoBehaviour
         //Debug.Log("cameraAxis: " + cameraAxis);
         //Debug.Log("prev: " + previousYAxis);
         //Debug.Log("curr: " + currentYAxis);       
+       
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+       // logManager.WriteToLogFileForHeadMovement("test");
         camEulerAngles = Camera.main.transform.eulerAngles;
         camRotation = Camera.main.transform.rotation;
         curEulerY = camEulerAngles.y;
