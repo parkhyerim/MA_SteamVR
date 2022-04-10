@@ -97,10 +97,10 @@ public class BSBystanderAvatar : MonoBehaviour
 
         for(int i = 0; i < studyOrder.Length; i++)
         {
-            int index = studyOrder[i];
+            int order = studyOrder[i];
            // Debug.Log(i + " index: " + index);
             if (i == currentLevelIndex)
-                order = index;
+                this.order = order;
         }
 
       //  Debug.Log("order: " + order);

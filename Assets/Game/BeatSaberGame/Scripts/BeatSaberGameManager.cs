@@ -28,21 +28,22 @@ public class BeatSaberGameManager : MonoBehaviour
 
     [Header("GAME UI")]
     public GameObject lobbyMenuUI;
-    // practice
-    public GameObject practiceLobbyMenuUI;
-    public GameObject trialInstructionUI;
+    public GameObject instructionUI;
     public GameObject timeUI;
     public GameObject scoreUI;
+    private TMP_Text gameScoreText;
+    private TMP_Text gameTimeText;
+    private TMP_Text instructionText;
+
+    [Header("TRIAL_UI")]
+    public GameObject trialLobbyMenuUI;
+    public GameObject trialInstructionUI;
    // public GameObject instructionUI;
     // public GameObject surveryUI;
-    public GameObject processUI;
-
-    public TMP_Text gameScoreText;
-    public TMP_Text gameTimeText;
-    public TMP_Text trialInstructionText;
-    public TMP_Text lobbyTrialText;
+    public GameObject trialProcessUI;
+    private TMP_Text trialInstructionText;
+    private TMP_Text trialLobbyText;
     public GameObject trialStartButton;
-    public TMP_Text notificationText;
 
     [Header("GAME COMPONENTS")]
     public GameObject saberObject;
@@ -63,7 +64,7 @@ public class BeatSaberGameManager : MonoBehaviour
     [SerializeField]
     private float pausedTime, identificationTime, eyeFocusTime;
 
-    [Header("TRIAL TIME MNG)")]
+    [Header("TRIAL TIME MNG.")]
     public float getReadyTimeForTrial;
 
     [Header("SCORE")]
@@ -73,7 +74,9 @@ public class BeatSaberGameManager : MonoBehaviour
     [Header("BOOLEADN")]
     private bool canStartGame;
     [SerializeField]
-    private bool canPauseGame, canStartTrial, gamePaused;
+    private bool canPauseGame, gamePaused;
+    [SerializeField]
+    private bool canStartTrial, canPauseTrial;
 
     [Header("TRACKER")]
     BSRotateTracker bysTracker;
@@ -94,6 +97,7 @@ public class BeatSaberGameManager : MonoBehaviour
     private bool askSpawnCubes;
     //Trial
     private bool pauseInstructed;
+    private bool askSpawnCubesForTrial;
     private GameObject[] cubes;
     private GameObject[] trialCubes;
     public CubeSpawner cubeSpawner;
@@ -131,6 +135,7 @@ public class BeatSaberGameManager : MonoBehaviour
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
     public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
     public bool CanPauseGame { get => canPauseGame; set => canPauseGame = value; }
+    public bool CanPauseTrial { get => canPauseTrial; set => canPauseTrial = value; }
     public float GameCountTimer { get => gameCountTimer; set => gameCountTimer = value; }
     public bool BystanderCanHearAnswer { get => bystanderCanHearAnswer; set => bystanderCanHearAnswer = value; }
     public bool CanStartTrial { get => canStartTrial; set => canStartTrial = value; }
@@ -147,15 +152,16 @@ public class BeatSaberGameManager : MonoBehaviour
         headMovement = FindObjectOfType<HeadMovement>();
 
         // Game Notification
+        instructionUI.SetActive(false);
         trialInstructionUI.SetActive(false);
         // surveryUI.gameObject.SetActive(false);
         timeUI.SetActive(false);
         scoreUI.SetActive(false);
-        processUI.SetActive(false);
+        trialProcessUI.SetActive(false);
 
         if (!isPracticeGame)
         {
-            practiceLobbyMenuUI.SetActive(false);
+            trialLobbyMenuUI.SetActive(false);
            
         }
         else // Practice game
@@ -166,6 +172,14 @@ public class BeatSaberGameManager : MonoBehaviour
 
         saberObject.SetActive(false);
         participantID = userstudyManager.GetID();
+
+        // GAME
+        instructionText = instructionUI.GetComponentInChildren<TMP_Text>();
+        gameScoreText = scoreUI.GetComponentInChildren<TMP_Text>();
+        gameTimeText = timeUI.GetComponentInChildren<TMP_Text>();
+        //TRIAL
+        trialLobbyText = trialLobbyMenuUI.GetComponentInChildren<TMP_Text>();
+        trialInstructionText = trialInstructionUI.GetComponentInChildren<TMP_Text>();
     }
 
     private void Start()
@@ -196,7 +210,7 @@ public class BeatSaberGameManager : MonoBehaviour
         // TRIAL_GAME
         if (isPracticeGame)
         {
-            lobbyTrialText.text = "";
+            trialLobbyText.text = "";
             StartCoroutine(WelcomeInstruction());
         }
     }
@@ -204,8 +218,7 @@ public class BeatSaberGameManager : MonoBehaviour
     private void FixedUpdate()
     {
         if (CanStartGame)
-        {
-      
+        {      
             maincameraAxis = Camera.main.transform.localEulerAngles;
 
             // Head Movement
@@ -329,7 +342,6 @@ public class BeatSaberGameManager : MonoBehaviour
             // GAME TIME
             else if (Time.time > startTimeForSpawingCubes && GameCountTimer <= totalGameTime) // During the Game
             {
-                //Debug.Log("Practice is called 2");
                 gameTimerIgnoringPause += Time.fixedDeltaTime;
 
                 if (!gamePaused)
@@ -337,17 +349,18 @@ public class BeatSaberGameManager : MonoBehaviour
                     GameCountTimer += Time.fixedDeltaTime;
                     gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
 
-                    if (askSpawnCubes == false)
+                    if (askSpawnCubesForTrial == false)
                     {
-                        SpawnCubes();
-                        askSpawnCubes = true;
+                        SpawnCubesForTrial();
+                        askSpawnCubesForTrial = true;
                     }
 
                     if (Math.Round(GameCountTimer) == totalGameTime)
                     {
                         trialCubeSpawner.CanSpawn = false;
                         StopRayInteractoin();
-                        EndGame();
+                        //EndGame();
+                        EndTrial();
                     }
                 }
                 else
@@ -359,24 +372,6 @@ public class BeatSaberGameManager : MonoBehaviour
         }
     }
 
-    // TRIAL_GAME
-    public void StartTrial()
-    {
-        //Debug.Log("Click Trial");
-        CanStartTrial = true;
-
-        timeFromSceneLoading = Time.time;
-        startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
-
-        practiceLobbyMenuUI.SetActive(false);
-        trialInstructionUI.SetActive(true);
-
-      //  timeUI.SetActive(true);
-      //  scoreUI.SetActive(true);
-        
-        saberObject.SetActive(true);
-        StartCoroutine(InstructionsForCubeSlice());
-    }
 
     public void StartGame()
     {
@@ -434,39 +429,26 @@ public class BeatSaberGameManager : MonoBehaviour
     }
 
     public void SpawnCubes()
-    {
-        if (!isPracticeGame)
+{
+   
+        cubeSpawner.CanSpawn = true;
+        CanPauseGame = true;
+
+        instructionText.enabled = false;
+        gameScoreText.text = "0";
+
+        Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime);
+
+        if (!oneInteruption)
         {
-            cubeSpawner.CanSpawn = true;
-            CanPauseGame = true;
-
-            notificationText.enabled = false;
-            gameScoreText.text = "0";
-
-            Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime);
-
-            if (!oneInteruption)
-            {
-                Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime2);
-                Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime3);
-                Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime4);
-            }
-            // interactionUI.SetActive(true);
+            Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime2);
+            Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime3);
+            Invoke(nameof(BystanderStartTurningToVRPlayer), time: BystanderStartTime4);
         }
-        else
-        {
-            trialCubeSpawner.CanSpawn = true;
-
-            //   notificationBGImage.enabled = false;
-            //  notificationText.enabled = false;
-            // instructionText.text = "";
-
-            gameScoreText.text = "0";
-            // Vector3 backAngles = new Vector3(0, 180, 0);
-
-            CanPauseGame = true;
-        }
+        // interactionUI.SetActive(true);
     }
+
+
 
     public void BystanderStartTurningToVRPlayer()
     {
@@ -575,7 +557,7 @@ public class BeatSaberGameManager : MonoBehaviour
                     instructionMsg = "You paused the game.\n Try to resume the game!";
                 }
 
-                notificationText.text = instructionMsg;
+                instructionText.text = instructionMsg;
                 //  StartCoroutine(InstructionForPause());
                 // notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
                 //StartCoroutine(InstructionForPause());              
@@ -620,7 +602,7 @@ public class BeatSaberGameManager : MonoBehaviour
                 }
 
                 instructionMsg =
-                notificationText.text = instructionMsg;
+                instructionText.text = instructionMsg;
                 trialInstructionUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
                 // notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
                 StartCoroutine(InstructionForPause());
@@ -633,10 +615,11 @@ public class BeatSaberGameManager : MonoBehaviour
     {
         if (!isPracticeGame)
         {
-            trialInstructionUI.SetActive(true);
-            notificationText.enabled = true;
+            instructionUI.SetActive(true);
+            instructionText.enabled = true;
             bystanderInteract = false;
             CanPauseGame = false;
+            CanPauseTrial = false;
             headMovement.CanMeasure = false;
             headMovement.InGame = false;
             float avgValue = headMovement.GetResultHeadMovement();
@@ -655,7 +638,7 @@ public class BeatSaberGameManager : MonoBehaviour
             scoreUI.SetActive(false);
             timeUI.SetActive(false);
 
-            notificationText.text = "BRAVO!\nYOUR SCORE IS " + score + "!";
+            instructionText.text = "BRAVO!\nYOUR SCORE IS " + score + "!";
 
             gameTimeText.text = ConvertToMinAndSeconds(0);
 
@@ -685,9 +668,10 @@ public class BeatSaberGameManager : MonoBehaviour
         else
         {
             CanPauseGame = false;
+            CanPauseTrial = false;
             trialCubeSpawner.CanSpawn = false;
             saberObject.SetActive(false);
-            notificationText.text = "Your Trial Game is finised!";
+            instructionText.text = "Your Trial Game is finised!";
             gameTimeText.text = ConvertToMinAndSeconds(0);
             Invoke(nameof(GoToNextLevel), 5f);
         }
@@ -713,7 +697,7 @@ public class BeatSaberGameManager : MonoBehaviour
         //lineVisual.gameObject.SetActive(true);
         trialInstructionUI.SetActive(false);
         //  notificationBGImage.enabled = false;
-        notificationText.enabled = false;
+        instructionText.enabled = false;
         // menuUICanvas.SetActive(false);
     }
 
@@ -813,33 +797,99 @@ public class BeatSaberGameManager : MonoBehaviour
         trialInstructionUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
         Debug.Log("pause instruction is called");
     }
+
+
+/******************************************************************
+ * *************** TRIAL*******************************************
+ *****************************************************************/
+    // TRIAL_GAME
+
+    public void StartTrialIntroduction()
+    {
+        trialLobbyMenuUI.SetActive(false);
+        trialInstructionUI.SetActive(true);
+        timeUI.SetActive(true);
+        scoreUI.SetActive(true);
+        saberObject.SetActive(true);
+        StartCoroutine(InstructionsForCubeSlice());
+    }
+
+    public void StartTrialGame()
+    {
+        CanStartTrial = true;
+
+        timeFromSceneLoading = Time.time; 
+        startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial; // getReadyTimeForTrial: longer than the main game
+
+
+        //timeFromSceneLoading = Time.time;
+        //startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
+        instructionText.text = "";
+
+
+        trialProcessUI.SetActive(true);
+        //trialLobbyMenuUI.SetActive(false);
+        //trialInstructionUI.SetActive(true);
+
+        //saberObject.SetActive(true);
+        //StartCoroutine(InstructionsForCubeSlice());
+    }
+
+    public void SpawnCubesForTrial()
+    {
+        trialCubeSpawner.CanSpawn = true;
+
+        gameScoreText.text = "0";
+
+      //  CanPauseGame = true;
+        CanPauseTrial = true;
+    }
+
+    public void EndTrial()
+    {
+        CanPauseGame = false;
+        CanPauseTrial = false;
+        trialCubeSpawner.CanSpawn = false;
+        saberObject.SetActive(false);
+        trialInstructionText.text = "Your Trial Game is finised!";
+       // instructionText.text = "Your Trial Game is finised!";
+        gameTimeText.text = ConvertToMinAndSeconds(0);
+        Invoke(nameof(GoToNextLevel), 5f);
+    }
+
+    // TRIAL_GAME: 1
     IEnumerator WelcomeInstruction()
     {
-        practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = false; // trackpad image
+        trialLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = false; // trackpad image
         instructionMsg = "Welcome to our user study!";
-        lobbyTrialText.text = instructionMsg;
-        yield return new WaitForSeconds(7);
-        instructionMsg = "Please point and click the Start button below when you're ready.\n You can press the trigger button of the controller.";
-        lobbyTrialText.text = instructionMsg;
-        practiceLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = true; // trackpad image
+        trialLobbyText.text = instructionMsg;
+        yield return new WaitForSeconds(6);
+
+        instructionMsg = "Please click the Start button below when you're ready." +
+            "\n\n You can press the trigger button of the controller.";
+        trialLobbyText.text = instructionMsg;
+        trialLobbyMenuUI.GetComponentsInChildren<RawImage>()[0].enabled = true; // trackpad image
         trialStartButton.SetActive(true);
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(0);
     }
 
     IEnumerator InstructionsForCubeSlice()
     {
-        instructionMsg = "You hold a lightsaber now! \n Slash the blocks by hitting the colored part with your saber! \n You don't have to click any button on the controller";
+        instructionMsg = "You hold a lightsaber in your right hand now! \n " +
+            "Slash the blocks by hitting the colored part with your saber! \n You don't have to click any button on the controller";
         trialInstructionText.text = instructionMsg;
         trialInstructionUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
         yield return new WaitForSeconds(10);
-        CanStartTrial = true;
-        timeFromSceneLoading = Time.time;
-        startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
-        notificationText.text = "";
+    
+        trialProcessUI.SetActive(true);
+        yield return new WaitForSeconds(10);
+        //CanStartTrial = true;
+        //timeFromSceneLoading = Time.time;
+        //startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
+        //instructionText.text = "";
 
-        timeUI.SetActive(true);
-        scoreUI.SetActive(true);
-        processUI.SetActive(true);
+       
+        //trialProcessUI.SetActive(true);
         yield return new WaitForSeconds(0); //20
         //trialInstructionText.text = "Try to Pause the game.\n You can press the touchpad on the controller";
         //trialInstructionUI.GetComponentsInChildren<RawImage>()[0].enabled = true;

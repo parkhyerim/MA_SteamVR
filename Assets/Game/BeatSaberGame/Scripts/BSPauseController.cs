@@ -69,6 +69,38 @@ public class BSPauseController : MonoBehaviour
         }
     }
 
+    private void PauseTrial(InputAction.CallbackContext context)
+    {
+        // bool isActive = !gameObject.activeSelf;
+        // gameObject.SetActive(isActive);
+        if (gameManager.CanPauseGame)
+        {
+            if (!pauseClicked)
+            {
+                bgMusicAS.Pause();
+
+                if (gameManager.BystanderInteract)
+                {
+                    if (!oncePausedInSession && gameManager.BystanderCanHearAnswer)
+                    {
+                        // Invoke(nameof(PlayQuestionAudio), 1f);
+                        oncePausedInSession = true;
+                    }
+                }
+
+                pauseClicked = true;
+                gameManager.PauseGame();
+            }
+            else
+            {
+                bgMusicAS.UnPause();
+                gameManager.PauseGame();
+                pauseClicked = false;
+                // logManager.WriteToLogFile("Resume the game again (" + DateTime.Now.ToShortTimeString() + ")");
+            }
+        }
+    }
+
     public void PlayQuestionAudio()
     {
         //if (counter < 3)
