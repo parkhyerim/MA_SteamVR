@@ -29,12 +29,14 @@ public class BSPauseController : MonoBehaviour
         logManager = FindObjectOfType<BSLogManager>();
 
         pauseReference.action.started += PauseGame;
+        pauseReference.action.started += PauseTrial;
         audioPlayed = new bool[3] { false, false, false };
     }
 
     private void OnDestroy()
     {
         pauseReference.action.started -= PauseGame;
+        pauseReference.action.started -= PauseTrial;
     }
 
     private void PauseGame(InputAction.CallbackContext context)
@@ -73,7 +75,7 @@ public class BSPauseController : MonoBehaviour
     {
         // bool isActive = !gameObject.activeSelf;
         // gameObject.SetActive(isActive);
-        if (gameManager.CanPauseGame)
+        if (gameManager.CanPauseTrial)
         {
             if (!pauseClicked)
             {

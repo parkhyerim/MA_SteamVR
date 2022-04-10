@@ -45,6 +45,8 @@ public class BeatSaberGameManager : MonoBehaviour
     private TMP_Text trialLobbyText;
     public GameObject trialStartButton;
 
+    public GameObject[] stopCubes;
+
     [Header("GAME COMPONENTS")]
     public GameObject saberObject;
 
@@ -161,8 +163,7 @@ public class BeatSaberGameManager : MonoBehaviour
 
         if (!isPracticeGame)
         {
-            trialLobbyMenuUI.SetActive(false);
-           
+            trialLobbyMenuUI.SetActive(false);         
         }
         else // Practice game
         {
@@ -175,11 +176,17 @@ public class BeatSaberGameManager : MonoBehaviour
 
         // GAME
         instructionText = instructionUI.GetComponentInChildren<TMP_Text>();
-        gameScoreText = scoreUI.GetComponentInChildren<TMP_Text>();
-        gameTimeText = timeUI.GetComponentInChildren<TMP_Text>();
+        gameScoreText = scoreUI.GetComponentsInChildren<Image>()[1].GetComponentInChildren<TMP_Text>();
+        gameTimeText = timeUI.GetComponentsInChildren<Image>()[1].GetComponentInChildren<TMP_Text>();
         //TRIAL
         trialLobbyText = trialLobbyMenuUI.GetComponentInChildren<TMP_Text>();
         trialInstructionText = trialInstructionUI.GetComponentInChildren<TMP_Text>();
+        // TRIAL
+
+        foreach (GameObject cube in stopCubes)
+        {
+            cube.SetActive(false);
+        }
     }
 
     private void Start()
@@ -212,7 +219,7 @@ public class BeatSaberGameManager : MonoBehaviour
         {
             trialLobbyText.text = "";
             StartCoroutine(WelcomeInstruction());
-        }
+        }      
     }
 
     private void FixedUpdate()
@@ -369,7 +376,10 @@ public class BeatSaberGameManager : MonoBehaviour
                     gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
                 }
             }
+
+          
         }
+
     }
 
 
@@ -793,41 +803,53 @@ public class BeatSaberGameManager : MonoBehaviour
 
     private void ShowPauseHint()
     {
-        trialInstructionText.text = "Try to Pause the game.\n You can press the touchpad on the controller";
+        trialInstructionText.text = "Try to Pause the game.\n You can press the trackpad on the controller";
         trialInstructionUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
         Debug.Log("pause instruction is called");
     }
 
 
-/******************************************************************
- * *************** TRIAL*******************************************
- *****************************************************************/
-    // TRIAL_GAME
-
+    /****************************************************************************************************
+     * *********************************** TRIAL *******************************************************
+     ****************************************************************************************************/
     public void StartTrialIntroduction()
     {
         trialLobbyMenuUI.SetActive(false);
         trialInstructionUI.SetActive(true);
-        timeUI.SetActive(true);
-        scoreUI.SetActive(true);
+        //timeUI.SetActive(true);
+       // scoreUI.SetActive(true);
         saberObject.SetActive(true);
+       
+        foreach (GameObject cube in stopCubes)
+        {
+            cube.SetActive(true); 
+        }
+        trialProcessUI.SetActive(true);
         StartCoroutine(InstructionsForCubeSlice());
     }
 
     public void StartTrialGame()
     {
         CanStartTrial = true;
+        foreach(GameObject cube in stopCubes)
+        {
+            if(cube != null)
+            {
+                Destroy(cube);
+            }
+        }
 
         timeFromSceneLoading = Time.time; 
         startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial; // getReadyTimeForTrial: longer than the main game
-
+        timeUI.SetActive(true);
+        scoreUI.SetActive(true);
 
         //timeFromSceneLoading = Time.time;
         //startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
-        instructionText.text = "";
+        trialInstructionText.text = "";
 
 
-        trialProcessUI.SetActive(true);
+  
         //trialLobbyMenuUI.SetActive(false);
         //trialInstructionUI.SetActive(true);
 
@@ -875,8 +897,8 @@ public class BeatSaberGameManager : MonoBehaviour
 
     IEnumerator InstructionsForCubeSlice()
     {
-        instructionMsg = "You hold a lightsaber in your right hand now! \n " +
-            "Slash the blocks by hitting the colored part with your saber! \n You don't have to click any button on the controller";
+        instructionMsg = "You now hold a lightsaber in your right hand! \n\n " +
+            "Slash the colored parts of the blocks in front of you with your saber! \n\n You don't need to press any button on the controller";
         trialInstructionText.text = instructionMsg;
         trialInstructionUI.GetComponentsInChildren<RawImage>()[0].enabled = false;
         yield return new WaitForSeconds(10);
@@ -887,7 +909,8 @@ public class BeatSaberGameManager : MonoBehaviour
         //timeFromSceneLoading = Time.time;
         //startTimeForSpawingCubes = timeFromSceneLoading + getReadyTimeForTrial;
         //instructionText.text = "";
-
+        instructionMsg = "If you slash all three boxes, you can press the NEXT button";
+        trialInstructionText.text = instructionMsg;
        
         //trialProcessUI.SetActive(true);
         yield return new WaitForSeconds(0); //20
