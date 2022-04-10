@@ -275,12 +275,16 @@ public class BSTrialManager : MonoBehaviour
         // string curDateTime = GetCurrentTime();
         Debug.Log("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
         logManager.WriteLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogForHeadMovement("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogForVRUserHead("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
     }
 
     public void SetTimeStampForAvatarInCriticalZoneWithMessage(string state)
     {
         Debug.Log("Bystander Interaction: " + state + " " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
         logManager.WriteLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
+        logManager.WriteLogForHeadMovement("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
+        logManager.WriteLogForVRUserHead("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
     }
 
     //private void LogCameraAxisAtStart()
@@ -332,6 +336,8 @@ public class BSTrialManager : MonoBehaviour
         pauseController.OncePausedInSession = false;
         // logManager
         logManager.WriteLogFile("Bystander starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogForHeadMovement("Bystander starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogForVRUserHead("Bystander starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause));
 
         bystanderCanHearAnswer = true;
         bystanderAvatar.LookedOnceSeatedPosition = false;
@@ -392,6 +398,9 @@ public class BSTrialManager : MonoBehaviour
                 pausedTime = (float)Math.Round(GameCountTimer);
                 identificationTime = (float)Math.Round(gameTimerIgnoringPause);
                 logManager.WriteLogFile("Identification (Paused) Time: " + identificationTime);
+                logManager.WriteLogForHeadMovement("Identification (Paused) Time: " + identificationTime);
+                logManager.WriteLogForVRUserHead("Identification (Paused) Time: " + identificationTime);
+
                 cubeSpawner.CanSpawn = false;
                 cubeSpawner.StopMoving = true;
                 cubes = GameObject.FindGameObjectsWithTag("Cube");

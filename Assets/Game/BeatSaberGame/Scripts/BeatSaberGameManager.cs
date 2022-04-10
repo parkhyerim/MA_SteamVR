@@ -408,9 +408,9 @@ public class BeatSaberGameManager : MonoBehaviour
         string currentSceneName = SceneManager.GetActiveScene().name;
 
         // Logging Game-Start
-        logManager.WriteLogFile("Game Start: ");
-        logManager.WriteLogForHeadMovement("Game Start: ");
-        logManager.WriteLogForVRUserHead("Game Start: ");
+        logManager.WriteLogFile("Game Start");
+        logManager.WriteLogForHeadMovement("Game Start");
+        logManager.WriteLogForVRUserHead("Game Start");
         logManager.WriteLogFile("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
         logManager.WriteLogForHeadMovement("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
         logManager.WriteLogForVRUserHead("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
@@ -424,12 +424,16 @@ public class BeatSaberGameManager : MonoBehaviour
         // string curDateTime = GetCurrentTime();
         Debug.Log("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
         logManager.WriteLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogForHeadMovement("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogForVRUserHead("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
     }
 
     public void SetTimeStampForAvatarInCriticalZoneWithMessage(string state)
     {
         Debug.Log("Bystander Interaction: " + state + " " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
         logManager.WriteLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
+        logManager.WriteLogForHeadMovement("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
+        logManager.WriteLogForVRUserHead("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
     }
 
     private void LogCameraAxisAtStart()
@@ -437,6 +441,7 @@ public class BeatSaberGameManager : MonoBehaviour
         logManager.WriteLogFile("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxis);
         logManager.WriteLogForVRUserHead("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxis);
         // TODO: Head Movement Start Value
+        logManager.WriteLogForHeadMovement("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxis);
     }
 
     public void SpawnCubes()
@@ -523,7 +528,8 @@ public class BeatSaberGameManager : MonoBehaviour
 
         if (score % 10 == 0 && score > 0 && score < 30)
         {
-            ShowPauseHint();
+            if(isPracticeGame)
+                ShowPauseHint();
         }
 
         
@@ -549,6 +555,8 @@ public class BeatSaberGameManager : MonoBehaviour
                 pausedTime = (float)Math.Round(GameCountTimer);
                 identificationTime = (float)Math.Round(gameTimerIgnoringPause);
                 logManager.WriteLogFile("Identification (Paused) Time: " + identificationTime);
+                logManager.WriteLogForHeadMovement("Identification (Paused) Time: " + identificationTime);
+                logManager.WriteLogForVRUserHead("Identification (Paused) Time: " + identificationTime);
                 cubeSpawner.CanSpawn = false;
                 cubeSpawner.StopMoving = true;
                 cubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -599,6 +607,8 @@ public class BeatSaberGameManager : MonoBehaviour
             {
                 gamePaused = false;
                 logManager.WriteLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+                logManager.WriteLogForHeadMovement("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+                logManager.WriteLogForVRUserHead("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
                 cubeSpawner.CanSpawn = true;
                 cubeSpawner.StopMoving = false;
                 cubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -612,7 +622,7 @@ public class BeatSaberGameManager : MonoBehaviour
             else
             {
                 gamePaused = false;
-                logManager.WriteLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+               // logManager.WriteLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
                 trialCubeSpawner.CanSpawn = true;
                 trialCubeSpawner.StopMoving = false;
                 trialCubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -646,6 +656,8 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void EndGame()
     {
+        trialInstructionUI.SetActive(false);
+
         if (!isPracticeGame)
         {
             instructionUI.SetActive(true);
@@ -655,8 +667,10 @@ public class BeatSaberGameManager : MonoBehaviour
             CanPauseTrial = false;
             headMovement.CanMeasure = false;
             headMovement.InGame = false;
+            
+
             float avgValue = headMovement.GetResultHeadMovement();
-            logManager.WriteLogFile("Head Movement Avg. (every 0.20s): " + avgValue);
+           
 
             cubeSpawner.CanSpawn = false;
             cubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -672,6 +686,8 @@ public class BeatSaberGameManager : MonoBehaviour
             timeUI.SetActive(false);
 
             instructionText.text = "BRAVO!\nYOUR SCORE IS " + score + "!";
+         
+            
 
             gameTimeText.text = ConvertToMinAndSeconds(0);
 
@@ -689,6 +705,12 @@ public class BeatSaberGameManager : MonoBehaviour
                 //logManager.WriteLogFile("Min X Axis: " + minXAxis + " Vector: " + minXVectorAxis);
                 //logManager.WriteLogFile("================================\n=================");
                 LogVRHeadsetAxis();
+                logManager.WriteLogFile("END GAME");
+                logManager.WriteLogForHeadMovement("END GAME");
+                logManager.WriteLogForVRUserHead("END GAME");
+                logManager.WriteLogFile("Head Movement Avg. (every 0.20s): " + avgValue);
+                logManager.WriteLogForHeadMovement("Head Movement Avg. (every 0.20s): " + avgValue);
+                logManager.WriteLogForVRUserHead("Head Movement Avg. (every 0.20s): " + avgValue);
                 recordMaxMin = true;
             }
 
@@ -818,6 +840,7 @@ public class BeatSaberGameManager : MonoBehaviour
                 int index = audioOrder[questionCounter - 1] - 1;
                 quesitionAudioSource.PlayOneShot(questionAudios[index]);
                 logManager.WriteLogFile("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause));
+
 
             }
             questionCounter++;

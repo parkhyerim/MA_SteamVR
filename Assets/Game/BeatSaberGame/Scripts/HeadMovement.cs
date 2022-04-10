@@ -14,13 +14,14 @@ public class HeadMovement : MonoBehaviour
     [SerializeField]
     private Quaternion camRotation;
     [SerializeField]
-    private float curEulerY, diffEulerY, prevEulerY, avgEulerY, sumEulerY;
+    private float curEulerY, prevEulerY, diffEulerY, avgEulerY, sumEulerY;
     [SerializeField]
-    private float conv_curEulerY, conv_diffEulerY, conv_prevEulerY, conv_avgEulerY, conv_sumEulerY;
+    private float conv_curEulerY, conv_prevEulerY, conv_diffEulerY, conv_avgEulerY, conv_sumEulerY;
     [SerializeField]
-    private float curRotY, diffRotY, prevRotY, avgRotY, sumRotY;
+    private float curRotY, prevRotY, diffRotY, avgRotY, sumRotY;
     [SerializeField]
     private int num;
+
     bool canMeasure;
     bool inGame;
     BSLogManager logManager;
@@ -36,6 +37,7 @@ public class HeadMovement : MonoBehaviour
     void Start()
     {
         num = -1;
+
         // Euler Angles
         camEulerAngles = Camera.main.transform.eulerAngles;
        // prevEulerY = camEulerAngles.y;
@@ -43,50 +45,37 @@ public class HeadMovement : MonoBehaviour
 
         // Rotation Angles
         camRotation = Camera.main.transform.rotation;
-        curRotY = camRotation.y;
-
-        //Debug.Log("cameraAxis: " + cameraAxis);
-        //Debug.Log("prev: " + previousYAxis);
-        //Debug.Log("curr: " + currentYAxis);       
-       
+        curRotY = camRotation.y;       
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-       // logManager.WriteToLogFileForHeadMovement("test");
+        // logManager.WriteToLogFileForHeadMovement("test");
+
+        // Measure Head Movement
+        // 1.Euler
         camEulerAngles = Camera.main.transform.eulerAngles;
-        camRotation = Camera.main.transform.rotation;
         curEulerY = camEulerAngles.y;
+
+        // 2. Rotation
+        camRotation = Camera.main.transform.rotation;
         curRotY = camRotation.y;
-        //cameraAxis = Camera.main.transform.eulerAngles;
-        //currentYAxis = cameraAxis.y;
-        //Debug.Log("Euelr: " + currentYAxis + " " + cameraAxis);
-        //currentRot = Camera.main.transform.rotation.y;
-        //cameraRot = Camera.main.transform.localRotation;
-        //Debug.Log("Rotation: " + currentRot + " " + cameraRot);
+
+        // 3. converted euler
         if (curEulerY >= 180 && curEulerY <= 360) // 360-270-180 => 0-90-180
         {
-            // curEulerY = 360f - curEulerY;
             conv_curEulerY = 360f - curEulerY;
         }
         else if (curEulerY > 0 && curEulerY < 180) // 1-90-179 => -1 -90 -179
         {
-            // curEulerY = curEulerY * (-1f);
             conv_curEulerY = curEulerY * (-1f);
         }
-        //Debug.Log("Cur Starting Game: "
-        //   + " curEuler:" + curEulerY
-        //   + " curRot: " + curRotY
-        //  );
+
         if (!canMeasure)
         {
             if (!inGame)
             {
-                //  camEulerAngles = Camera.main.transform.eulerAngles;
-                //  camRotation = Camera.main.transform.rotation;
-                //prevEulerY = camEulerAngles.y;
-                //prevRotY = camRotation.y;
                 prevEulerY = curEulerY;
                 prevRotY = curRotY;
                 // 360-270-180 => 0-90-180
@@ -104,62 +93,56 @@ public class HeadMovement : MonoBehaviour
         {
             // Time
             checkTimer += Time.fixedDeltaTime; // 0f - 0.2f
-
-            // Measure Head Movement
-            // 1. Euler
-            // camEulerAngles = Camera.main.transform.eulerAngles;
-            // curEulerY = camEulerAngles.y;
-            // 2. Rotation
-            // camRotation = Camera.main.transform.rotation;
-            // curRotY = camRotation.y;
-
-            // 3. Converted Y angle
-            if (curEulerY >= 180 && curEulerY <= 360) // 360-270-180 => 0-90-180
-            {
-               // curEulerY = 360f - curEulerY;
-                conv_curEulerY = 360f - curEulerY;
-            } else if(curEulerY >0 && curEulerY < 180) // 1-90-179 => -1 -90 -179
-            {
-               // curEulerY = curEulerY * (-1f);
-                conv_curEulerY = curEulerY * (-1f);
-            }
              
             if (checkTimer >= period) // every 0.2 secs
             {
                 num += 1;
                 if (num > 0)
                 {
+                    
                     diffEulerY = Mathf.Abs(prevEulerY - curEulerY);
+                    // Converted
                     conv_diffEulerY = Mathf.Abs(conv_prevEulerY - conv_curEulerY);
 
                     sumEulerY += diffEulerY;
                     conv_sumEulerY += conv_diffEulerY;
-
+            
 
                     avgEulerY = sumEulerY / num;
                     conv_avgEulerY = conv_sumEulerY / num;
 
-                    //Debug.Log("Time:" + Time.time + " period: " + checkTimer +
-                    //    " prev:" + conv_prevEulerY + " cur: " + conv_curEulerY + " diffYAxis: " + conv_diffEulerY +
-                    //    " num: " + num + " sum: " + conv_sumEulerY + " avg: " + conv_avgEulerY);
+                    string logMsg = "Time:" + Time.time + 
+                        " period: " + checkTimer +
+                        " prev:" + conv_prevEulerY + "("+prevEulerY+") " +
+                        "cur: " + conv_curEulerY +"("+ curEulerY+ ") " +
+                        "diff: " + conv_diffEulerY + "("+ diffEulerY+") " +
+                        "num: " + num + 
+                        " sum: " + conv_sumEulerY +"("+ sumEulerY + ") " + 
+                        " avg: " + conv_avgEulerY + "("+avgEulerY + ")";
+
+                    Debug.Log("Time:" + Time.time + " period: " + checkTimer +
+                        " prev:" + conv_prevEulerY + " cur: " + conv_curEulerY + " diffYAxis: " + conv_diffEulerY +
+                        " num: " + num + " sum: " + conv_sumEulerY + " avg: " + conv_avgEulerY);
                     // previousYAxis = currentYAxis;
-              
-                }
-               
-                if(num > 0)
-                {
                     conv_prevEulerY = conv_curEulerY;
+                    prevEulerY = curEulerY;
+                    logManager.WriteLogForHeadMovement(logMsg);
+                }
+
+                if (num > 0)
+                {
+                    //conv_prevEulerY = conv_curEulerY;
+                    //prevEulerY = curEulerY;
                 }
                 checkTimer = 0f;
             }
-           // prevEulerY = curEulerY;
-           //
+          //  prevEulerY = curEulerY;
         }
     }
 
     public float GetResultHeadMovement()
     {
        // string value = avgYAxis.ToString();
-        return avgEulerY;
+        return conv_avgEulerY;
     }
 }
