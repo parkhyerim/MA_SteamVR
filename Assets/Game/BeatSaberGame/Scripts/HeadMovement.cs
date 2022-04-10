@@ -120,9 +120,9 @@ public class HeadMovement : MonoBehaviour
                         " sum: " + conv_sumEulerY +"("+ sumEulerY + ") " + 
                         " avg: " + conv_avgEulerY + "("+avgEulerY + ")";
 
-                    Debug.Log("Time:" + Time.time + " period: " + checkTimer +
-                        " prev:" + conv_prevEulerY + " cur: " + conv_curEulerY + " diffYAxis: " + conv_diffEulerY +
-                        " num: " + num + " sum: " + conv_sumEulerY + " avg: " + conv_avgEulerY);
+                    //Debug.Log("Time:" + Time.time + " period: " + checkTimer +
+                    //    " prev:" + conv_prevEulerY + " cur: " + conv_curEulerY + " diffYAxis: " + conv_diffEulerY +
+                    //    " num: " + num + " sum: " + conv_sumEulerY + " avg: " + conv_avgEulerY);
                     // previousYAxis = currentYAxis;
                     conv_prevEulerY = conv_curEulerY;
                     prevEulerY = curEulerY;
