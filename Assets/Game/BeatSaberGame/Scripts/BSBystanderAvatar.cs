@@ -70,7 +70,7 @@ public class BSBystanderAvatar : MonoBehaviour
     Color noTransparency, lowTransparency;
     public bool askedQuestion;
     private bool firstQuestioned, secondQuestioned, thirdQuestioned;
-    private int[] studyOrder = new int[3];
+    private int[] studyOrder = new int[4];
     int currentLevelIndex; // practice 0
     int order;
     public bool LookedOnceSeatedPosition { get => lookedOnceSeatedPosition; set => lookedOnceSeatedPosition = value; }
@@ -89,32 +89,44 @@ public class BSBystanderAvatar : MonoBehaviour
         sitToLeft = true;
         guidingPos = GetComponent<Transform>(); // For Avatar Setting (FOV -> Seated)
         bystanderAnim.SetBool("isInteracting", false);
-       // Debug.Log("studyorder in avatarscript[b]: " + studyOrder[0] + studyOrder[1] + studyOrder[2] + " length: " + studyOrder.Length);
-        studyOrder = userstudyManager.studyOrder;
-       // Debug.Log("studyorder in avatarscript[a]: " + studyOrder[0] + studyOrder[1] + studyOrder[2] + " length: " + studyOrder.Length);
-        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
-       // Debug.Log(currentLevelIndex);
+        //Debug.Log("studyorder in avatarscript[b]: " + studyOrder[0] + studyOrder[1] + studyOrder[2] + " length: " + studyOrder.Length);
+      //  studyOrder = userstudyManager.studyOrder;
+      //  Debug.Log("studyorder in avatarscript[a]: " + studyOrder[0] + studyOrder[1] + studyOrder[2] + +studyOrder[3] +" length: " + studyOrder.Length);
+      //  currentLevelIndex = SceneManager.GetActiveScene().buildIndex; // 0,1,2,3
+      //  Debug.Log("Current Index: " + currentLevelIndex);
 
-        for(int i = 0; i < studyOrder.Length; i++)
-        {
-            int order = studyOrder[i];
-           // Debug.Log(i + " index: " + index);
-            if (i == currentLevelIndex)
-                this.order = order;
-        }
+      //  for(int i = 0; i < studyOrder.Length; i++) // 0,1,2,3
+      //  {
+      //      int myOrder = studyOrder[i];
+      //      Debug.Log(i + " index: " + myOrder);
+      //      if (i == currentLevelIndex)
+      //      {
+      //          order = myOrder;
+      //          Debug.Log("order: " + order);
+      //      }               
+      //  }
 
-      //  Debug.Log("order: " + order);
+      ////  Debug.Log("order: " + order);
 
-        if(order == 1)
-        {
-            isAnimojiSetting = true;
-        }else if(order == 2)
-        {
-            isAvatarSetting = true;
-        }else if(order == 3)
-        {
-            isMixedSetting = true;
-        }
+      //  if(order == 1)
+      //  {
+      //      isAnimojiSetting = true;
+      //  }
+        
+      //  if(order == 2)
+      //  {
+      //      isAvatarSetting = true;
+      //  }
+        
+      //  if(order == 3)
+      //  {
+      //      isMixedSetting = true;
+      //  }
+        
+      //  if(order == 0)
+      //  {
+      //      isPractice = true;
+      //  }
 
         
         // Default setting: Avatar setting

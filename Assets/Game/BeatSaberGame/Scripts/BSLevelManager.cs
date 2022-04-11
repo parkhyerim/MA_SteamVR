@@ -5,8 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class BSLevelManager : MonoBehaviour
 {
-    [SerializeField]
-    float sceneLoadDelay = 2f;
+    public float sceneLoadDelay = 3f;
     int currentLevelIndex; // practice 0
 
     [SerializeField]
@@ -14,15 +13,15 @@ public class BSLevelManager : MonoBehaviour
 
     private static BSLevelManager instance;
 
+    UserStudyManager userstudyManager;
     BeatSaberGameManager gameManager;
     BSLogManager logManager;
-    UserStudyManager userstudyManager;
 
     private void Awake()
     {
+        userstudyManager = FindObjectOfType<UserStudyManager>();
         gameManager = FindObjectOfType<BeatSaberGameManager>();
         logManager = FindObjectOfType<BSLogManager>();
-        userstudyManager = FindObjectOfType<UserStudyManager>();
 
         studyOrder = userstudyManager.GetStudyOrder();
     }
@@ -30,39 +29,30 @@ public class BSLevelManager : MonoBehaviour
     {
         if (studyOrder == null || studyOrder.Length == 0 || studyOrder.Length < 3)
         {
-           // Debug.Log("study order array is empty");
-            int[] studyOrder = new int[3];
-            for (int i = 0; i < studyOrder.Length; i++)
+            //Debug.Log("study order array is empty");
+            int[] myStudyOrder = new int[3];    
+            for (int i = 0; i < myStudyOrder.Length; i++)
             {
-                studyOrder[i] = i + 1;
-               // Debug.Log("study order set: " + studyOrder[i]);
+                myStudyOrder[i] = i; // 0,1,2,3
             }
-        }
-        else
-        {
-            for (int i = 0; i < studyOrder.Length; i++)
-            {
-                //Debug.Log("study order: " + studyOrder[i]);
-            }
+            studyOrder = myStudyOrder;
+            // Debug.Log(studyOrder.Length);
         }
 
         currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
-        // currentLevelIndex = 0;
         string currentSceneName = SceneManager.GetActiveScene().name;
-        //  logManager.WriteToLogFile("Study Order: " + currentLevelIndex + " , name: " + currentSceneName);
+        logManager.WriteLogFile("Condition: " + currentSceneName + ", Study Order: " + (currentLevelIndex));        
     }
 
     public void LoadNextLevel()
     {
-        currentLevelIndex += 1; // 0 -> 1, 1-> 2, 
-                                // int nextIndex = userStudyOrder[currentLevelIndex-1];
-                                // Debug.Log("next index: " + nextIndex);
-                                //  Debug.Log("Level" + currentLevelIndex + "is called");
-                                // Debug.Log(newOrder[currentLevelIndex]);
-        if (currentLevelIndex <= 6)
+        currentLevelIndex += 1; // 0 -> 1, 1-> 2 ... 
+
+        if (currentLevelIndex <= 4) // trial + three conditions 
             GoToScene(currentLevelIndex);
         else
-            GoToScene("EndScene");
+            //GoToScene("EndScene");
+            LoadGameOver();
     }
 
     public void GoToScene(string nameScene)
@@ -70,9 +60,10 @@ public class BSLevelManager : MonoBehaviour
         SceneManager.LoadScene(nameScene);
     }
 
-    public void GoToScene(int indexScene)
+    public void GoToScene(int sceneIndex)
     {
-        SceneManager.LoadScene(indexScene);
+       // SceneManager.LoadScene(sceneIndex);
+        StartCoroutine(WaitAndLoad(sceneIndex, sceneLoadDelay));
     }
     public void LoadMainMenu()
     {
@@ -94,5 +85,11 @@ public class BSLevelManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         SceneManager.LoadScene(sceneName);
+    }
+
+    IEnumerator WaitAndLoad(int sceneIndex, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(sceneIndex);
     }
 }

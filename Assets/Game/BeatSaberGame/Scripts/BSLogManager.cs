@@ -14,12 +14,15 @@ public class BSLogManager : MonoBehaviour
     {
         userstudyManager = FindObjectOfType<UserStudyManager>();
         bsGameManager = FindObjectOfType<BeatSaberGameManager>();
+
+        participantID = userstudyManager.GetID();
+        currentDateAndTime = GetCurrentDateAndTime();
     }
 
     void Start()
     {
-        participantID = userstudyManager.GetID();
-        currentDateAndTime = GetCurrentDateAndTime();
+        //participantID = userstudyManager.GetID();
+        //currentDateAndTime = GetCurrentDateAndTime();
         
         WriteLogFile("==============GAME LOG=======================================" +
             "\nLOG STRAT: " + currentDateAndTime +

@@ -713,7 +713,8 @@ public class BeatSaberGameManager : MonoBehaviour
                 recordMaxMin = true;
             }
 
-            Invoke(nameof(GoToNextLevel), 5f);
+            GoToNextLevel();
+            //Invoke(nameof(GoToNextLevel), 5f);
             // Invoke(nameof(DoSurvey), 1f);
 
             //TODO:
@@ -727,7 +728,8 @@ public class BeatSaberGameManager : MonoBehaviour
             saberObject.SetActive(false);
             instructionText.text = "Your Trial Game is finised!";
             gameTimeText.text = ConvertToMinAndSeconds(0);
-            Invoke(nameof(GoToNextLevel), 5f);
+            GoToNextLevel();
+           // Invoke(nameof(GoToNextLevel), 5f);
         }
     }
 
@@ -757,7 +759,6 @@ public class BeatSaberGameManager : MonoBehaviour
 
     public void GoToNextLevel()
     {
-        //BSLevelManager levelManager = FindObjectOfType<BSLevelManager>();
         levelManager.LoadNextLevel();
     }
 
@@ -937,7 +938,8 @@ public class BeatSaberGameManager : MonoBehaviour
         trialInstructionText.text = "Your Trial Game is finised!";
        // instructionText.text = "Your Trial Game is finised!";
         gameTimeText.text = ConvertToMinAndSeconds(0);
-        Invoke(nameof(GoToNextLevel), 5f);
+        GoToNextLevel();
+       // Invoke(nameof(GoToNextLevel), 5f);
     }
 
     // TRIAL_GAME: 1
