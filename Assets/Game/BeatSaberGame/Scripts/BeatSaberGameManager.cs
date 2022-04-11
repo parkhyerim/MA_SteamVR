@@ -419,9 +419,9 @@ public class BeatSaberGameManager : MonoBehaviour
         logManager.WriteLogFile("Game Start");
         logManager.WriteLogForHeadMovement("Game Start");
         logManager.WriteLogForVRUserHead("Game Start");
-        logManager.WriteLogFile("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
-        logManager.WriteLogForHeadMovement("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
-        logManager.WriteLogForVRUserHead("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex + 1));
+        logManager.WriteLogFile("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex));
+        logManager.WriteLogForHeadMovement("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex));
+        logManager.WriteLogForVRUserHead("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex));
     }
 
     public void SetTimeStampForAvatarInCriticalZone()
@@ -786,17 +786,22 @@ public class BeatSaberGameManager : MonoBehaviour
         Debug.Log("submit survey");
     }
 
-    public void EyeFocused(bool focus)
+    public void EyeFocused(bool focus, string vis)
     {
-        eyeFocusTime = (float)Math.Round(gameTimerIgnoringPause);
-        if (focus)
+        if (BystanderInteract)
         {
-            logManager.WriteLogFile("Receive FOCUS: " + eyeFocusTime);
-        }
-        else
-        {
-            logManager.WriteLogFile("LOST FOCUS: " + eyeFocusTime);
-        }
+            eyeFocusTime = (float)Math.Round(gameTimerIgnoringPause);
+            if (focus)
+            {
+                logManager.WriteLogFile("[" + vis +"] Receive FOCUS: " + eyeFocusTime);
+                logManager.WriteLogForEyeGaze("[" + vis + "] Receive FOCUS: " + eyeFocusTime);
+            }
+            else
+            {
+                logManager.WriteLogFile("[" + vis + "] LOST FOCUS: " + eyeFocusTime);
+                logManager.WriteLogForEyeGaze("[" + vis + "] LOST FOCUS: " + eyeFocusTime);
+            }
+        }     
     }
 
     public string GetCurrentTime()

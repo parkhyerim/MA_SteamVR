@@ -41,7 +41,7 @@ public class BSLevelManager : MonoBehaviour
 
         currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
         string currentSceneName = SceneManager.GetActiveScene().name;
-        logManager.WriteLogFile("Condition: " + currentSceneName + ", Study Order: " + (currentLevelIndex));        
+       // logManager.WriteLogFile("Condition: " + currentSceneName + ", Study Order: " + (currentLevelIndex));        
     }
 
     public void LoadNextLevel()

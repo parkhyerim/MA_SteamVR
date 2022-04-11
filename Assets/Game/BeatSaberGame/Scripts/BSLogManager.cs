@@ -35,6 +35,10 @@ public class BSLogManager : MonoBehaviour
         WriteLogForVRUserHead("===============HEAD MAX. & MIN. VALUES======================================" +
           "\nLOG STRAT: " + currentDateAndTime +
           "\nID: " + participantID);
+
+        WriteLogForEyeGaze("===============Eye Gaze======================================" +
+          "\nLOG STRAT: " + currentDateAndTime +
+          "\nID: " + participantID);
     }
 
     public void WriteLogFile(string message)
@@ -63,6 +67,17 @@ public class BSLogManager : MonoBehaviour
     {
         using (System.IO.StreamWriter logFile =
                    new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_Head.txt", append: true))
+        {
+            currentTime = GetCurrentTime();
+            logFile.Write("[" + currentTime + "] ");
+            logFile.WriteLine(message);
+        }
+    }
+
+    public void WriteLogForEyeGaze(string message)
+    {
+        using (System.IO.StreamWriter logFile =
+                   new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_Gaze.txt", append: true))
         {
             currentTime = GetCurrentTime();
             logFile.Write("[" + currentTime + "] ");
