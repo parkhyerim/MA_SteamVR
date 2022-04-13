@@ -9,7 +9,7 @@ namespace Tobii.XR.Examples.GettingStarted
     public class HighlightAtGaze : MonoBehaviour, IGazeFocusable
     {
        // public GameManager gameManager;
-        public BeatSaberGameManager gameManager;
+        public BSGameManager gameManager;
 
         private static readonly int _baseColor = Shader.PropertyToID("_BaseColor");
         public Color highlightColor = Color.red;

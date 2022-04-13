@@ -126,7 +126,7 @@ public class HeadMovement : MonoBehaviour
                     // previousYAxis = currentYAxis;
                     conv_prevEulerY = conv_curEulerY;
                     prevEulerY = curEulerY;
-                    logManager.WriteLogForHeadMovement(logMsg);
+                    logManager.WriteLogForHorizontalHeadMovement(logMsg);
                 }
 
                 if (num > 0)

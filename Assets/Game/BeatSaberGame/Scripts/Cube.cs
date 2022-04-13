@@ -7,12 +7,12 @@ public class Cube : MonoBehaviour
     public float speed = 4f;
     private bool stopMoving;
     private GameObject gameManagerObject;
-    private BeatSaberGameManager bsGameManager;
+    private BSGameManager bsGameManager;
 
     private void Start()
     {
         gameManagerObject = GameObject.Find("GameManager");
-        bsGameManager = gameManagerObject.GetComponent<BeatSaberGameManager>();
+        bsGameManager = gameManagerObject.GetComponent<BSGameManager>();
     }
 
     void Update()

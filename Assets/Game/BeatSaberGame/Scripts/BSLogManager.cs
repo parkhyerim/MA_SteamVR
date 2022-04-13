@@ -4,18 +4,17 @@ using System.Globalization;
 
 public class BSLogManager : MonoBehaviour
 {
-    BeatSaberGameManager bsGameManager;
     UserStudyManager userstudyManager;
     private string participantID;
     private string currentDateAndTime;
     private string currentTime;
+    private string currentTimeinMilliseconds;
 
     private void Awake()
     {
         userstudyManager = FindObjectOfType<UserStudyManager>();
-        bsGameManager = FindObjectOfType<BeatSaberGameManager>();
 
-        participantID = userstudyManager.GetID();
+        participantID = userstudyManager.GetParticipantID();
         currentDateAndTime = GetCurrentDateAndTime();
     }
 
@@ -25,20 +24,24 @@ public class BSLogManager : MonoBehaviour
         //currentDateAndTime = GetCurrentDateAndTime();
         
         WriteLogFile("==============GAME LOG=======================================" +
-            "\nLOG STRAT: " + currentDateAndTime +
-            "\nID: " + participantID);
+           "\nID: " + participantID+
+           "\nLOG STRAT: " + currentDateAndTime);
 
-        WriteLogForHeadMovement("===============HEAD MOVEMENT PER 0.2 SEC======================================" +
-          "\nLOG STRAT: " + currentDateAndTime +
-          "\nID: " + participantID);
+        WriteLogForHorizontalHeadMovement("===============HEAD MOVEMENT (Horizontal)========================" +
+          "\nID: " + participantID +
+          "\nLOG STRAT: " + currentDateAndTime);
 
-        WriteLogForVRUserHead("===============HEAD MAX. & MIN. VALUES======================================" +
-          "\nLOG STRAT: " + currentDateAndTime +
-          "\nID: " + participantID);
+        WriteLogForVerticalHeadMovement("===============HEAD MOVEMENT (Vertical)========================" +
+          "\nID: " + participantID +
+          "\nLOG STRAT: " + currentDateAndTime);
 
         WriteLogForEyeGaze("===============Eye Gaze======================================" +
-          "\nLOG STRAT: " + currentDateAndTime +
-          "\nID: " + participantID);
+          "\nID: " + participantID +
+          "\nLOG STRAT: " + currentDateAndTime);
+
+        WriteLogForVRUserHead("===============HEAD MAX. & MIN.======================================" +
+          "\nID: " + participantID +
+          "\nLOG STRAT: " + currentDateAndTime);
     }
 
     public void WriteLogFile(string message)
@@ -52,10 +55,21 @@ public class BSLogManager : MonoBehaviour
         }
     }
 
-    public void WriteLogForHeadMovement(string message)
+    public void WriteLogForHorizontalHeadMovement(string message)
     {
         using (System.IO.StreamWriter logFile =
-           new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_HeadMovement.txt", append: true))
+           new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_HeadMovement_Hor.txt", append: true))
+        {
+            currentTime = GetCurrentTime();
+            logFile.Write("[" + currentTime + "] ");
+            logFile.WriteLine(message);
+        }
+    }
+
+    public void WriteLogForVerticalHeadMovement(string message)
+    {
+        using (System.IO.StreamWriter logFile =
+           new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_HeadMovement_Ver.txt", append: true))
         {
             currentTime = GetCurrentTime();
             logFile.Write("[" + currentTime + "] ");
@@ -80,7 +94,8 @@ public class BSLogManager : MonoBehaviour
                    new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_Gaze.txt", append: true))
         {
             currentTime = GetCurrentTime();
-            logFile.Write("[" + currentTime + "] ");
+            currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
+            logFile.Write("[" + currentTimeinMilliseconds + "] ");
             logFile.WriteLine(message);
         }
     }
@@ -99,6 +114,14 @@ public class BSLogManager : MonoBehaviour
     {
         DateTime localDate = DateTime.Now;
         string name = localDate.ToString("HH:mm:ss");
+
+        return name;
+    }
+
+    private string GetCurrentTimeMilliseconds()
+    {
+        DateTime localDate = DateTime.Now;
+        string name = localDate.ToString("HH:mm:ss:ms");
 
         return name;
     }

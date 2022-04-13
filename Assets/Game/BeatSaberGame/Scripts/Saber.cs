@@ -6,7 +6,7 @@ public class Saber : MonoBehaviour
 {
     public LayerMask layer;
     private Vector3 previousPos;
-    public BeatSaberGameManager gameMananger;
+    public BSGameManager gameMananger;
     public GameObject blueEffect;
     public GameObject greenEffect;
     public GameObject yellowEffect;
@@ -21,7 +21,7 @@ public class Saber : MonoBehaviour
             if(Vector3.Angle(transform.position - previousPos, hit.transform.up) > 130 )// && Vector3.Angle(transform.position - previousPos, hit.transform.up) < 150)
             {
                 //  Debug.Log(hit.transform.gameObject.name + ": Hit Destroy " + Vector3.Angle(transform.position - previousPos, hit.transform.up));
-                Debug.Log(Vector3.Angle(transform.position - previousPos, hit.transform.up));
+               //Debug.Log(Vector3.Angle(transform.position - previousPos, hit.transform.up));
                 gameMananger.SliceCube(hit.transform.gameObject);
 
                 //if (hit.transform.gameObject.name.Contains("Blue"))
@@ -46,14 +46,20 @@ public class Saber : MonoBehaviour
                 //}
                 Destroy(hit.transform.gameObject);
             }
+
         }
         previousPos = transform.position;
     }
 
     private void OnTriggerEnter(Collider collision)
     {
-       // gameMananger.CubeSliced(collision.gameObject);
-
+        // gameMananger.CubeSliced(collision.gameObject);
+        //Debug.Log("collision");
+        //if (collision.gameObject.tag == "Cube")
+        //{
+        //    Debug.Log("cube collision");
+        //    this.gameObject.GetComponent<Renderer>().material.color = Color.red;
+        //}
         //if(collision.gameObject.tag == "Cube")
         //{
         //    //Destroy(collision.gameObject);

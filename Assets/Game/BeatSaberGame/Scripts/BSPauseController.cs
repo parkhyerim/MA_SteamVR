@@ -11,7 +11,7 @@ public class BSPauseController : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip[] quesitionAudios;
     public AudioSource bgMusicAS;
-    BeatSaberGameManager gameManager;
+    BSGameManager gameManager;
     BSBystanderAvatar bAvatar;
     BSLogManager logManager;
     [SerializeField]
@@ -24,7 +24,7 @@ public class BSPauseController : MonoBehaviour
 
     private void Awake()
     {
-        gameManager = FindObjectOfType<BeatSaberGameManager>();
+        gameManager = FindObjectOfType<BSGameManager>();
         bAvatar = FindObjectOfType<BSBystanderAvatar>();
         logManager = FindObjectOfType<BSLogManager>();
 

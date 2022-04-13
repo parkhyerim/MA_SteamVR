@@ -8,7 +8,7 @@ public class BSBystanderAvatar : MonoBehaviour
 {
     public GameObject bystanderTracker;
     private Transform trackerTransform;
-    BeatSaberGameManager bsgameManager;
+    BSGameManager bsgameManager;
     BSLogManager logManager;
     UserStudyManager userstudyManager;
     private float trackerEulerYAxis;  // bystander's euler y-axis -> tracker y
@@ -78,7 +78,7 @@ public class BSBystanderAvatar : MonoBehaviour
 
     private void Awake()
     {
-        bsgameManager = FindObjectOfType<BeatSaberGameManager>();
+        bsgameManager = FindObjectOfType<BSGameManager>();
         logManager = FindObjectOfType<BSLogManager>();
         userstudyManager = FindObjectOfType<UserStudyManager>();
     }

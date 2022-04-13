@@ -7,7 +7,7 @@ public class BSRotateTracker : MonoBehaviour
     public bool doInteraction;
     public bool useTracker;
     public BSLogManager logManager;
-    public BeatSaberGameManager gameManager;
+    public BSGameManager gameManager;
     // temporary
     public float rotateSpeed = 2;
     [SerializeField]

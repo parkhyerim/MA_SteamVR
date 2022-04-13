@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class BeatSaberGameManager : MonoBehaviour
+public class BSGameManager : MonoBehaviour
 {
     [Header("AUDIO")]
     public AudioSource gameEffectAudioSource;
@@ -179,12 +179,7 @@ public class BeatSaberGameManager : MonoBehaviour
 
         saberObject.SetActive(false);
 
-        participantID = userstudyManager.GetID();
-
-        //foreach (GameObject cube in stopCubes)
-        //{
-        //    cube.SetActive(false);
-        //}
+        participantID = userstudyManager.GetParticipantID();
     }
 
     private void Start()
@@ -209,9 +204,7 @@ public class BeatSaberGameManager : MonoBehaviour
         maxRightAxis = mainCameraYAxis;
 
         if (participantID == "" || participantID == null)
-        {
-            participantID = "ID not assigned";
-        }
+            participantID = "IDNotAssigned";
 
         // TRIAL_GAME
         if (isPracticeGame)
@@ -417,10 +410,10 @@ public class BeatSaberGameManager : MonoBehaviour
 
         // Logging Game-Start
         logManager.WriteLogFile("Game Start");
-        logManager.WriteLogForHeadMovement("Game Start");
+        logManager.WriteLogForHorizontalHeadMovement("Game Start");
         logManager.WriteLogForVRUserHead("Game Start");
         logManager.WriteLogFile("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex));
-        logManager.WriteLogForHeadMovement("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex));
+        logManager.WriteLogForHorizontalHeadMovement("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex));
         logManager.WriteLogForVRUserHead("Condition: " + currentSceneName + ", Order: " + (currentSceneIndex));
     }
 
@@ -429,7 +422,7 @@ public class BeatSaberGameManager : MonoBehaviour
         // string curDateTime = GetCurrentTime();
         Debug.Log("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
         logManager.WriteLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
-        logManager.WriteLogForHeadMovement("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogForHorizontalHeadMovement("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
         logManager.WriteLogForVRUserHead("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
     }
 
@@ -437,7 +430,7 @@ public class BeatSaberGameManager : MonoBehaviour
     {
         Debug.Log("Bystander Interaction: " + state + " " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
         logManager.WriteLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
-        logManager.WriteLogForHeadMovement("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
+        logManager.WriteLogForHorizontalHeadMovement("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
         logManager.WriteLogForVRUserHead("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
     }
 
@@ -446,7 +439,7 @@ public class BeatSaberGameManager : MonoBehaviour
         logManager.WriteLogFile("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxisVector);
         logManager.WriteLogForVRUserHead("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxisVector);
         // TODO: Head Movement Start Value
-        logManager.WriteLogForHeadMovement("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxisVector);
+        logManager.WriteLogForHorizontalHeadMovement("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxisVector);
     }
 
     public void SpawnCubes()
@@ -554,7 +547,7 @@ public class BeatSaberGameManager : MonoBehaviour
                 pausedTime = (float)Math.Round(GameCountTimer);
                 identificationTime = (float)Math.Round(gameTimerIgnoringPause);
                 logManager.WriteLogFile("Identification (Paused) Time: " + identificationTime);
-                logManager.WriteLogForHeadMovement("Identification (Paused) Time: " + identificationTime);
+                logManager.WriteLogForHorizontalHeadMovement("Identification (Paused) Time: " + identificationTime);
                 logManager.WriteLogForVRUserHead("Identification (Paused) Time: " + identificationTime);
                 cubeSpawner.CanSpawn = false;
                 cubeSpawner.StopMoving = true;
@@ -606,7 +599,7 @@ public class BeatSaberGameManager : MonoBehaviour
             {
                 gamePaused = false;
                 logManager.WriteLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
-                logManager.WriteLogForHeadMovement("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+                logManager.WriteLogForHorizontalHeadMovement("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
                 logManager.WriteLogForVRUserHead("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
                 cubeSpawner.CanSpawn = true;
                 cubeSpawner.StopMoving = false;
@@ -705,10 +698,10 @@ public class BeatSaberGameManager : MonoBehaviour
                 //logManager.WriteLogFile("================================\n=================");
                 LogVRHeadsetAxis();
                 logManager.WriteLogFile("END GAME");
-                logManager.WriteLogForHeadMovement("END GAME");
+                logManager.WriteLogForHorizontalHeadMovement("END GAME");
                 logManager.WriteLogForVRUserHead("END GAME");
                 logManager.WriteLogFile("Head Movement Avg. (every 0.20s): " + avgValue);
-                logManager.WriteLogForHeadMovement("Head Movement Avg. (every 0.20s): " + avgValue);
+                logManager.WriteLogForHorizontalHeadMovement("Head Movement Avg. (every 0.20s): " + avgValue);
                 logManager.WriteLogForVRUserHead("Head Movement Avg. (every 0.20s): " + avgValue);
                 recordMaxMin = true;
             }
