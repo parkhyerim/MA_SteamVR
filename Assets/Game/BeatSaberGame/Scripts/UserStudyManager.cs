@@ -7,7 +7,7 @@ public class UserStudyManager : MonoBehaviour
     static UserStudyManager instance;
 
     public string participantID; 
-    public int[] studyOrder = new int[3] { 1, 2, 3 }; // default order
+   // public int[] studyOrder = new int[3] { 1, 2, 3 }; // default order
 
     private void Awake()
     {
@@ -33,8 +33,8 @@ public class UserStudyManager : MonoBehaviour
         return participantID;
     }
 
-    public int[] GetStudyOrder()
-    {
-        return studyOrder;
-    }
+    //public int[] GetStudyOrder()
+    //{
+    //    return studyOrder;
+    //}
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Globalization;
+using System.IO;
+using System.Net.Sockets;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -140,6 +142,70 @@ public class BSGameManager : MonoBehaviour
     public bool CanStartTrial { get => canStartTrial; set => canStartTrial = value; }
     public int Score { get => score; set => score = value; }
 
+
+    /**************************************************************
+     * socket code
+     **************************************************************/
+
+    //TcpClient mySocket;
+    //NetworkStream theStream;
+    //StreamWriter theWriter;
+    //StreamReader theReader;
+
+    //public bool socketReady = false; //a true/false variable for connection status
+    ////try to initiate connection
+    //public void setupSocket()
+    //{
+    //    try
+    //    {
+    //        mySocket = new TcpClient("localhost", 25001);
+    //        theStream = mySocket.GetStream();
+    //        theWriter = new StreamWriter(theStream);
+    //        theReader = new StreamReader(theStream);
+    //        socketReady = true;
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Debug.Log("Socket error:" + e);
+    //    }
+    //}
+    ////send message to server
+    //public void writeSocket(string theLine)
+    //{
+    //    if (!socketReady)
+    //        return;
+    //    String tmpString = theLine + "\r\n";
+    //    theWriter.Write(tmpString);
+    //    theWriter.Flush();
+    //}
+    ////disconnect from the socket
+    //public void closeSocket()
+    //{
+    //    if (!socketReady)
+    //        return;
+    //    theWriter.Close();
+    //    theReader.Close();
+    //    mySocket.Close();
+    //    socketReady = false;
+    //}
+    /**************************************************************
+     * socket code ende
+     **************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private void Awake()
     {
         // Create references to other game objects and components
@@ -211,7 +277,13 @@ public class BSGameManager : MonoBehaviour
         {
             trialLobbyText.text = "";
             StartCoroutine(WelcomeInstruction());
-        }      
+        }
+        //else
+        //{
+        //    setupSocket();
+
+        //}
+
     }
 
     private void FixedUpdate()
@@ -323,7 +395,8 @@ public class BSGameManager : MonoBehaviour
                 {
                     GameCountTimer += Time.fixedDeltaTime;
                     // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                   // gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                    gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
 
                     if (!askSpawnCubes)
                     {
@@ -341,7 +414,8 @@ public class BSGameManager : MonoBehaviour
                 else
                 {
                     // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                   // gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                    gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
                 }
             }
         }
@@ -363,7 +437,8 @@ public class BSGameManager : MonoBehaviour
                 if (!gamePaused)
                 {
                     GameCountTimer += Time.fixedDeltaTime;
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                    // gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                    gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
 
                     if (askSpawnCubesForTrial == false)
                     {
@@ -382,7 +457,8 @@ public class BSGameManager : MonoBehaviour
                 else
                 {
                     // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                    // gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                    gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
                 }
             }       
         }
@@ -424,28 +500,28 @@ public class BSGameManager : MonoBehaviour
     public void SetTimeStampForAvatarInCriticalZone()
     {
         // string curDateTime = GetCurrentTime();
-        Debug.Log("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
-        logManager.WriteLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
-        logManager.WriteLogForHorizontalHeadMovement("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
-        logManager.WriteLogForVRUserHead("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause));
+        Debug.Log("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogFile("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogForHorizontalHeadMovement("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogForVRUserHead("Bystander Interaction (Enter 30-0 d Zone): " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
     }
 
     public void SetTimeStampForAvatarInCriticalZoneWithMessage(string state)
     {
-        Debug.Log("Bystander Interaction: " + state + " " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
-        logManager.WriteLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
-        logManager.WriteLogForHorizontalHeadMovement("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
-        logManager.WriteLogForVRUserHead("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + "sec");
+        Debug.Log("Bystander Interaction: " + state + " " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogFile("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogForHorizontalHeadMovement("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) +" (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogForVRUserHead("Bystander " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) +" (" + gameTimerIgnoringPause + ")");
     }
 
     private void LogCameraAxisAtStart()
     {
-        logManager.WriteLogFile("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxisVector);
-        logManager.WriteLogForVRUserHead("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxisVector);
+        logManager.WriteLogFile("Head Movement [START]: " + "Horizontal(Y): " + mainCameraYAxis + ", Vertical(X): " + mainCameraXAxis + ", Vector:" + maincameraAxisVector);
+        logManager.WriteLogForVRUserHead("Head Movement [START]: " + "Horizontal(Y): " + mainCameraYAxis + ", Vertical(X): " + mainCameraXAxis + ", Vector:" + maincameraAxisVector);
         // TODO: Head Movement Start Value
-        logManager.WriteLogForHorizontalHeadMovement("Head Movement [START]: " + "Y-Axis: " + mainCameraYAxis + ", X-Axis: " + mainCameraXAxis + ", Vector:" + maincameraAxisVector);
+        logManager.WriteLogForHorizontalHeadMovement("Head Movement [START]: " + "Horizontal(Y): " + mainCameraYAxis + ", Vertical(X): " + mainCameraXAxis + ", Vector:" + maincameraAxisVector);
     }
-
+ 
     public void SpawnCubes()
     {
         cubeSpawner.CanSpawn = true;
@@ -472,7 +548,7 @@ public class BSGameManager : MonoBehaviour
         BystanderInteract = true;
         pauseController.OncePausedInSession = false;
         // logManager
-        logManager.WriteLogFile("Bystander starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause));
+        logManager.WriteLogFile("Bystander starts turning towards VR user (NZ_to_UCZ): " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
 
         bystanderCanHearAnswer = true;
         bystanderAvatar.LookedOnceSeatedPosition = false;
@@ -550,9 +626,9 @@ public class BSGameManager : MonoBehaviour
                 gamePaused = true;
                 pausedTime = (float)Math.Round(GameCountTimer);
                 identificationTime = (float)Math.Round(gameTimerIgnoringPause);
-                logManager.WriteLogFile("Identification (Paused) Time: " + identificationTime);
-                logManager.WriteLogForHorizontalHeadMovement("Identification (Paused) Time: " + identificationTime);
-                logManager.WriteLogForVRUserHead("Identification (Paused) Time: " + identificationTime);
+                logManager.WriteLogFile("Identification (Paused) Time: " + identificationTime + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForHorizontalHeadMovement("Identification (Paused) Time: " + identificationTime + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForVRUserHead("Identification (Paused) Time: " + identificationTime + " (" + gameTimerIgnoringPause + ")");
                 cubeSpawner.CanSpawn = false;
                 cubeSpawner.StopMoving = true;
                 cubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -602,9 +678,9 @@ public class BSGameManager : MonoBehaviour
             if (!isPracticeGame)
             {
                 gamePaused = false;
-                logManager.WriteLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
-                logManager.WriteLogForHorizontalHeadMovement("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
-                logManager.WriteLogForVRUserHead("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause));
+                logManager.WriteLogFile("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause +")");
+                logManager.WriteLogForHorizontalHeadMovement("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForVRUserHead("Resume Time: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 cubeSpawner.CanSpawn = true;
                 cubeSpawner.StopMoving = false;
                 cubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -656,6 +732,9 @@ public class BSGameManager : MonoBehaviour
 
         if (!isPracticeGame)
         {
+            //writeSocket("endscript");
+            //closeSocket();
+
             instructionUI.SetActive(true);
             instructionText.enabled = true;
             bystanderInteract = false;
@@ -687,9 +766,11 @@ public class BSGameManager : MonoBehaviour
 
             gameTimeText.text = ConvertToMinAndSeconds(0);
 
+            int totalScore = cubeSpawner.GetCountCubes();
+
             if (!recordScore)
             {
-                logManager.WriteLogFile("Score: " + score);
+                logManager.WriteLogFile("Score: " + score + " /" + totalScore);
                 recordScore = true;
             }
 
@@ -713,6 +794,7 @@ public class BSGameManager : MonoBehaviour
                 logManager.WriteLogForVRUserHead("Vertical Head Movement Avg. (every 0.20s): " + avgVertHMValue);
                 recordMaxMin = true;
             }
+
 
             GoToNextLevel();
             //Invoke(nameof(GoToNextLevel), 5f);
@@ -763,14 +845,14 @@ public class BSGameManager : MonoBehaviour
         levelManager.LoadNextLevel();
     }
 
-    public IEnumerator ShowRandomImage()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(1);
-            // notificationCheerImages[randomNumForEffect].enabled = false;
-        }
-    }
+    //public IEnumerator ShowRandomImage()
+    //{
+    //    while (true)
+    //    {
+    //        yield return new WaitForSeconds(1);
+    //        // notificationCheerImages[randomNumForEffect].enabled = false;
+    //    }
+    //}
 
     void StopRayInteractoin()
     {
@@ -787,20 +869,20 @@ public class BSGameManager : MonoBehaviour
         Debug.Log("submit survey");
     }
 
-    public void EyeFocused(bool focus, string vis)
+    public void EyeFocused(bool focus, string visType)
     {
         if (BystanderInteract)
         {
             eyeFocusTime = (float)Math.Round(gameTimerIgnoringPause);
             if (focus)
             {
-                logManager.WriteLogFile("[" + vis +"] Receive FOCUS: " + eyeFocusTime);
-                logManager.WriteLogForEyeGaze("[" + vis + "] Receive FOCUS: " + eyeFocusTime);
+                logManager.WriteLogFile("[" + visType +"] Receive FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForEyeGaze("[" + visType + "] Receive FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
             }
             else
             {
-                logManager.WriteLogFile("[" + vis + "] LOST FOCUS: " + eyeFocusTime);
-                logManager.WriteLogForEyeGaze("[" + vis + "] LOST FOCUS: " + eyeFocusTime);
+                logManager.WriteLogFile("[" + visType + "] LOST FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForEyeGaze("[" + visType + "] LOST FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
             }
         }     
     }
@@ -845,6 +927,8 @@ public class BSGameManager : MonoBehaviour
             {
                 int index = audioOrder[questionCounter - 1] - 1;
                 quesitionAudioSource.PlayOneShot(questionAudios[index]);
+                Debug.Log(index+ "question is called");
+                //writeSocket("question" + index);
                 logManager.WriteLogFile("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause));
             }
             questionCounter++;
@@ -1002,4 +1086,10 @@ public class BSGameManager : MonoBehaviour
         trialInstructionUI.SetActive(false);
         yield return new WaitForSeconds(3);
     }
+
+
+
+
+
+
 }

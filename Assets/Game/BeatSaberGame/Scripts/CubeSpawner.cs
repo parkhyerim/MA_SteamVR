@@ -13,10 +13,15 @@ public class CubeSpawner : MonoBehaviour
     private bool canSpawn;
     private bool stopSpawn;
     private bool stopMoving;
+    private int count;
     public bool CanSpawn { get => canSpawn; set => canSpawn = value; }
     public bool StopSpawn { get => stopSpawn; set => stopSpawn = value; }
     public bool StopMoving { get => stopMoving; set => stopMoving = value; }
 
+    private void Start()
+    {
+        count = 0;
+    }
     void Update()
     {
         if (CanSpawn)
@@ -28,9 +33,10 @@ public class CubeSpawner : MonoBehaviour
                 GameObject cube = Instantiate(cubes[Random.Range(0, cubes.Length)], points[Random.Range(0, points.Length)]);
                 cube.transform.localPosition = Vector3.zero;
                 cube.transform.Rotate(transform.forward, 90 * Random.Range(0, 4));
+                count++;
+                //Debug.Log(count);
                 // Remove the recorded beat seconds.
                 timer -= beat;
-
             }
             timer += Time.deltaTime;
         }  
@@ -39,5 +45,10 @@ public class CubeSpawner : MonoBehaviour
     public void SetSpawner()
     {
         CanSpawn = true;
+    }
+
+    public int GetCountCubes()
+    {
+        return count;
     }
 }
