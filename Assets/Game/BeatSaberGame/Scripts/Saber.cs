@@ -18,10 +18,10 @@ public class Saber : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(transform.position, transform.forward, out hit, 1, layer))
         {
-            if(Vector3.Angle(transform.position - previousPos, hit.transform.up) > 5)
+            if(Vector3.Angle(transform.position - previousPos, hit.transform.up) > 130 )// && Vector3.Angle(transform.position - previousPos, hit.transform.up) < 150)
             {
-             //  Debug.Log(hit.transform.gameObject.name + ": Hit Destroy " + Vector3.Angle(transform.position - previousPos, hit.transform.up));
-
+                //  Debug.Log(hit.transform.gameObject.name + ": Hit Destroy " + Vector3.Angle(transform.position - previousPos, hit.transform.up));
+                Debug.Log(Vector3.Angle(transform.position - previousPos, hit.transform.up));
                 gameMananger.SliceCube(hit.transform.gameObject);
 
                 //if (hit.transform.gameObject.name.Contains("Blue"))
@@ -45,9 +45,7 @@ public class Saber : MonoBehaviour
                 //   // Instantiate(startEffect, hit.transform.position, Quaternion.identity);
                 //}
                 Destroy(hit.transform.gameObject);
-
             }
-           // Debug.Log(hit.transform.gameObject.name + ": Not Destroy " +    Vector3.Angle(transform.position - previousPos, hit.transform.up));
         }
         previousPos = transform.position;
     }
