@@ -720,17 +720,17 @@ public class BeatSaberGameManager : MonoBehaviour
             //TODO:
             // levelManager.LoadGameOver();
         }
-        else
-        {
-            CanPauseGame = false;
-            CanPauseTrial = false;
-            trialCubeSpawner.CanSpawn = false;
-            saberObject.SetActive(false);
-            instructionText.text = "Your Trial Game is finised!";
-            gameTimeText.text = ConvertToMinAndSeconds(0);
-            GoToNextLevel();
-           // Invoke(nameof(GoToNextLevel), 5f);
-        }
+        //else
+        //{
+        //    CanPauseGame = false;
+        //    CanPauseTrial = false;
+        //    trialCubeSpawner.CanSpawn = false;
+        //    saberObject.SetActive(false);
+        //    instructionText.text = "Your Trial Game is finised!";
+        //    gameTimeText.text = ConvertToMinAndSeconds(0);
+        //    GoToNextLevel();
+        //   // Invoke(nameof(GoToNextLevel), 5f);
+        //}
     }
 
     private void LogVRHeadsetAxis()
