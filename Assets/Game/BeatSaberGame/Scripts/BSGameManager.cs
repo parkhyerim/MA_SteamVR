@@ -132,6 +132,7 @@ public class BSGameManager : MonoBehaviour
     private bool bystanderCanHearAnswer;
     public int[] audioOrder = { 1, 2, 3 };
     int questionCounter;
+    bool allQuestionAsked, reduceGameTime, calledPushEnd;
 
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
     public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
@@ -348,14 +349,6 @@ public class BSGameManager : MonoBehaviour
             else if (Time.time > startTimeForSpawningCubes && GameCountTimer <= totalGameTime) // During the Game
             {
                 gameTimerIgnoringPause += Time.fixedDeltaTime;
-                //if (maincameraAxisVector.y > 180 && maincameraAxisVector.y <= 360)
-                //{
-                //    mainCameraYAxis = 360f - maincameraAxisVector.y;
-                //}
-                //if (maincameraAxisVector.y >= 0 && maincameraAxisVector.y < 180)
-                //{
-                //    mainCameraYAxis = maincameraAxisVector.y * -1f;
-                //}
 
                 // Set Max. & Min. Value
                 if (maxRightAxis > mainCameraYAxis)
@@ -368,16 +361,7 @@ public class BSGameManager : MonoBehaviour
                 {
                     maxLeftAxis = mainCameraYAxis;
                     maxLeftVectorAxis = maincameraAxisVector;
-                }
-                   
-                //if (maincameraAxisVector.x > 180 && maincameraAxisVector.x <= 360)
-                //{
-                //    mainCameraXAxis = 360f - maincameraAxisVector.x;
-                //}
-                //if (maincameraAxisVector.x >= 0 && maincameraAxisVector.x < 180)
-                //{
-                //    mainCameraXAxis = maincameraAxisVector.x * -1f;
-                //}
+                }                
 
                 if (maxDownAxis > mainCameraXAxis)
                 {
@@ -410,6 +394,14 @@ public class BSGameManager : MonoBehaviour
                         StopRayInteractoin();
                         EndGame();
                     }
+
+                    //if (reduceGameTime && !calledPushEnd)
+                    //{
+                    //    cubeSpawner.CanSpawn = false;
+                    //    StopRayInteractoin();
+                    //    EndGame();
+                    //    calledPushEnd = true;
+                    //}
                 }
                 else
                 {
@@ -558,7 +550,27 @@ public class BSGameManager : MonoBehaviour
     public void BystanderEnd()
     {
         BystanderInteract = false;
+        //if (questionCounter == 3)
+        //{
+        //    Debug.Log("all question is asked");
+        //    allQuestionAsked = true;
+        //    ChangeTotalTime();
+        //}         
     }
+
+    //private void ChangeTotalTime()
+    //{
+    //    float countTime = gameCountTimer;
+    //    float remainTime = totalGameTime - countTime;
+    //    Debug.Log("counttime:" + countTime);
+    //    Debug.Log("remain time:" + remainTime);
+    //    if (remainTime > 30)
+    //    {
+    //        //totalGameTime = 30;
+    //        //Debug.Log(totalGameTime);
+    //        reduceGameTime = true;
+    //    }
+    //}
 
     public void SliceCube(GameObject cube)
     {
@@ -929,7 +941,11 @@ public class BSGameManager : MonoBehaviour
                 quesitionAudioSource.PlayOneShot(questionAudios[index]);
                 Debug.Log(index+ "question is called");
                 //writeSocket("question" + index);
-                logManager.WriteLogFile("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause));
+
+                logManager.WriteLogFile("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForEyeGaze("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForHorizontalHeadMovement("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForVerticalHeadMovement("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
             }
             questionCounter++;
         }
