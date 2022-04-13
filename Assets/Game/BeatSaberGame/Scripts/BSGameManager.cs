@@ -217,21 +217,25 @@ public class BSGameManager : MonoBehaviour
     private void FixedUpdate()
     {
         if (CanStartGame)
-        {      
-            maincameraAxisVector = Camera.main.transform.localEulerAngles;
-            if (maincameraAxisVector.y > 180 && maincameraAxisVector.y <= 360)
+        {
+            //maincameraAxisVector = Camera.main.transform.localEulerAngles;
+            maincameraAxisVector = Camera.main.transform.eulerAngles;
+           // Debug.Log("local: " + Camera.main.transform.localEulerAngles);
+           // Debug.Log("no: " + Camera.main.transform.eulerAngles);
+
+            if (maincameraAxisVector.y >= 180 && maincameraAxisVector.y <= 360)
             {
                 mainCameraYAxis = 360f - maincameraAxisVector.y;
             }
-            if (maincameraAxisVector.y >= 0 && maincameraAxisVector.y < 180)
+            if (maincameraAxisVector.y > 0 && maincameraAxisVector.y < 180)
             {
                 mainCameraYAxis = maincameraAxisVector.y * -1f;
             }
-            if (maincameraAxisVector.x > 180 && maincameraAxisVector.x <= 360)
+            if (maincameraAxisVector.x >= 180 && maincameraAxisVector.x <= 360)
             {
                 mainCameraXAxis = 360f - maincameraAxisVector.x;
             }
-            if (maincameraAxisVector.x >= 0 && maincameraAxisVector.x < 180)
+            if (maincameraAxisVector.x > 0 && maincameraAxisVector.x < 180)
             {
                 mainCameraXAxis = maincameraAxisVector.x * -1f;
             }
@@ -392,7 +396,7 @@ public class BSGameManager : MonoBehaviour
         startTimeForSpawningCubes = timeFromSceneLoading + getReadyTime;
 
         headMovement.CanMeasure = true;
-        headMovement.InGame = true;
+       // headMovement.InGame = true;
 
         // Music 
         lobbyMusicAudioSource.Stop();
@@ -658,11 +662,11 @@ public class BSGameManager : MonoBehaviour
             CanPauseGame = false;
             CanPauseTrial = false;
             headMovement.CanMeasure = false;
-            headMovement.InGame = false;
+            // headMovement.InGame = false;
             
 
-            float avgValue = headMovement.GetResultHeadMovement();
-           
+            float avgHorizHMValue = headMovement.GetHorizontalHeadMovement();
+            float avgVertHMValue = headMovement.GetVerticalHeadMovement();
 
             cubeSpawner.CanSpawn = false;
             cubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -699,10 +703,14 @@ public class BSGameManager : MonoBehaviour
                 LogVRHeadsetAxis();
                 logManager.WriteLogFile("END GAME");
                 logManager.WriteLogForHorizontalHeadMovement("END GAME");
+                logManager.WriteLogForVerticalHeadMovement("END GAME");
                 logManager.WriteLogForVRUserHead("END GAME");
-                logManager.WriteLogFile("Head Movement Avg. (every 0.20s): " + avgValue);
-                logManager.WriteLogForHorizontalHeadMovement("Head Movement Avg. (every 0.20s): " + avgValue);
-                logManager.WriteLogForVRUserHead("Head Movement Avg. (every 0.20s): " + avgValue);
+                logManager.WriteLogFile("Horizontal Head Movement Avg. (every 0.20s): " + avgHorizHMValue);
+                logManager.WriteLogFile("Vertical Head Movement Avg. (every 0.20s): " + avgVertHMValue);
+                logManager.WriteLogForHorizontalHeadMovement("Horizontal Head Movement Avg. (every 0.20s): " + avgHorizHMValue);
+                logManager.WriteLogForVerticalHeadMovement("Vertical Head Movement Avg. (every 0.20s): " + avgVertHMValue);
+                logManager.WriteLogForVRUserHead("Horizontal Head Movement Avg. (every 0.20s): " + avgHorizHMValue);
+                logManager.WriteLogForVRUserHead("Vertical Head Movement Avg. (every 0.20s): " + avgVertHMValue);
                 recordMaxMin = true;
             }
 

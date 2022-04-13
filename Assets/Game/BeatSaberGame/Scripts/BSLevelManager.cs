@@ -32,6 +32,7 @@ public class BSLevelManager : MonoBehaviour
         //}
 
         currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+      //  Debug.Log("current scene index: " + currentLevelIndex);
       //  string currentSceneName = SceneManager.GetActiveScene().name;
        // logManager.WriteLogFile("Condition: " + currentSceneName + ", Study Order: " + (currentLevelIndex));        
     }
