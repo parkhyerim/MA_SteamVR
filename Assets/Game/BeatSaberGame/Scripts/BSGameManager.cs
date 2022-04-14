@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net.Sockets;
@@ -148,62 +149,50 @@ public class BSGameManager : MonoBehaviour
      * socket code
      **************************************************************/
 
-    //TcpClient mySocket;
-    //NetworkStream theStream;
-    //StreamWriter theWriter;
-    //StreamReader theReader;
+    TcpClient mySocket;
+    NetworkStream theStream;
+    StreamWriter theWriter;
+    StreamReader theReader;
 
-    //public bool socketReady = false; //a true/false variable for connection status
-    ////try to initiate connection
-    //public void setupSocket()
-    //{
-    //    try
-    //    {
-    //        mySocket = new TcpClient("localhost", 25001);
-    //        theStream = mySocket.GetStream();
-    //        theWriter = new StreamWriter(theStream);
-    //        theReader = new StreamReader(theStream);
-    //        socketReady = true;
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log("Socket error:" + e);
-    //    }
-    //}
-    ////send message to server
-    //public void writeSocket(string theLine)
-    //{
-    //    if (!socketReady)
-    //        return;
-    //    String tmpString = theLine + "\r\n";
-    //    theWriter.Write(tmpString);
-    //    theWriter.Flush();
-    //}
-    ////disconnect from the socket
-    //public void closeSocket()
-    //{
-    //    if (!socketReady)
-    //        return;
-    //    theWriter.Close();
-    //    theReader.Close();
-    //    mySocket.Close();
-    //    socketReady = false;
-    //}
+    public bool socketReady = false; //a true/false variable for connection status
+    //try to initiate connection
+    public void setupSocket()
+    {
+        try
+        {
+            mySocket = new TcpClient("localhost", 25001);
+            theStream = mySocket.GetStream();
+            theWriter = new StreamWriter(theStream);
+            theReader = new StreamReader(theStream);
+            socketReady = true;
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Socket error:" + e);
+        }
+    }
+    //send message to server
+    public void writeSocket(string theLine)
+    {
+        if (!socketReady)
+            return;
+        String tmpString = theLine + "\r\n";
+        theWriter.Write(tmpString);
+        theWriter.Flush();
+    }
+    //disconnect from the socket
+    public void closeSocket()
+    {
+        if (!socketReady)
+            return;
+        theWriter.Close();
+        theReader.Close();
+        mySocket.Close();
+        socketReady = false;
+    }
     /**************************************************************
      * socket code ende
      **************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -247,10 +236,13 @@ public class BSGameManager : MonoBehaviour
         saberObject.SetActive(false);
 
         participantID = userstudyManager.GetParticipantID();
+
+        setupSocket();
     }
 
     private void Start()
     {
+        
         gameTimerToZero = totalGameTime; // set time for the game e.g., 150
         score = 0;
 
@@ -282,9 +274,7 @@ public class BSGameManager : MonoBehaviour
         //else
         //{
         //    setupSocket();
-
         //}
-
     }
 
     private void FixedUpdate()
@@ -794,16 +784,22 @@ public class BSGameManager : MonoBehaviour
                 //logManager.WriteLogFile("Min X Axis: " + minXAxis + " Vector: " + minXVectorAxis);
                 //logManager.WriteLogFile("================================\n=================");
                 LogVRHeadsetAxis();
-                logManager.WriteLogFile("END GAME");
-                logManager.WriteLogForHorizontalHeadMovement("END GAME");
-                logManager.WriteLogForVerticalHeadMovement("END GAME");
-                logManager.WriteLogForVRUserHead("END GAME");
                 logManager.WriteLogFile("Horizontal Head Movement Avg. (every 0.20s): " + avgHorizHMValue);
                 logManager.WriteLogFile("Vertical Head Movement Avg. (every 0.20s): " + avgVertHMValue);
                 logManager.WriteLogForHorizontalHeadMovement("Horizontal Head Movement Avg. (every 0.20s): " + avgHorizHMValue);
                 logManager.WriteLogForVerticalHeadMovement("Vertical Head Movement Avg. (every 0.20s): " + avgVertHMValue);
                 logManager.WriteLogForVRUserHead("Horizontal Head Movement Avg. (every 0.20s): " + avgHorizHMValue);
                 logManager.WriteLogForVRUserHead("Vertical Head Movement Avg. (every 0.20s): " + avgVertHMValue);
+                logManager.WriteLogFile("END GAME");
+                logManager.WriteLogForHorizontalHeadMovement("END GAME");
+                logManager.WriteLogForVerticalHeadMovement("END GAME");
+                logManager.WriteLogForVRUserHead("END GAME");
+                logManager.WriteLogForEyeGaze("END GAME");
+                logManager.WriteLogFile("=================================\n");
+                logManager.WriteLogForHorizontalHeadMovement("=================================\n");
+                logManager.WriteLogForVerticalHeadMovement("=================================\n");
+                logManager.WriteLogForVRUserHead("=================================\n");
+                logManager.WriteLogForEyeGaze("=================================\n");
                 recordMaxMin = true;
             }
 
@@ -826,15 +822,20 @@ public class BSGameManager : MonoBehaviour
         //    GoToNextLevel();
         //   // Invoke(nameof(GoToNextLevel), 5f);
         //}
+
+        Debug.Log("EndGame");
+        Debug.Log("Closing socket connection to python");
+        writeSocket("endscript");
+        closeSocket();
     }
 
     private void LogVRHeadsetAxis()
     {
-        logManager.WriteLogFile("Head Movement [END]: Max Y-Axis (Toward Bystander): " + maxLeftAxis + " Vector: " + maxLeftVectorAxis);
-        logManager.WriteLogFile("Head Movement [END]:  Min Y-Axis (Against Bystander): " + maxRightAxis + " Vector: " + maxRightVecotorAxis);
-        logManager.WriteLogFile("Head Movement [END]:  Max X-Axis: " + maxUpAxis + " Vector: " + maxUpVectorAxis);
-        logManager.WriteLogFile("Head Movement [END]:  Min X-Axis: " + maxDownAxis + " Vector: " + maxDownVectorAxis);
-        logManager.WriteLogFile("================================\n=================");
+        logManager.WriteLogFile("Head Movement [END]: Max Left(Y) (Toward Bystander): " + maxLeftAxis + " Vector: " + maxLeftVectorAxis);
+        logManager.WriteLogFile("Head Movement [END]: Max Right(Y) (Against Bystander): " + maxRightAxis + " Vector: " + maxRightVecotorAxis);
+        logManager.WriteLogFile("Head Movement [END]: Max Up(X): " + maxUpAxis + " Vector: " + maxUpVectorAxis);
+        logManager.WriteLogFile("Head Movement [END]: Max Down(X): " + maxDownAxis + " Vector: " + maxDownVectorAxis);
+        logManager.WriteLogFile("==========================================================");
     }
     public void GoSurvey()
     {
@@ -938,10 +939,12 @@ public class BSGameManager : MonoBehaviour
             else
             {
                 int index = audioOrder[questionCounter - 1] - 1;
-                quesitionAudioSource.PlayOneShot(questionAudios[index]);
-                Debug.Log(index+ "question is called");
-                //writeSocket("question" + index);
+                //quesitionAudioSource.PlayOneShot(questionAudios[index]);
 
+                // socket
+                Debug.Log(index+ "question is called");
+                writeSocket("question" + index);
+                Debug.Log(index + "question is called: " + (float)Math.Round(gameTimerIgnoringPause));
                 logManager.WriteLogFile("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForEyeGaze("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForHorizontalHeadMovement("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
