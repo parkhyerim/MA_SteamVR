@@ -281,6 +281,7 @@ public class BSGameManager : MonoBehaviour
     {
         if (CanStartGame)
         {
+            Debug.Log("gametimeingnoringpause: " + gameTimerIgnoringPause);
             //maincameraAxisVector = Camera.main.transform.localEulerAngles;
             maincameraAxisVector = Camera.main.transform.eulerAngles;
            // Debug.Log("local: " + Camera.main.transform.localEulerAngles);
@@ -369,8 +370,8 @@ public class BSGameManager : MonoBehaviour
                 {
                     GameCountTimer += Time.fixedDeltaTime;
                     // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
-                   // gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
-                    gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
+                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                   // gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
 
                     if (!askSpawnCubes)
                     {
@@ -380,8 +381,8 @@ public class BSGameManager : MonoBehaviour
 
                     if (Math.Round(GameCountTimer) == totalGameTime)
                     {
-                        cubeSpawner.CanSpawn = false;
-                        StopRayInteractoin();
+                        //cubeSpawner.CanSpawn = false;
+                       // StopRayInteractoin();
                         EndGame();
                     }
 
@@ -396,8 +397,8 @@ public class BSGameManager : MonoBehaviour
                 else
                 {
                     // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
-                   // gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
-                    gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
+                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                   // gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
                 }
             }
         }
@@ -419,8 +420,8 @@ public class BSGameManager : MonoBehaviour
                 if (!gamePaused)
                 {
                     GameCountTimer += Time.fixedDeltaTime;
-                    // gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
-                    gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
+                     gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                  //  gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
 
                     if (askSpawnCubesForTrial == false)
                     {
@@ -430,8 +431,8 @@ public class BSGameManager : MonoBehaviour
 
                     if (Math.Round(GameCountTimer) == totalGameTime)
                     {
-                        trialCubeSpawner.CanSpawn = false;
-                        StopRayInteractoin();
+                       // trialCubeSpawner.CanSpawn = false;
+                        //StopRayInteractoin();
                         //EndGame();
                         EndTrial();
                     }
@@ -439,8 +440,8 @@ public class BSGameManager : MonoBehaviour
                 else
                 {
                     // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
-                    // gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
-                    gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
+                     gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                    //gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
                 }
             }       
         }
@@ -540,12 +541,13 @@ public class BSGameManager : MonoBehaviour
     public void BystanderEnd()
     {
         BystanderInteract = false;
-        //if (questionCounter == 3)
-        //{
-        //    Debug.Log("all question is asked");
-        //    allQuestionAsked = true;
-        //    ChangeTotalTime();
-        //}         
+        if (questionCounter == 4)
+        {
+            Debug.Log("all question is asked");
+            allQuestionAsked = true;
+            Invoke(nameof(EndGame), 20f);
+            //ChangeTotalTime();
+        }
     }
 
     //private void ChangeTotalTime()
@@ -731,7 +733,11 @@ public class BSGameManager : MonoBehaviour
     public void EndGame()
     {
         trialInstructionUI.SetActive(false);
-
+        StopRayInteractoin();
+        cubeSpawner.CanSpawn = false;
+        float totaltime = gameTimerIgnoringPause;
+        Debug.Log("END gametimeingnoringpause: " + totaltime);
+        Debug.Log("END gametimeingnoringpause: " + gameTimerIgnoringPause);
         if (!isPracticeGame)
         {
             //writeSocket("endscript");
@@ -929,16 +935,16 @@ public class BSGameManager : MonoBehaviour
 
     public void PlayQuestionAudio()
     {
-
+        // default. counter = 0
         if (questionCounter < 4)
         {
             if (questionCounter == 0)
             {
-
+                // no question(1st visualisation)
             }
             else
             {
-                int index = audioOrder[questionCounter - 1] - 1;
+                int index = audioOrder[questionCounter - 1] - 1;  // 0,1,2
                 //quesitionAudioSource.PlayOneShot(questionAudios[index]);
 
                 // socket
@@ -950,7 +956,7 @@ public class BSGameManager : MonoBehaviour
                 logManager.WriteLogForHorizontalHeadMovement("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForVerticalHeadMovement("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
             }
-            questionCounter++;
+            questionCounter++; // 1, 2, 3, 4  end
         }
     }
 
@@ -1040,6 +1046,8 @@ public class BSGameManager : MonoBehaviour
 
     public void EndTrial()
     {
+        StopRayInteractoin();
+        trialCubeSpawner.CanSpawn = false;
         CanPauseGame = false;
         CanPauseTrial = false;
         trialCubeSpawner.CanSpawn = false;
