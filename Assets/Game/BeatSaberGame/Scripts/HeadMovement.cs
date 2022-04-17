@@ -123,15 +123,18 @@ public class HeadMovement : MonoBehaviour
         headsetPosY = headsetLocalPosition.y;
         headsetPosZ = headsetLocalPosition.z;
 
-        if (!GameStart && !GameEnd) // Before game Start
+        if (!GameStart) // Before game Start
         {
-            prevEulerY = curEulerY;
-            prevEulerX = curEulerX;
-            prevEulerZ = curEulerZ;
-            conv_prevEulerX = conv_curEulerX;
-            conv_prevEulerY = conv_curEulerY;
-            conv_prevEulerZ = conv_curEulerZ;
-            prevRotY = curRotY;
+            if (!GameEnd)
+            {
+                prevEulerY = curEulerY;
+                prevEulerX = curEulerX;
+                prevEulerZ = curEulerZ;
+                conv_prevEulerX = conv_curEulerX;
+                conv_prevEulerY = conv_curEulerY;
+                conv_prevEulerZ = conv_curEulerZ;
+                prevRotY = curRotY;
+            }          
         }
         else 
         {

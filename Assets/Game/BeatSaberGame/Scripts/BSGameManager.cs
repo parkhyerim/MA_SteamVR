@@ -291,8 +291,9 @@ public class BSGameManager : MonoBehaviour
            // Debug.Log("gametimeingnoringpause: " + gameTimerIgnoringPause);
             //maincameraAxisVector = Camera.main.transform.localEulerAngles;
             maincameraAxisVector = Camera.main.transform.eulerAngles;
-           // Debug.Log("local: " + Camera.main.transform.localEulerAngles);
-           // Debug.Log("no: " + Camera.main.transform.eulerAngles);
+            // Debug.Log("local: " + Camera.main.transform.localEulerAngles);
+            // Debug.Log("no: " + Camera.main.transform.eulerAngles);
+            mainCameraZAxis = maincameraAxisVector.z;
 
             if (maincameraAxisVector.y > 180 && maincameraAxisVector.y <= 360) // 360-> 270-> 179 => 0-> -90 -> -179
             {
@@ -524,12 +525,12 @@ public class BSGameManager : MonoBehaviour
         BystanderInteract = true;
         pauseController.OncePausedInSession = false;
         // logManager
-        logManager.WriteLogFile("BYSTANDER FROM NZ_to_UCT (starts turning towards VR user): " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
-        logManager.WriteLogForEyeGaze("BYSTANDER FROM NZ_to_UCT (starts turning towards VR user): " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
-        logManager.WriteLogForYawHeadMovement("BYSTANDER FROM NZ_to_UCT (starts turning towards VR user): " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
-        logManager.WriteLogForPitchHeadMovement("BYSTANDER FROM NZ_to_UCT (starts turning towards VR user): " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
-        logManager.WriteLogForRollHeadMovement("BYSTANDER FROM NZ_to_UCT (starts turning towards VR user): " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
-        logManager.WriteLogForHeadPosition("BYSTANDER FROM NZ_to_UCT (starts turning towards VR user): " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogFile("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogForEyeGaze("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogForYawHeadMovement("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogForPitchHeadMovement("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogForRollHeadMovement("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogForHeadPosition("BYSTANDER FROM starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
         bystanderCanHearAnswer = true;
         bystanderAvatar.LookedOnceSeatedPosition = false;
         bystanderAvatar.IsGuidingFOVToSeatedExceed = false;
@@ -941,7 +942,7 @@ public class BSGameManager : MonoBehaviour
 
     public void AskQuestion()
     {
-        Invoke(nameof(PlayQuestionAudio), 3f);
+        Invoke(nameof(PlayQuestionAudio), 0f);
     }
 
     public void PlayQuestionAudio()
@@ -962,10 +963,12 @@ public class BSGameManager : MonoBehaviour
                 Debug.Log(index+ "question is called");
                 writeSocket("question" + index);
                 Debug.Log(index + "question is called: " + (float)Math.Round(gameTimerIgnoringPause));
-                logManager.WriteLogFile("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
-                logManager.WriteLogForEyeGaze("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
-                logManager.WriteLogForYawHeadMovement("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
-                logManager.WriteLogForPitchHeadMovement("Bystander ask the question " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogFile("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForEyeGaze("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForYawHeadMovement("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForPitchHeadMovement("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForRollHeadMovement("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForHeadPosition("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
             }
             questionCounter++; // 1, 2, 3, 4  end
         }
