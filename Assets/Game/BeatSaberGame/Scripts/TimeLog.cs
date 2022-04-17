@@ -41,44 +41,39 @@ public class TimeLog : MonoBehaviour
     private void FixedUpdate()
     {
         checkTimer += Time.fixedDeltaTime;
-        if (checkTimer >= period)
+
+        if (!GameStart)
         {
-            headUpMaxDegrees = gameManager.MaxUpAxis;
-            headDownDegrees = gameManager.MaxDownAxis;
-            headLeftDegrees = gameManager.MaxLeftAxis;
-            headRightDegrees = gameManager.MaxRightAxis;
-            curEulerY = headMovement.Conv_curEulerY;
-            curEulerX = headMovement.Conv_curEulerX;
-            curEulerZ = headMovement.Conv_curEulerZ;
-            curPosX = headMovement.HeadsetPosX;
-            curPosY = headMovement.HeadsetPosY;
-            curPosZ = headMovement.HeadsetPosZ;
-            paused = gameManager.GamePaused;
-
-           // logManager.WriteLogForExcel(checkTimer + " check", false);
-            logManager.WriteLogForExcel(headUpMaxDegrees + " " + headDownDegrees + " " + headLeftDegrees + " " + headRightDegrees + " "
-                + curEulerX + " " + curEulerY + " " + curEulerZ + " "
-                + curPosX + " " + curPosY + " " + curPosZ + " "
-                + "GAZE" + " "
-                + paused + " "
-                , false);
-
-            checkTimer = 0f;
+            
         }
-        //if (!GameStart)
-        //{
-        //    logManager.WriteLogForExcel("check");
-        //}
-        //else
-        //{
-        //    checkTimer += Time.fixedDeltaTime;
-        //    if(checkTimer >= period)
-        //    {
-        //        logManager.WriteLogForExcel(checkTimer+ " check");
-        //        checkTimer = 0f;
-        //    }
+        else
+        {
+            checkTimer += Time.fixedDeltaTime;
+            if (checkTimer >= period)
+            {
+                headUpMaxDegrees = gameManager.MaxUpAxis;
+                headDownDegrees = gameManager.MaxDownAxis;
+                headLeftDegrees = gameManager.MaxLeftAxis;
+                headRightDegrees = gameManager.MaxRightAxis;
+                curEulerY = headMovement.Conv_curEulerY;
+                curEulerX = headMovement.Conv_curEulerX;
+                curEulerZ = headMovement.Conv_curEulerZ;
+                curPosX = headMovement.HeadsetPosX;
+                curPosY = headMovement.HeadsetPosY;
+                curPosZ = headMovement.HeadsetPosZ;
+                paused = gameManager.GamePaused;
 
-        //}
+                // logManager.WriteLogForExcel(checkTimer + " check", false);
+                logManager.WriteLogForExcel(headUpMaxDegrees + ", " + headDownDegrees + ", " + headLeftDegrees + ", " + headRightDegrees + ", "
+                    + curEulerX + ", " + curEulerY + ", " + curEulerZ + ", "
+                    + curPosX + ", " + curPosY + ", " + curPosZ + ", "
+                    + "GAZE" + ", "
+                    + paused + ", "
+                    , false);
+
+                checkTimer = 0f;
+            }
+        }
     }
 
 }

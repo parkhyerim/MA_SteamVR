@@ -8,7 +8,7 @@ public class BSBystanderAvatar : MonoBehaviour
 {
     public GameObject bystanderTracker;
     private Transform trackerTransform;
-    BSGameManager bsgameManager;
+    BSGameManager gameManager;
     BSLogManager logManager;
     UserStudyManager userstudyManager;
     private float trackerEulerYAxis;  // bystander's euler y-axis -> tracker y
@@ -79,7 +79,7 @@ public class BSBystanderAvatar : MonoBehaviour
 
     private void Awake()
     {
-        bsgameManager = FindObjectOfType<BSGameManager>();
+        gameManager = FindObjectOfType<BSGameManager>();
         logManager = FindObjectOfType<BSLogManager>();
         userstudyManager = FindObjectOfType<UserStudyManager>();
     }
@@ -92,7 +92,7 @@ public class BSBystanderAvatar : MonoBehaviour
         bystanderAnim.SetBool("isInteracting", false);
       
         // Default setting: Avatar setting
-        if (!(isAnimojiSetting || isMixedSetting || isAvatarSetting) && !bsgameManager.isPracticeGame)
+        if (!(isAnimojiSetting || isMixedSetting || isAvatarSetting) && !gameManager.isPracticeGame)
             isAvatarSetting = true;
 
        // Debug.Log("Animoji: " + isAnimojiSetting + " Avatar: " + isAvatarSetting + " Mixed: " + isMixedSetting);
@@ -216,6 +216,7 @@ public class BSBystanderAvatar : MonoBehaviour
                             //Debug.Log("FROM_NZ_to_UCZ");
                             BystanderShiftZone("From_NZ_to_UCZ");
                             logFlag = true;
+                            
                         }                    
                         timeElapsedForAnimoji += Time.deltaTime;
 
@@ -239,6 +240,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         {
                             //  Debug.Log("FROM_TZ_to_UCZ");
                             BystanderShiftZone("FromM_TZ_to_UCZ");
+                            SetRightPauseStamp();
                             logFlag = true;
                         }
                         timeElapsedForAnimoji += Time.deltaTime;
@@ -317,7 +319,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     else  // The bystander is outside the FOV of the VR user ( 310 < d < 360, ....) 
                     {
                         movingTime += Time.deltaTime;
-                        if (movingTime > (guideTimeForAvatar + 2f)) // 2+ 2f
+                        if (movingTime > (guideTimeForAvatar + 1f)) // 2+ 2f
                         { 
                             isGuidingFOVToSeatedExceed = true;
                         }
@@ -472,7 +474,8 @@ public class BSBystanderAvatar : MonoBehaviour
                     {
                        // Debug.Log("Avatar: From NZ to UCZ");
                         BystanderShiftZone("From_NZ_To_UCZ");
-                        inNoZone = false;
+                        SetRightPauseStamp();
+                        inNoZone = false;                     
                     }
 
                     if (inTransitionZone)
@@ -674,6 +677,7 @@ public class BSBystanderAvatar : MonoBehaviour
                             if (!logFlag)
                             {
                                 BystanderShiftZone("From_NZ_To_UCZ");
+                                SetRightPauseStamp();
                                 logFlag = true;
                             }
 
@@ -725,8 +729,10 @@ public class BSBystanderAvatar : MonoBehaviour
                             if (!logFlag)
                             {
                                 BystanderShiftZone("From_NZ_To_UCZ");
+                                SetRightPauseStamp();
                                 logFlag = true;
                             }
+                           // inNoZone = true;
                         }
 
                         if (inTransitionZone)
@@ -736,6 +742,7 @@ public class BSBystanderAvatar : MonoBehaviour
                                 BystanderShiftZone("From_TZ_To_UCZ");
                                 logFlag = true;
                             }
+                           // inTransitionZone = true;
                         }
 
                         // Avatar (No FE)
@@ -890,12 +897,22 @@ public class BSBystanderAvatar : MonoBehaviour
 
     private void BystanderShiftZone(string state)
     {
-        bsgameManager.SetTimeStampForAvatarInCriticalZoneWithMessage(state);
+        gameManager.SetTimeStampForAvatarInCriticalZoneWithMessage(state);
     }
 
     public void SetGuide()
     {
         Debug.Log("setGuide is called");
+    }
+
+    private void SetRightPauseStamp()
+    {
+        gameManager.DoVisualising = true;
+    }
+
+    private void SetRightResumeStamp()
+    {
+        gameManager.DoVisualising = false;
     }
     public void TurnBackwards()
     {

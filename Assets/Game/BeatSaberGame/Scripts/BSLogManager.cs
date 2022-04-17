@@ -35,11 +35,15 @@ public class BSLogManager : MonoBehaviour
            "\n                    ID: " + participantID +
            ", LOG STRAT (Date & Time): " + currentDateAndTime);
 
-        WriteLogForYawHeadMovement("===============HEAD MOVEMENT (Horizontal)========================" +
+        WriteLogForYawHeadMovement("===============HEAD MOVEMENT YAW (Y)========================" +
           "\n                    ID: " + participantID +
           ", LOG STRAT (Date & Time): " + currentDateAndTime);
 
-        WriteLogForPitchHeadMovement("===============HEAD MOVEMENT (Vertical)========================" +
+        WriteLogForPitchHeadMovement("===============HEAD MOVEMENT PITCH (X)========================" +
+          "\n                    ID: " + participantID +
+          ", LOG STRAT (Date & Time): " + currentDateAndTime);
+
+        WriteLogForRollHeadMovement("===============HEAD MOVEMENT Roll (Z)========================" +
           "\n                    ID: " + participantID +
           ", LOG STRAT (Date & Time): " + currentDateAndTime);
 
@@ -47,7 +51,7 @@ public class BSLogManager : MonoBehaviour
           "\n                    ID: " + participantID +
           ", LOG STRAT (Date & Time): " + currentDateAndTime);
 
-        WriteLogForHeadPosition("===============HEAD MAX. & MIN.======================================" +
+        WriteLogForHeadPosition("===============HEAD POSITIONS======================================" +
          "\n                    ID: " + participantID +
           ", LOG STRAT (Date & Time): " + currentDateAndTime);
     }
@@ -62,7 +66,7 @@ public class BSLogManager : MonoBehaviour
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
             timeInEpoch = GetTimeFromEpoch();
            // logFile.Write("[" + currentTimeinMilliseconds + "] ");
-            logFile.Write("[" + currentTime + "] ");
+          //  logFile.Write("[" + currentTime + "] ");
             logFile.Write("[" + timeInEpoch + "] ");           
             logFile.WriteLine(message);
         }
@@ -78,7 +82,7 @@ public class BSLogManager : MonoBehaviour
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
             timeInEpoch = GetTimeFromEpoch();
            // logFile.Write("[" + currentTimeinMilliseconds + "] ");
-            logFile.Write("[" + currentTime + "] ");
+         //   logFile.Write("[" + currentTime + "] ");
             logFile.Write("[" + timeInEpoch + "] ");
             logFile.WriteLine(message);
         }
@@ -93,7 +97,7 @@ public class BSLogManager : MonoBehaviour
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
             timeInEpoch = GetTimeFromEpoch();
            // logFile.Write("[" + currentTimeinMilliseconds + "] ");
-            logFile.Write("[" + currentTime + "] ");
+         //   logFile.Write("[" + currentTime + "] ");
             logFile.Write("[" + timeInEpoch + "] ");
             logFile.WriteLine(message);
         }
@@ -108,7 +112,7 @@ public class BSLogManager : MonoBehaviour
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
             timeInEpoch = GetTimeFromEpoch();
             //logFile.Write("[" + currentTimeinMilliseconds + "] ");
-            logFile.Write("[" + currentTime + "] ");
+          //  logFile.Write("[" + currentTime + "] ");
             logFile.Write("[" + timeInEpoch + "] ");
             logFile.WriteLine(message);
         }
@@ -125,7 +129,7 @@ public class BSLogManager : MonoBehaviour
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
             timeInEpoch = GetTimeFromEpoch();
             //logFile.Write("[" + currentTimeinMilliseconds + "] ");
-            logFile.Write("[" + currentTime + "] ");
+           // logFile.Write("[" + currentTime + "] ");
             logFile.Write("[" + timeInEpoch + "] ");
             logFile.WriteLine(message);
         }
@@ -140,7 +144,7 @@ public class BSLogManager : MonoBehaviour
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
             timeInEpoch = GetTimeFromEpoch();
           //  logFile.Write("[" + currentTimeinMilliseconds + "] ");
-            logFile.Write("[" + currentTime + "] ");
+          //  logFile.Write("[" + currentTime + "] ");
             logFile.Write("[" + timeInEpoch + "] ");
             logFile.WriteLine(message);
         }

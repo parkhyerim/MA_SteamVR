@@ -114,6 +114,8 @@ public class BSGameManager : MonoBehaviour
     BSLogManager logManager;
     BSPauseController pauseController;
     HeadMovement headMovement;
+    TimeLog timeLog;
+    SocketManager socketManager;
 
     float testTime;
     int checkCounter;
@@ -134,6 +136,8 @@ public class BSGameManager : MonoBehaviour
     public int[] audioOrder = { 1, 2, 3 };
     int questionCounter;
     bool allQuestionAsked, reduceGameTime, calledPushEnd;
+    float pauseDuration;
+    bool firstPauseCalled, secondPauseCalled, thirdPauseCalled, fourthPauseCalled, doVisualizing;
 
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
     public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
@@ -148,6 +152,7 @@ public class BSGameManager : MonoBehaviour
     public float MaxUpAxis { get => maxUpAxis; set => maxUpAxis = value; }
     public float MaxDownAxis { get => maxDownAxis; set => maxDownAxis = value; }
     public bool GamePaused { get => gamePaused; set => gamePaused = value; }
+    public bool DoVisualising { get => doVisualizing; set => doVisualizing = value; }
 
 
 
@@ -155,47 +160,47 @@ public class BSGameManager : MonoBehaviour
      * socket code
      **************************************************************/
 
-    TcpClient mySocket;
-    NetworkStream theStream;
-    StreamWriter theWriter;
-    StreamReader theReader;
+    //TcpClient mySocket;
+    //NetworkStream theStream;
+    //StreamWriter theWriter;
+    //StreamReader theReader;
 
-    public bool socketReady = false; //a true/false variable for connection status
-    //try to initiate connection
-    public void setupSocket()
-    {
-        try
-        {
-            mySocket = new TcpClient("localhost", 25001);
-            theStream = mySocket.GetStream();
-            theWriter = new StreamWriter(theStream);
-            theReader = new StreamReader(theStream);
-            socketReady = true;
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Socket error:" + e);
-        }
-    }
-    //send message to server
-    public void writeSocket(string theLine)
-    {
-        if (!socketReady)
-            return;
-        String tmpString = theLine + "\r\n";
-        theWriter.Write(tmpString);
-        theWriter.Flush();
-    }
-    //disconnect from the socket
-    public void closeSocket()
-    {
-        if (!socketReady)
-            return;
-        theWriter.Close();
-        theReader.Close();
-        mySocket.Close();
-        socketReady = false;
-    }
+    //public bool socketReady = false; //a true/false variable for connection status
+    ////try to initiate connection
+    //public void setupSocket()
+    //{
+    //    try
+    //    {
+    //        mySocket = new TcpClient("localhost", 25001);
+    //        theStream = mySocket.GetStream();
+    //        theWriter = new StreamWriter(theStream);
+    //        theReader = new StreamReader(theStream);
+    //        socketReady = true;
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Debug.Log("Socket error:" + e);
+    //    }
+    //}
+    ////send message to server
+    //public void writeSocket(string theLine)
+    //{
+    //    if (!socketReady)
+    //        return;
+    //    String tmpString = theLine + "\r\n";
+    //    theWriter.Write(tmpString);
+    //    theWriter.Flush();
+    //}
+    ////disconnect from the socket
+    //public void closeSocket()
+    //{
+    //    if (!socketReady)
+    //        return;
+    //    theWriter.Close();
+    //    theReader.Close();
+    //    mySocket.Close();
+    //    socketReady = false;
+    //}
     /**************************************************************
      * socket code ende
      **************************************************************/
@@ -212,6 +217,8 @@ public class BSGameManager : MonoBehaviour
         bystanderAvatar = FindObjectOfType<BSBystanderAvatar>();
         bysTracker = FindObjectOfType<BSRotateTracker>();
         headMovement = FindObjectOfType<HeadMovement>();
+        timeLog = FindObjectOfType<TimeLog>();
+        socketManager = FindObjectOfType<SocketManager>();
 
         // GAME
         instructionText = instructionUI.GetComponentInChildren<TMP_Text>();
@@ -243,7 +250,7 @@ public class BSGameManager : MonoBehaviour
 
         participantID = userstudyManager.GetParticipantID();
 
-        setupSocket();
+        socketManager.setupSocket();
     }
 
     private void Start()
@@ -293,7 +300,6 @@ public class BSGameManager : MonoBehaviour
             maincameraAxisVector = Camera.main.transform.eulerAngles;
             // Debug.Log("local: " + Camera.main.transform.localEulerAngles);
             // Debug.Log("no: " + Camera.main.transform.eulerAngles);
-            mainCameraZAxis = maincameraAxisVector.z;
 
             if (maincameraAxisVector.y > 180 && maincameraAxisVector.y <= 360) // 360-> 270-> 179 => 0-> -90 -> -179
             {
@@ -310,6 +316,14 @@ public class BSGameManager : MonoBehaviour
             if (maincameraAxisVector.x > 0 && maincameraAxisVector.x <= 180)
             {
                 mainCameraXAxis = maincameraAxisVector.x;
+            }
+            if (maincameraAxisVector.z> 180 && maincameraAxisVector.z <= 360)
+            {
+                mainCameraZAxis = maincameraAxisVector.z - 360f;
+            }
+            if (maincameraAxisVector.z > 0 && maincameraAxisVector.z <= 180)
+            {
+                mainCameraZAxis = maincameraAxisVector.z;
             }
 
             // Head Movement
@@ -445,6 +459,8 @@ public class BSGameManager : MonoBehaviour
         startTimeForSpawningCubes = timeFromSceneLoading + getReadyTime;
 
         headMovement.GameStart = true;
+        timeLog.GameStart = true;
+        
        // headMovement.InGame = true;
 
         // Music 
@@ -755,6 +771,7 @@ public class BSGameManager : MonoBehaviour
             CanPauseTrial = false;
             headMovement.GameStart = false;
             headMovement.GameEnd = true;
+            timeLog.GameStart = false;
             // headMovement.InGame = false;
             
 
@@ -841,17 +858,17 @@ public class BSGameManager : MonoBehaviour
 
         Debug.Log("EndGame");
         Debug.Log("Closing socket connection to python");
-        writeSocket("endscript");
-        closeSocket();
+        socketManager.writeSocket("endscript");
+        socketManager.closeSocket();
     }
 
     private void LogVRHeadsetAxis()
     {
-        logManager.WriteLogFile("Head Movement [END]: Max Left(Y) (Toward Bystander): " + MaxLeftAxis + " Vector: " + maxLeftVectorAxis);
-        logManager.WriteLogFile("Head Movement [END]: Max Right(Y) (Against Bystander): " + MaxRightAxis + " Vector: " + maxRightVecotorAxis);
-        logManager.WriteLogFile("Head Movement [END]: Max Up(X): " + MaxUpAxis + " Vector: " + maxUpVectorAxis);
-        logManager.WriteLogFile("Head Movement [END]: Max Down(X): " + MaxDownAxis + " Vector: " + maxDownVectorAxis);
-        logManager.WriteLogFile("==========================================================");
+        logManager.WriteLogFile("Head Movement [END]: Max Left(Y) (Toward Bystander): " + MaxLeftAxis + " Vector: (" + maxLeftVectorAxis.x +", " + maxLeftVectorAxis.y+ ", " + maxLeftVectorAxis.z+")");
+        logManager.WriteLogFile("Head Movement [END]: Max Right(Y) (Against Bystander): " + MaxRightAxis + " Vector: (" + maxRightVecotorAxis.x + ", " + maxRightVecotorAxis.y + ", " + maxRightVecotorAxis.z + ")");
+        logManager.WriteLogFile("Head Movement [END]: Max Up(X): " + MaxUpAxis + " Vector: (" + maxUpVectorAxis.x + ", " + maxUpVectorAxis.y + ", " + maxUpVectorAxis.z + ")");
+        logManager.WriteLogFile("Head Movement [END]: Max Down(X): " + MaxDownAxis + " Vector: (" + maxDownVectorAxis.x + ", " + maxDownVectorAxis.y + ", " + maxDownVectorAxis.z + ")");
+       // logManager.WriteLogFile("==========================================================");
     }
 
   
@@ -875,15 +892,6 @@ public class BSGameManager : MonoBehaviour
     {
         levelManager.LoadNextLevel();
     }
-
-    //public IEnumerator ShowRandomImage()
-    //{
-    //    while (true)
-    //    {
-    //        yield return new WaitForSeconds(1);
-    //        // notificationCheerImages[randomNumForEffect].enabled = false;
-    //    }
-    //}
 
     void StopRayInteractoin()
     {
@@ -942,7 +950,7 @@ public class BSGameManager : MonoBehaviour
 
     public void AskQuestion()
     {
-        Invoke(nameof(PlayQuestionAudio), 0f);
+        Invoke(nameof(PlayQuestionAudio), 1f);
     }
 
     public void PlayQuestionAudio()
@@ -961,8 +969,8 @@ public class BSGameManager : MonoBehaviour
 
                 // socket
                 Debug.Log(index+ "question is called");
-                writeSocket("question" + index);
-                Debug.Log(index + "question is called: " + (float)Math.Round(gameTimerIgnoringPause));
+                socketManager.writeSocket("question" + index);
+               // Debug.Log(index + "question is called: " + (float)Math.Round(gameTimerIgnoringPause));
                 logManager.WriteLogFile("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForEyeGaze("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForYawHeadMovement("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");

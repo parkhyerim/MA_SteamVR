@@ -192,7 +192,7 @@ public class HeadMovement : MonoBehaviour
                     string logMsgForPitchHM = 
                         "Time:" + Time.time +
                         ", period: " + checkTimer +
-                        " prev:" + conv_prevEulerX + "(" + prevEulerX + ") " +
+                        ", prev:" + conv_prevEulerX + "(" + prevEulerX + ") " +
                         ", cur: " + conv_curEulerX + "(" + curEulerX + ") " +
                         ", diff: " + conv_diffEulerX +
                         ", sum: " + conv_sumEulerX +
