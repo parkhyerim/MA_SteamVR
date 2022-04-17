@@ -34,6 +34,12 @@ public class HeadMovement : MonoBehaviour
 
     public bool GameStart { get => gameStart; set => gameStart = value; }
     public bool GameEnd { get => gameEnd; set => gameEnd = value; }
+    public float Conv_curEulerY { get => conv_curEulerY; set => conv_curEulerY = value; }
+    public float Conv_curEulerX { get => conv_curEulerX; set => conv_curEulerX = value; }
+    public float Conv_curEulerZ { get => conv_curEulerZ; set => conv_curEulerZ = value; }
+    public float HeadsetPosX { get => headsetPosX; set => headsetPosX = value; }
+    public float HeadsetPosY { get => headsetPosY; set => headsetPosY = value; }
+    public float HeadsetPosZ { get => headsetPosZ; set => headsetPosZ = value; }
 
     private void Awake()
     {

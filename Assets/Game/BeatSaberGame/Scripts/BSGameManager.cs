@@ -78,7 +78,7 @@ public class BSGameManager : MonoBehaviour
 
     [Header("BOOLEADN FOR GAME")]
     [SerializeField]
-    private bool canStartGame, canPauseGame, gamePaused;
+    private bool canStartGame, canPauseGame, gamePaused, gameResumed;
     [Header("BOOLEADN FOR TRIAL")]
     [SerializeField]
     private bool canStartTrial, canPauseTrial;
@@ -143,6 +143,12 @@ public class BSGameManager : MonoBehaviour
     public bool BystanderCanHearAnswer { get => bystanderCanHearAnswer; set => bystanderCanHearAnswer = value; }
     public bool CanStartTrial { get => canStartTrial; set => canStartTrial = value; }
     public int Score { get => score; set => score = value; }
+    public float MaxRightAxis { get => maxRightAxis; set => maxRightAxis = value; }
+    public float MaxLeftAxis { get => maxLeftAxis; set => maxLeftAxis = value; }
+    public float MaxUpAxis { get => maxUpAxis; set => maxUpAxis = value; }
+    public float MaxDownAxis { get => maxDownAxis; set => maxDownAxis = value; }
+    public bool GamePaused { get => gamePaused; set => gamePaused = value; }
+
 
 
     /**************************************************************
@@ -258,10 +264,10 @@ public class BSGameManager : MonoBehaviour
         mainCameraZAxis = maincameraAxisVector.z;
 
         // basic values
-        maxUpAxis = mainCameraXAxis;
-        maxDownAxis = mainCameraXAxis;
-        maxLeftAxis = mainCameraYAxis;
-        maxRightAxis = mainCameraYAxis;
+        MaxUpAxis = mainCameraXAxis;
+        MaxDownAxis = mainCameraXAxis;
+        MaxLeftAxis = mainCameraYAxis;
+        MaxRightAxis = mainCameraYAxis;
 
         if (participantID == "" || participantID == null)
             participantID = "IDNotAssigned";
@@ -288,21 +294,21 @@ public class BSGameManager : MonoBehaviour
            // Debug.Log("local: " + Camera.main.transform.localEulerAngles);
            // Debug.Log("no: " + Camera.main.transform.eulerAngles);
 
-            if (maincameraAxisVector.y >= 180 && maincameraAxisVector.y <= 360)
+            if (maincameraAxisVector.y > 180 && maincameraAxisVector.y <= 360) // 360-> 270-> 179 => 0-> -90 -> -179
             {
-                mainCameraYAxis = 360f - maincameraAxisVector.y;
+                mainCameraYAxis = maincameraAxisVector.y - 360f;
             }
-            if (maincameraAxisVector.y > 0 && maincameraAxisVector.y < 180)
+            if (maincameraAxisVector.y > 0 && maincameraAxisVector.y <= 180) // 1-> 90-> 180 => 1 -> 90 -> 180
             {
-                mainCameraYAxis = maincameraAxisVector.y * -1f;
+                mainCameraYAxis = maincameraAxisVector.y;
             }
-            if (maincameraAxisVector.x >= 180 && maincameraAxisVector.x <= 360)
+            if (maincameraAxisVector.x > 180 && maincameraAxisVector.x <= 360)
             {
-                mainCameraXAxis = 360f - maincameraAxisVector.x;
+                mainCameraXAxis = maincameraAxisVector.x - 360f;
             }
-            if (maincameraAxisVector.x > 0 && maincameraAxisVector.x < 180)
+            if (maincameraAxisVector.x > 0 && maincameraAxisVector.x <= 180)
             {
-                mainCameraXAxis = maincameraAxisVector.x * -1f;
+                mainCameraXAxis = maincameraAxisVector.x;
             }
 
             // Head Movement
@@ -325,27 +331,27 @@ public class BSGameManager : MonoBehaviour
                 gameTimerIgnoringPause += Time.fixedDeltaTime;
 
                 // Set Max. & Min. Value
-                if (maxRightAxis > mainCameraYAxis)
+                if (MaxRightAxis < mainCameraYAxis) // against bystander: 0 <-> 90
                 {
-                    maxRightAxis = mainCameraYAxis;
+                    MaxRightAxis = mainCameraYAxis;
                     maxRightVecotorAxis = maincameraAxisVector;
                 }
                    
-                if (maxLeftAxis < mainCameraYAxis)
+                if (MaxLeftAxis > mainCameraYAxis) // towards bystander: -90 <-> 0
                 {
-                    maxLeftAxis = mainCameraYAxis;
+                    MaxLeftAxis = mainCameraYAxis;
                     maxLeftVectorAxis = maincameraAxisVector;
                 }                
 
-                if (maxDownAxis > mainCameraXAxis)
+                if (MaxDownAxis < mainCameraXAxis) // head down: 0 <-> 90
                 {
-                    maxDownAxis = mainCameraXAxis;
+                    MaxDownAxis = mainCameraXAxis;
                     maxDownVectorAxis = maincameraAxisVector;               
                 }
                    
-                if (maxUpAxis < mainCameraXAxis)
+                if (MaxUpAxis > mainCameraXAxis) // head up: 0 <-> -90
                 {
-                    maxUpAxis = mainCameraXAxis;
+                    MaxUpAxis = mainCameraXAxis;
                     maxUpVectorAxis = maincameraAxisVector;
                 }
             
@@ -840,12 +846,14 @@ public class BSGameManager : MonoBehaviour
 
     private void LogVRHeadsetAxis()
     {
-        logManager.WriteLogFile("Head Movement [END]: Max Left(Y) (Toward Bystander): " + maxLeftAxis + " Vector: " + maxLeftVectorAxis);
-        logManager.WriteLogFile("Head Movement [END]: Max Right(Y) (Against Bystander): " + maxRightAxis + " Vector: " + maxRightVecotorAxis);
-        logManager.WriteLogFile("Head Movement [END]: Max Up(X): " + maxUpAxis + " Vector: " + maxUpVectorAxis);
-        logManager.WriteLogFile("Head Movement [END]: Max Down(X): " + maxDownAxis + " Vector: " + maxDownVectorAxis);
+        logManager.WriteLogFile("Head Movement [END]: Max Left(Y) (Toward Bystander): " + MaxLeftAxis + " Vector: " + maxLeftVectorAxis);
+        logManager.WriteLogFile("Head Movement [END]: Max Right(Y) (Against Bystander): " + MaxRightAxis + " Vector: " + maxRightVecotorAxis);
+        logManager.WriteLogFile("Head Movement [END]: Max Up(X): " + MaxUpAxis + " Vector: " + maxUpVectorAxis);
+        logManager.WriteLogFile("Head Movement [END]: Max Down(X): " + MaxDownAxis + " Vector: " + maxDownVectorAxis);
         logManager.WriteLogFile("==========================================================");
     }
+
+  
     public void GoSurvey()
     {
         // surveryUI.SetActive(true);
