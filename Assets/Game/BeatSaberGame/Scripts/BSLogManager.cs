@@ -146,7 +146,7 @@ public class BSLogManager : MonoBehaviour
         }
     }
 
-    public void WriteLogForExcel(string message)
+    public void WriteLogForExcel(string message, bool init)
     {
         using (System.IO.StreamWriter logFile =
                    new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_Timelog.txt", append: true))
@@ -155,9 +155,17 @@ public class BSLogManager : MonoBehaviour
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
             timeInEpoch = GetTimeFromEpoch();
             //  logFile.Write("[" + currentTimeinMilliseconds + "] ");
-           // logFile.Write("[" + currentTime + "] ");
-            logFile.Write("[" + timeInEpoch + "] ");
-            logFile.WriteLine(message);
+            // logFile.Write("[" + currentTime + "] ");
+            if (init)
+            {
+               // logFile.Write("[" + timeInEpoch + "] ");
+                logFile.WriteLine(message);
+            }
+            else
+            {
+                logFile.Write("[" + timeInEpoch + "] ");
+                logFile.WriteLine(message);
+            }         
         }
     }
 
