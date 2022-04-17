@@ -12,6 +12,7 @@ public class BSLogManager : MonoBehaviour
     private string currentTimeinMilliseconds;
     private string fullPath, filename, extension, newfullpath, path;
     int count = 1;
+    private double timeInEpoch;
 
     private void Awake()
     {
@@ -29,86 +30,103 @@ public class BSLogManager : MonoBehaviour
     }
 
     void Start()
-    {
-        //participantID = userstudyManager.GetID();
-        //currentDateAndTime = GetCurrentDateAndTime();
-        
-        WriteLogFile("==============GAME LOG=======================================" +
-           "\nID: " + participantID+
-           "\nLOG STRAT: " + currentDateAndTime);
+    {    
+        WriteLogFile("====================GAME LOG==============================" +
+           "\n                    ID: " + participantID +
+           ", LOG STRAT (Date & Time): " + currentDateAndTime);
 
-        WriteLogForHorizontalHeadMovement("===============HEAD MOVEMENT (Horizontal)========================" +
-          "\nID: " + participantID +
-          "\nLOG STRAT: " + currentDateAndTime);
+        WriteLogForYawHeadMovement("===============HEAD MOVEMENT (Horizontal)========================" +
+          "\n                    ID: " + participantID +
+          ", LOG STRAT (Date & Time): " + currentDateAndTime);
 
-        WriteLogForVerticalHeadMovement("===============HEAD MOVEMENT (Vertical)========================" +
-          "\nID: " + participantID +
-          "\nLOG STRAT: " + currentDateAndTime);
+        WriteLogForPitchHeadMovement("===============HEAD MOVEMENT (Vertical)========================" +
+          "\n                    ID: " + participantID +
+          ", LOG STRAT (Date & Time): " + currentDateAndTime);
 
         WriteLogForEyeGaze("===============Eye Gaze======================================" +
-          "\nID: " + participantID +
-          "\nLOG STRAT: " + currentDateAndTime);
+          "\n                    ID: " + participantID +
+          ", LOG STRAT (Date & Time): " + currentDateAndTime);
 
-        WriteLogForVRUserHead("===============HEAD MAX. & MIN.======================================" +
-          "\nID: " + participantID +
-          "\nLOG STRAT: " + currentDateAndTime);
+        WriteLogForHeadPosition("===============HEAD MAX. & MIN.======================================" +
+         "\n                    ID: " + participantID +
+          ", LOG STRAT (Date & Time): " + currentDateAndTime);
     }
 
+    // For the overview logfile
     public void WriteLogFile(string message)
-    {
-        //while (File.Exists(newfullpath))
-        //{
-        //    string tempFileName = string.Format("{0}({1})", filename, count++);
-        //    newfullpath = Path.Combine(path, tempFileName + extension);
-        //}
-        
+    {        
         using (System.IO.StreamWriter logFile =
             new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + ".txt", append: true))
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            logFile.Write("[" + currentTimeinMilliseconds + "] ");
-            // logFile.Write("[" + currentTime + "] ");
+            timeInEpoch = GetTimeFromEpoch();
+           // logFile.Write("[" + currentTimeinMilliseconds + "] ");
+            logFile.Write("[" + currentTime + "] ");
+            logFile.Write("[" + timeInEpoch + "] ");           
             logFile.WriteLine(message);
         }
     }
 
-    public void WriteLogForHorizontalHeadMovement(string message)
+    public void WriteLogForYawHeadMovement(string message) // Horizontal (Y-Axis) ex.: Turn Left/Right Head
     {
 
         using (System.IO.StreamWriter logFile =
-           new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_HeadMovement_Hor.txt", append: true))
+           new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_HeadMovement_Yaw(Y).txt", append: true))
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            logFile.Write("[" + currentTimeinMilliseconds + "] ");
-            // logFile.Write("[" + currentTime + "] ");
+            timeInEpoch = GetTimeFromEpoch();
+           // logFile.Write("[" + currentTimeinMilliseconds + "] ");
+            logFile.Write("[" + currentTime + "] ");
+            logFile.Write("[" + timeInEpoch + "] ");
             logFile.WriteLine(message);
         }
     }
 
-    public void WriteLogForVerticalHeadMovement(string message)
+    public void WriteLogForPitchHeadMovement(string message) // Vertical (X-Axis) ex.: Nodding Head
     {
         using (System.IO.StreamWriter logFile =
-           new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_HeadMovement_Ver.txt", append: true))
+           new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_HeadMovement_Pitch(X).txt", append: true))
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            logFile.Write("[" + currentTimeinMilliseconds + "] ");
-            // logFile.Write("[" + currentTime + "] ");
+            timeInEpoch = GetTimeFromEpoch();
+           // logFile.Write("[" + currentTimeinMilliseconds + "] ");
+            logFile.Write("[" + currentTime + "] ");
+            logFile.Write("[" + timeInEpoch + "] ");
             logFile.WriteLine(message);
         }
     }
 
-    public void WriteLogForVRUserHead(string message)
+    public void WriteLogForRollHeadMovement(string message) // (Z-Axis) ex.: Streching out Neck to leftdown/rightdown
     {
         using (System.IO.StreamWriter logFile =
-                   new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_Head.txt", append: true))
+           new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_HeadMovement_Roll(Z).txt", append: true))
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            logFile.Write("[" + currentTimeinMilliseconds + "] ");
-           // logFile.Write("[" + currentTime + "] ");
+            timeInEpoch = GetTimeFromEpoch();
+            //logFile.Write("[" + currentTimeinMilliseconds + "] ");
+            logFile.Write("[" + currentTime + "] ");
+            logFile.Write("[" + timeInEpoch + "] ");
+            logFile.WriteLine(message);
+        }
+    }
+
+
+
+    public void WriteLogForHeadPosition(string message)
+    {
+        using (System.IO.StreamWriter logFile =
+                   new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_HeadPosition.txt", append: true))
+        {
+            currentTime = GetCurrentTime();
+            currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
+            timeInEpoch = GetTimeFromEpoch();
+            //logFile.Write("[" + currentTimeinMilliseconds + "] ");
+            logFile.Write("[" + currentTime + "] ");
+            logFile.Write("[" + timeInEpoch + "] ");
             logFile.WriteLine(message);
         }
     }
@@ -120,8 +138,25 @@ public class BSLogManager : MonoBehaviour
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            logFile.Write("[" + currentTimeinMilliseconds + "] ");
-          // logFile.Write("[" + currentTime + "] ");
+            timeInEpoch = GetTimeFromEpoch();
+          //  logFile.Write("[" + currentTimeinMilliseconds + "] ");
+            logFile.Write("[" + currentTime + "] ");
+            logFile.Write("[" + timeInEpoch + "] ");
+            logFile.WriteLine(message);
+        }
+    }
+
+    public void WriteLogForExcel(string message)
+    {
+        using (System.IO.StreamWriter logFile =
+                   new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_Timelog.txt", append: true))
+        {
+            currentTime = GetCurrentTime();
+            currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
+            timeInEpoch = GetTimeFromEpoch();
+            //  logFile.Write("[" + currentTimeinMilliseconds + "] ");
+           // logFile.Write("[" + currentTime + "] ");
+            logFile.Write("[" + timeInEpoch + "] ");
             logFile.WriteLine(message);
         }
     }
@@ -150,5 +185,12 @@ public class BSLogManager : MonoBehaviour
         string name = localDate.ToString("HH:mm:ss:ms");
 
         return name;
+    }
+
+    private double GetTimeFromEpoch()
+    {
+        var epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        var timeStamp = (DateTime.UtcNow - epochStart).TotalSeconds;
+        return timeStamp;
     }
 }

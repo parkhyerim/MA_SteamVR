@@ -1,112 +1,143 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class HeadMovement : MonoBehaviour
 {
     BSLogManager logManager;
 
-    public float period = 0.2f;
-    [SerializeField]
+    private float period = 0.2f; // timestamp period
     private float checkTimer = 0.0f;
+    private int count;
 
-    private Vector3 camEulerAngles;
-    private Quaternion camRotation;
+    private Vector3 headsetEulerAngles, headsetLocalPosition, headsetOriginPos;
+    private Quaternion headsetRotationAngles;
+    private float headsetPosX, headsetPosY, headsetPosZ;
 
+    // Yaw (Y roatation)
     private float curEulerY, prevEulerY, diffEulerY, avgEulerY, sumEulerY;
     private float conv_curEulerY, conv_prevEulerY, conv_diffEulerY, conv_avgEulerY, conv_sumEulerY;
     private float curRotY, prevRotY, diffRotY, avgRotY, sumRotY;
 
+    // Pitch (X rotation)
     private float curEulerX, prevEulerX, diffEulerX, avgEulerX, sumEulerX;
     private float conv_curEulerX, conv_prevEulerX, conv_diffEulerX, conv_avgEulerX, conv_sumEulerX;
-    private float curRotX, prevRotX, diffRotX, avgRotX, sumRox;
+    private float curRotX, prevRotX, diffRotX, avgRotX, sumRotx;
 
-    private int count;
+    // Roll (Z rotation)
+    private float curEulerZ, prevEulerZ, diffEulerZ, avgEulerZ, sumEulerZ;
+    private float conv_curEulerZ, conv_prevEulerZ, conv_diffEulerZ, conv_avgEulerZ, conv_sumEulerZ;
+    private float curRotZ, prevRotZ, diffRotZ, avgRotZ, sumRotZ;
 
-    bool canMeasure;
-    bool inGame;
+    bool gameStart, gameEnd;
+    private bool startInfoRecored;
 
-    public bool CanMeasure { get => canMeasure; set => canMeasure = value; }
-    public bool InGame { get => inGame; set => inGame = value; }
+    public bool GameStart { get => gameStart; set => gameStart = value; }
+    public bool GameEnd { get => gameEnd; set => gameEnd = value; }
 
     private void Awake()
     {
         logManager = FindObjectOfType<BSLogManager>();
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         count = -1;
 
-        // Euler Angles
-        camEulerAngles = Camera.main.transform.eulerAngles;
-        
-       // prevEulerY = camEulerAngles.y;
-        curEulerY = camEulerAngles.y;
+        //// MainCamera's Euler Angles
+        //headsetEulerAngles = Camera.main.transform.eulerAngles;       
+        //curEulerY = headsetEulerAngles.y;
+        //curEulerX = headsetEulerAngles.x;
+        //curEulerZ = headsetEulerAngles.z;
 
-        // Rotation Angles
-        camRotation = Camera.main.transform.rotation;
-        curRotY = camRotation.y;
-        curRotX = camRotation.x;
-        //Debug.Log(camRotation + " " + curRotX + " " + curRotY);       
+        //// Rotation Angles
+        //headsetRotationAngles = Camera.main.transform.rotation;
+        //curRotY = headsetRotationAngles.y;
+        //curRotX = headsetRotationAngles.x;
+        //curRotZ = headsetRotationAngles.z;
+        
+        //// Position
+        //headsetOriginPos = Camera.main.transform.localPosition;
+        //headsetLocalPosition = Camera.main.transform.localPosition;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        // logManager.WriteToLogFileForHeadMovement("test");
-
-        // Measure Head Movement
+        /***********************************
+        *******  Rotation of Heaset
+        ****************************/
         // 1.Euler
-        camEulerAngles = Camera.main.transform.eulerAngles;
-        curEulerY = camEulerAngles.y;
-        curEulerX = camEulerAngles.x;
+        headsetEulerAngles = Camera.main.transform.eulerAngles;
+        curEulerY = headsetEulerAngles.y;
+        curEulerX = headsetEulerAngles.x;
+        curEulerZ = headsetEulerAngles.z;
 
         // 2. Rotation
-        camRotation = Camera.main.transform.rotation;
-        curRotY = camRotation.y;
-        curRotX = camRotation.x;
-
+        headsetRotationAngles = Camera.main.transform.rotation;
+        curRotY = headsetRotationAngles.y;
+        curRotX = headsetRotationAngles.x;
+        curRotZ = headsetRotationAngles.z;
+      
         // 3. converted euler
-        if (curEulerY >= 180 && curEulerY <= 360) // 360-270-180 => 0-90-180
+        // Yaw(Y)
+        if (curEulerY > 180 && curEulerY <= 360) // 360-> 270-> 179 => 0-> -90 -> -179
         {
-            conv_curEulerY = 360f - curEulerY;
+            conv_curEulerY = curEulerY - 360f;
         }
-        else if (curEulerY > 0 && curEulerY < 180) // 1-90-179 => -1 -90 -179
+        else if (curEulerY > 0 && curEulerY <= 180) // 1-> 90-> 180 => 1 -> 90 -> 180
         {
-            conv_curEulerY = curEulerY * (-1f);
-        }
-
-        if(curEulerX >= 180 && curEulerX <= 360)
-        {
-            conv_curEulerX = 360f - curEulerX;
-        }
-        else if (curEulerX > 0 && curEulerX < 180) // 1-90-179 => -1 -90 -179
-        {
-            conv_curEulerX = curEulerX * (-1f);
+            conv_curEulerY = curEulerY;
         }
 
-        if (!canMeasure)
+        // Pitch(X)
+        if (curEulerX > 180 && curEulerX <= 360) // 360-> 270-> 179 => 0-> -90 -> -179
         {
-            if (!inGame)
-            {
-                prevEulerY = curEulerY;
-                prevRotY = curRotY;
-                // 360-270-180 => 0-90-180
-                if (prevEulerY >= 180 && prevEulerY <= 360)
-                    conv_prevEulerY = 360f - prevEulerY;
-                else if (prevEulerY > 0 && prevEulerY < 180) // 1-90-179 => -1 -90 -179
-                    conv_prevEulerY = prevEulerY * (-1f);
-                //Debug.Log("Before Starting Game: " 
-                //    + " prevEuler:" + prevEulerY 
-                //    + " prevRot: " + prevRotY 
-                //    + " conv_Y: " + conv_prevEulerY);
-            }
+            conv_curEulerX = curEulerX - 360f;
+        }
+        else if (curEulerX > 0 && curEulerX <= 180) // 1-> 90-> 179 => -1 -90 -179
+        {
+            conv_curEulerX = curEulerX;
+        }
+      
+        // Roll(Z)
+        if (curEulerZ > 180 && curEulerZ <= 360) // 360-> 270-> 179 => 0-> -90 -> -179
+        {
+            conv_curEulerZ = curEulerZ - 360f;
+        }
+        else if (curEulerZ > 0 && curEulerZ <= 180) // 1-> 90-> 179 => -1 - 90 - 179
+        {
+            conv_curEulerZ = curEulerZ;
+        }
+
+        /***********************************
+        *******  Position of Heaset
+        ****************************/
+        headsetLocalPosition = Camera.main.transform.localPosition;
+        headsetPosX = headsetLocalPosition.x;
+        headsetPosY = headsetLocalPosition.y;
+        headsetPosZ = headsetLocalPosition.z;
+
+        if (!GameStart && !GameEnd) // Before game Start
+        {
+            prevEulerY = curEulerY;
+            prevEulerX = curEulerX;
+            prevEulerZ = curEulerZ;
+            conv_prevEulerX = conv_curEulerX;
+            conv_prevEulerY = conv_curEulerY;
+            conv_prevEulerZ = conv_curEulerZ;
+            prevRotY = curRotY;
         }
         else 
         {
+            if (!startInfoRecored)
+            {
+                headsetOriginPos = headsetLocalPosition;
+                logManager.WriteLogForPitchHeadMovement("GAME START: " + conv_curEulerX + " (" + curEulerX + ")");
+                logManager.WriteLogForYawHeadMovement("GAME START: " + conv_curEulerY + " (" + curEulerY + ")");
+                logManager.WriteLogForRollHeadMovement("GAME START: " + conv_curEulerZ + " (" + curEulerZ + ")");
+                logManager.WriteLogForHeadPosition("GAME START: x:" + headsetOriginPos.x + ", y:" + headsetOriginPos.y + ", z:" + headsetOriginPos.z + " " + headsetOriginPos);
+                startInfoRecored = true;
+            }
             // Time
             checkTimer += Time.fixedDeltaTime; // 0f - 0.2f
              
@@ -118,66 +149,95 @@ public class HeadMovement : MonoBehaviour
                     
                     diffEulerY = Mathf.Abs(prevEulerY - curEulerY);
                     diffEulerX = Mathf.Abs(prevEulerX - curEulerX);
+                    diffEulerZ = Mathf.Abs(prevEulerZ - curEulerZ);
                     // Converted
                     conv_diffEulerY = Mathf.Abs(conv_prevEulerY - conv_curEulerY);
                     conv_diffEulerX = Mathf.Abs(conv_prevEulerX - conv_curEulerX);
+                    conv_diffEulerZ = Mathf.Abs(conv_prevEulerZ - conv_curEulerZ);
 
                     sumEulerY += diffEulerY;
                     sumEulerX += diffEulerX;
+                    sumEulerZ += diffEulerZ;
                     conv_sumEulerY += conv_diffEulerY;
                     conv_sumEulerX += conv_diffEulerX;
+                    conv_sumEulerZ += conv_diffEulerZ;
             
                     avgEulerY = sumEulerY / count;
                     avgEulerX = sumEulerX / count;
+                    avgEulerZ = sumEulerZ / count;
                     conv_avgEulerY = conv_sumEulerY / count;
                     conv_avgEulerX = conv_sumEulerX / count;
+                    conv_avgEulerZ = conv_sumEulerZ / count;
 
-                    string logMsgForHorizontalHM = "Time:" + Time.time + 
-                        " period: " + checkTimer +
-                        " prev:" + conv_prevEulerY + "("+prevEulerY+") " +
-                        "cur: " + conv_curEulerY +"("+ curEulerY+ ") " +
-                        "diff: " + conv_diffEulerY + "("+ diffEulerY+") " +
-                        "count: " + count + 
-                        " sum: " + conv_sumEulerY +"("+ sumEulerY + ") " + 
-                        " avg: " + conv_avgEulerY + "("+avgEulerY + ")";
+                    // Y-Axis
+                    string logMsgForYawHM = 
+                        "Time:" + Time.time +
+                        ", period: " + checkTimer +
+                        ", prev:" + conv_prevEulerY + "(" + prevEulerY + ") " +
+                        ", cur: " + conv_curEulerY + "(" + curEulerY + ") " +
+                        ", diff: " + conv_diffEulerY +                     
+                        ", sum: " + conv_sumEulerY+
+                        ", count: " + count +
+                        ", avg: " + conv_avgEulerY;
 
-                    string logMsgForVerticalHM = "Time:" + Time.time +
-                        " period: " + checkTimer +
+                    string logMsgForPitchHM = 
+                        "Time:" + Time.time +
+                        ", period: " + checkTimer +
                         " prev:" + conv_prevEulerX + "(" + prevEulerX + ") " +
-                        "cur: " + conv_curEulerX + "(" + curEulerX + ") " +
-                        "diff: " + conv_diffEulerX + "(" + diffEulerX + ") " +
-                        "count: " + count +
-                        " sum: " + conv_sumEulerX + "(" + sumEulerX + ") " +
-                        " avg: " + conv_avgEulerX + "(" + avgEulerX + ")";
+                        ", cur: " + conv_curEulerX + "(" + curEulerX + ") " +
+                        ", diff: " + conv_diffEulerX +
+                        ", sum: " + conv_sumEulerX +
+                        ", count: " + count +
+                        ", avg: " + conv_avgEulerX;
 
-                    //Debug.Log(logMsgForHorizontalHM + "\n" + logMsgForVerticalHM);
+                    string logMsgForRollHM = 
+                        "Time:" + Time.time +
+                        ", period: " + checkTimer +
+                        ", prev:" + conv_prevEulerZ + "(" + prevEulerZ + ") " +
+                        ", cur: " + conv_curEulerZ + "(" + curEulerZ + ") " +
+                        ", diff: " + conv_diffEulerZ +                  
+                        ", sum: " + conv_sumEulerZ +
+                        ", count: " + count +
+                        ", avg: " + conv_avgEulerZ;
+
+                    string logMsgForHeadPosition = 
+                        "Time:" + Time.time +
+                        ", period: " + checkTimer +
+                        ", count: " + count +
+                        ", x:" + headsetPosX+
+                        ", y: " + headsetPosY +
+                        ", z: " + headsetPosZ +                    
+                        ", Vector3: " + headsetLocalPosition;
 
                     conv_prevEulerY = conv_curEulerY;
                     conv_prevEulerX = conv_curEulerX;
+                    conv_prevEulerZ = conv_curEulerZ;
                     prevEulerY = curEulerY;
                     prevEulerX = curEulerX;
-                    logManager.WriteLogForHorizontalHeadMovement(logMsgForHorizontalHM);
-                    logManager.WriteLogForVerticalHeadMovement(logMsgForVerticalHM);
+                    prevEulerZ = curEulerZ;
+                    logManager.WriteLogForYawHeadMovement(logMsgForYawHM);
+                    logManager.WriteLogForPitchHeadMovement(logMsgForPitchHM);
+                    logManager.WriteLogForRollHeadMovement(logMsgForRollHM);
+                    logManager.WriteLogForHeadPosition(logMsgForHeadPosition);
                 }
 
-                if (count > 0)
-                {
-                    //conv_prevEulerY = conv_curEulerY;
-                    //prevEulerY = curEulerY;
-                }
                 checkTimer = 0f;
             }
           //  prevEulerY = curEulerY;
         }
     }
 
-    public float GetHorizontalHeadMovement()
+    public float GetYawHeadMovement()
     {
-       // string value = avgYAxis.ToString();
         return conv_avgEulerY;
     }
 
-    public float GetVerticalHeadMovement()
+    public float GetRollHeadMovement()
+    {
+        return conv_avgEulerZ;
+    }
+
+    public float GetPitchHeadMovement()
     {
         return conv_avgEulerX;
     }

@@ -924,11 +924,6 @@ public class BSBystanderAvatar : MonoBehaviour
         }
     }
 
-    private void BystanderEnterCriticalZone()
-    {
-        bsgameManager.SetTimeStampForAvatarInCriticalZone();
-    }
-
     private void BystanderShiftZone(string state)
     {
         bsgameManager.SetTimeStampForAvatarInCriticalZoneWithMessage(state);
