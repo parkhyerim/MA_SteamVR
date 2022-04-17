@@ -521,31 +521,26 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [MIXED] CRITICAL ZONE: 30 >= [Bystander's degrees] > 0 to the VR user
                 if (trackerEulerYAxis >= 60 && trackerEulerYAxis < 100) // 100 <- 90
                 {
+                    inCriticalZone = true;
                     if (inTransitionZone)
                     {
-                        Debug.Log("From TZ To CZ");
-                        BystanderShiftZone("From_TZ_TO_CZ");
+                        //Debug.Log("From TZ To CZ");
+                        BystanderShiftZone("Enter_CZ");
                         inTransitionZone = false;
-                        // inTransitionZone = false;
                     }
-                    inCriticalZone = true;
+
                     // presenceAnimojiBoard.transform.position = new Vector3(Camera.main.transform.position.x - 0.4f, presenceAnimojiBoard.transform.position.y - 0.2f, presenceAnimojiBoard.transform.position.z);
 
                     // Avatar is still outside the FOV of VR user
                     // 320 - 315 - 300
-                    if (mainCameraYAxis >= 320 || (mainCameraYAxis > 0 && mainCameraYAxis <= 90))
+                    if ((mainCameraYAxis >= 320 && mainCameraYAxis<=360) || (mainCameraYAxis > 0 && mainCameraYAxis <= 90))
                     {
                         // Animoji Guiding
                         bystanderAvatar.SetActive(false);
 
-                        //presenceAnimojiBoard.transform.position = guidePos.transform.position;
-                        //presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
                         timeElapsedForMixedTransition += Time.deltaTime;
-
-
                         if (timeElapsedForMixedTransition < guideTimeForAvatar)
                         {
-                            //Debug.Log("guiding: timeElapsedForMixedTransition: " + timeElapsedForMixedTransition);
                             arrowImage.enabled = true;
                             float t = timeElapsedForMixedTransition / guideTimeForAvatar;
                             t = t * t * (3f - 2f * t);
@@ -562,11 +557,11 @@ public class BSBystanderAvatar : MonoBehaviour
                         // time passed
                         else
                         {
-                            Debug.Log("done: timeElapsedForMixedTransition: " + timeElapsedForMixedTransition);
                             presenceAnimojiBoard.transform.position = guidePosForMixed.transform.position;
                             arrowImage.transform.position = arrowPositionForMixed.transform.position;
                         }
 
+                        arrowImage.enabled = true;
                         backsideImage.enabled = false;
                         noInteractionFrontImage.enabled = false;
                         yesInteractionFrontImage.enabled = true;
@@ -574,9 +569,9 @@ public class BSBystanderAvatar : MonoBehaviour
                     }
                     // VR user looking at the Bystander
                     // Avatar visualisation
-                    else if (mainCameraYAxis < 320 && mainCameraYAxis >= 250)
+                    else if (mainCameraYAxis < 320 && mainCameraYAxis >= 230)
                     {
-                       // Debug.Log("VR user is looking at the bystander");
+                        presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
                         noInteractionFrontImage.enabled = false;
                         yesInteractionFrontImage.enabled = false;
                         backsideImage.enabled = false;
@@ -592,7 +587,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     }
                 }
                 // [MIXED] TRANSITION ZONE: 60 >= [Bystander's degrees] > 30
-                else if (trackerEulerYAxis >= 30 && trackerEulerYAxis < 60)
+                else if (trackerEulerYAxis < 60 && trackerEulerYAxis >= 30)
                 {
                     inTransitionZone = true;
                     inNoZone = false;
@@ -603,15 +598,13 @@ public class BSBystanderAvatar : MonoBehaviour
                     // ANIMOJI Visualisation
                     if (mainCameraYAxis >= 320 || (mainCameraYAxis > 0 && mainCameraYAxis <= 90))
                     {
-                        //Debug.Log("Transitional: Animoji");
                         bystanderAvatar.SetActive(false);
                         bystanderAnim.SetBool("isInteracting", false);
-                        //presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
 
                         if (inCriticalZone) // From Critical Zone to Transition Zone
                         {
-                            Debug.Log("From_CZ_to_TZ");
-                            BystanderShiftZone("From_CZ_to_TZ");
+                           // Debug.Log("From_CZ_To_TZ");
+                            BystanderShiftZone("From_CZ_To_TZ");
                             // show backside
                             backsideImage.enabled = true;
                             arrowImage.enabled = false;
@@ -621,8 +614,8 @@ public class BSBystanderAvatar : MonoBehaviour
                         }
                         if (inUncriticalZone) // From Uncritical Zone
                         {
-                            Debug.Log("From_UCZ_to_TZ");
-                            BystanderShiftZone("From_UCZ_to_TZ");
+                           // Debug.Log("From_UCZ_To_TZ");
+                            BystanderShiftZone("From_UCZ_To_TZ");
                             backsideImage.enabled = false;
                             yesInteractionFrontImage.enabled = false;
                             noInteractionFrontImage.enabled = true;
@@ -632,11 +625,20 @@ public class BSBystanderAvatar : MonoBehaviour
                         }
                     }
                     // VR user is looking at the bystander
-                    else if (mainCameraYAxis < 320 && mainCameraYAxis >= 250)
+                    else if (mainCameraYAxis < 320 && mainCameraYAxis >= 230)
                     {
+                        if (inCriticalZone)
+                        {
+                            BystanderShiftZone("From_CZ_To_TZ");
+                            inCriticalZone = false;
+                        }
+                        if (inUncriticalZone)
+                        {
+                            BystanderShiftZone("From_UCZ_To_TZ");
+                            inUncriticalZone = false;
+                        }
                         bystanderAvatar.SetActive(true);
                         bystanderAnim.SetBool("isInteracting", false);
-
                         transform.position = trackerTransform.position;
                         transform.localEulerAngles = new Vector3(0, trackerEulerYAxis, 0);
 
@@ -649,16 +651,8 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [MIXED] UNCRITICAL ZONE: 85 >= Bystander's degrees > 60
                 else if (trackerEulerYAxis < 30 && trackerEulerYAxis >= 5)
                 {
-                    if (!inUncriticalZone)
-                    {
-                        if(inNoZone)
-                            BystanderShiftZone("From NZ to UCZ");
-                        else if(inTransitionZone)
-                            BystanderShiftZone("From TZ to UCZ");
-
-                        inUncriticalZone = true;
-                    }
-
+                    inUncriticalZone = true;
+        
                     presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
                     yesInteractionFrontImage.enabled = false;
                     noInteractionFrontImage.enabled = false;
@@ -666,23 +660,25 @@ public class BSBystanderAvatar : MonoBehaviour
                     // VR user is looking at the game 
                     //-> The bystander's avatar is outside the VR user's FOV
                     // Animoji Visualisation
-                    if (mainCameraYAxis >= 320 || (mainCameraYAxis > 0 && mainCameraYAxis <= 90))
+                    if ((mainCameraYAxis >= 320 && mainCameraYAxis<=360) || (mainCameraYAxis > 0 && mainCameraYAxis <= 90))
                     {
-                        //Debug.Log("Uncritical: Animoji");
                         bystanderAvatar.SetActive(false);
                         bystanderAnim.SetBool("isInteracting", false);
 
-                        // presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
                         arrowImage.enabled = false;
 
                         if (inNoZone) // From No-Zone: Full-transparency to No-transparency
                         {
                             timeElapsedForMixedTransition += Time.deltaTime;
-                            //presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
+                            presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
+                            if (!logFlag)
+                            {
+                                BystanderShiftZone("From_NZ_To_UCZ");
+                                logFlag = true;
+                            }
 
                             if (timeElapsedForMixedTransition < fadeTime) // fadeTime: 2f (default)
                             {
-                                //  Debug.Log("TimeForMixed (fade in): " + timeElapsedForMixed);
                                 float t = timeElapsedForMixedTransition / fadeTime;
                                 t = t * t * (3f - 2f * t);
                                 backsideImage.enabled = true;
@@ -691,11 +687,8 @@ public class BSBystanderAvatar : MonoBehaviour
                             else // more than fadetime (e.g., 2f)
                             {
                                 backsideImage.color = noTransparency;
-
-                                // Debug.Log("Transparence is full and nozone is set as: " + inNoZone);
                                 inNoZone = false;
-                            }
-                           
+                            }                          
                         }
 
                         if (inTransitionZone) // From Transition Zone: No-Transparency to Full-transparency
@@ -703,9 +696,13 @@ public class BSBystanderAvatar : MonoBehaviour
                             timeElapsedForMixedTransition += Time.deltaTime;
                             presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
 
+                            if (!logFlag)
+                            {
+                                BystanderShiftZone("From_TZ_To_UCZ");
+                                logFlag = true;
+                            }
                             if (timeElapsedForMixedTransition < fadeTime)
                             {
-                                // Debug.Log("TimeForMixed (fade out): " + timeElapsedForMixed);
                                 float t = timeElapsedForMixedTransition / fadeTime;
                                 t = t * t * (3f - 2f * t);
                                 backsideImage.enabled = true;
@@ -714,8 +711,6 @@ public class BSBystanderAvatar : MonoBehaviour
                             else // more than fadetime (e.g., 2f)
                             {
                                 backsideImage.color = lowTransparency;
-
-                                // Debug.Log("Transparence is 0 and shift zone is set as: " + inTransitionZone);
                                 inTransitionZone = false;
                             }
                            
@@ -723,9 +718,27 @@ public class BSBystanderAvatar : MonoBehaviour
                     }
                     // VR user is looking at the seated position 
                     // -> avatar in the seated position
-                    else if (mainCameraYAxis < 320 && mainCameraYAxis >= 250)
+                    else if (mainCameraYAxis < 320 && mainCameraYAxis >= 230)
                     {
-                       // Debug.Log("Uncritical: Avatar");
+                        if (inNoZone)
+                        {
+                            if (!logFlag)
+                            {
+                                BystanderShiftZone("From_NZ_To_UCZ");
+                                logFlag = true;
+                            }
+                        }
+
+                        if (inTransitionZone)
+                        {
+                            if (!logFlag)
+                            {
+                                BystanderShiftZone("From_TZ_To_UCZ");
+                                logFlag = true;
+                            }
+                        }
+
+                        // Avatar (No FE)
                         bystanderAvatar.SetActive(true);
                         bystanderAnim.SetBool("isInteracting", false);
                         transform.position = trackerTransform.position;
@@ -744,9 +757,10 @@ public class BSBystanderAvatar : MonoBehaviour
                     inNoZone = true;
                     if (inUncriticalZone)
                     {
-                        Debug.Log("Mixed: From UCZ to NZ");
+                       // Debug.Log("Mixed: From UCZ to NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
                         inUncriticalZone = false;
+                        logFlag = false;
                     }                    
                     inTransitionZone = false;
                     inCriticalZone = false;
@@ -759,6 +773,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     backsideImage.enabled = false;
                     yesInteractionFrontImage.enabled = false;
                     noInteractionFrontImage.enabled = false;
+
                     arrowImage.enabled = false;
                     timeElapsedForMixedTransition = 0;
                 }
