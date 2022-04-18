@@ -31,11 +31,11 @@ public class TimeLog : MonoBehaviour
     private void Start()
     {
         logManager.WriteLogForExcel(
-            "Timestamp" 
-            + " HeadUp" + " HeadDown" + " HeadLeft" + " HeadRight"
-            + " RotX" + " RotY" + " RotZ" + " PosX" + " PosY" + " PosZ"
-            + " GazeX" + " GazeY" + " GazeZ" 
-            + " Pause" + " Resume", true);
+            "Timestamp(s:ms)," 
+            + "HeadUpMax(-(deg.))," + " HeadDownMax(deg.)," + " HeadLeft(-(deg.))," + " HeadRight(deg.),"
+            + "RotationX(deg.)," + "RotationY(deg.)," + "RotationZ(deg.)," + "PositionX," + " PosítionY," + " PositionZ,"
+            + "GazeX," + "GazeY," + "GazeZ," 
+            + "Pause(bool)," + "Resume(boo)", true);
     }
 
     private void FixedUpdate()
@@ -44,7 +44,17 @@ public class TimeLog : MonoBehaviour
 
         if (!GameStart)
         {
-            
+            headUpMaxDegrees = gameManager.MaxUpAxis;
+            headDownDegrees = gameManager.MaxDownAxis;
+            headLeftDegrees = gameManager.MaxLeftAxis;
+            headRightDegrees = gameManager.MaxRightAxis;
+            curEulerY = headMovement.Conv_curEulerY;
+            curEulerX = headMovement.Conv_curEulerX;
+            curEulerZ = headMovement.Conv_curEulerZ;
+            curPosX = headMovement.HeadsetPosX;
+            curPosY = headMovement.HeadsetPosY;
+            curPosZ = headMovement.HeadsetPosZ;
+            paused = gameManager.GamePaused;
         }
         else
         {
@@ -67,7 +77,7 @@ public class TimeLog : MonoBehaviour
                 logManager.WriteLogForExcel(headUpMaxDegrees + ", " + headDownDegrees + ", " + headLeftDegrees + ", " + headRightDegrees + ", "
                     + curEulerX + ", " + curEulerY + ", " + curEulerZ + ", "
                     + curPosX + ", " + curPosY + ", " + curPosZ + ", "
-                    + "GAZE" + ", "
+                    + "GAZEX" + ", " + "GAZEY" + ", " + "GAZEZ" + ", "
                     + paused + ", "
                     , false);
 

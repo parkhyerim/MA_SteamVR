@@ -44,8 +44,7 @@ public class BSBystanderAvatar : MonoBehaviour
 
     [Header("User-Study Settings")]
     public bool sitToLeft;  // Where is the bystander sitting?
-    public bool isAnimojiSetting, isAvatarSetting, isMixedSetting;
-    public bool isPractice;
+    private bool isAnimojiSetting, isAvatarSetting, isMixedSetting, isBaseline, isPractice;
 
     [Header("Avatar Sub-Settings")]
     // public bool isSeatedAndInFOV;
@@ -74,8 +73,16 @@ public class BSBystanderAvatar : MonoBehaviour
     private int[] studyOrder = new int[4];
     int currentLevelIndex; // practice 0
     int order;
+
+    bool inVisualisation;
     public bool LookedOnceSeatedPosition { get => lookedOnceSeatedPosition; set => lookedOnceSeatedPosition = value; }
     public bool IsGuidingFOVToSeatedExceed { get => isGuidingFOVToSeatedExceed; set => isGuidingFOVToSeatedExceed = value; }
+    public bool IsAnimojiSetting { get => isAnimojiSetting; set => isAnimojiSetting = value; }
+    public bool IsAvatarSetting { get => isAvatarSetting; set => isAvatarSetting = value; }
+    public bool IsMixedSetting { get => isMixedSetting; set => isMixedSetting = value; }
+    public bool IsBaseline { get => isBaseline; set => isBaseline = value; }
+    public bool IsPractice { get => isPractice; set => isPractice = value; }
+    public bool InVisualization { get => inVisualisation; set => inVisualisation = value; }
 
     private void Awake()
     {
@@ -92,8 +99,8 @@ public class BSBystanderAvatar : MonoBehaviour
         bystanderAnim.SetBool("isInteracting", false);
       
         // Default setting: Avatar setting
-        if (!(isAnimojiSetting || isMixedSetting || isAvatarSetting) && !gameManager.isPracticeGame)
-            isAvatarSetting = true;
+        //if (!(isAnimojiSetting || isMixedSetting || isAvatarSetting || isBaseline || isPractice))
+        //    isPractice = true;
 
        // Debug.Log("Animoji: " + isAnimojiSetting + " Avatar: " + isAvatarSetting + " Mixed: " + isMixedSetting);
         yesInteractionFrontImage.enabled = false;
@@ -215,6 +222,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         {
                             //Debug.Log("FROM_NZ_to_UCZ");
                             BystanderShiftZone("From_NZ_to_UCZ");
+                            InVisualization = true;
                             logFlag = true;
                             
                         }                    
@@ -269,6 +277,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         //Debug.Log("From_UCZ_to_NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
                         inUncriticalZone = false;
+                        InVisualization = false;
                         logFlag = false;
                     }
                     inTransitionZone = false;
@@ -475,6 +484,7 @@ public class BSBystanderAvatar : MonoBehaviour
                        // Debug.Log("Avatar: From NZ to UCZ");
                         BystanderShiftZone("From_NZ_To_UCZ");
                         SetRightPauseStamp();
+                        inVisualisation = true;
                         inNoZone = false;                     
                     }
 
@@ -505,6 +515,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     {
                         Debug.Log("Avatar: From UCZ To NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
+                        inVisualisation = false;
                         inUncriticalZone = false;
                     }
                     //inTransitionZone = false;
@@ -663,11 +674,10 @@ public class BSBystanderAvatar : MonoBehaviour
                     // VR user is looking at the game 
                     //-> The bystander's avatar is outside the VR user's FOV
                     // Animoji Visualisation
-                    if ((mainCameraYAxis >= 320 && mainCameraYAxis<=360) || (mainCameraYAxis > 0 && mainCameraYAxis <= 90))
+                    if ((mainCameraYAxis >= 320 && mainCameraYAxis<=360) || (mainCameraYAxis > 0 && mainCameraYAxis <= 150))
                     {
                         bystanderAvatar.SetActive(false);
                         bystanderAnim.SetBool("isInteracting", false);
-
                         arrowImage.enabled = false;
 
                         if (inNoZone) // From No-Zone: Full-transparency to No-transparency
@@ -730,9 +740,10 @@ public class BSBystanderAvatar : MonoBehaviour
                             {
                                 BystanderShiftZone("From_NZ_To_UCZ");
                                 SetRightPauseStamp();
+                                inVisualisation = true;
                                 logFlag = true;
                             }
-                           // inNoZone = true;
+                           //inNoZone = false;
                         }
 
                         if (inTransitionZone)
@@ -742,7 +753,7 @@ public class BSBystanderAvatar : MonoBehaviour
                                 BystanderShiftZone("From_TZ_To_UCZ");
                                 logFlag = true;
                             }
-                           // inTransitionZone = true;
+                           // inTransitionZone = false;
                         }
 
                         // Avatar (No FE)
@@ -767,6 +778,7 @@ public class BSBystanderAvatar : MonoBehaviour
                        // Debug.Log("Mixed: From UCZ to NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
                         inUncriticalZone = false;
+                        inVisualisation = false;
                         logFlag = false;
                     }                    
                     inTransitionZone = false;
@@ -895,14 +907,18 @@ public class BSBystanderAvatar : MonoBehaviour
         }
     }
 
+    public void SetUserstudyCondition()
+    {
+        isPractice = gameManager.isTrialGame;
+        isBaseline = gameManager.isBaseline;
+        isAnimojiSetting = gameManager.isAnimojiSetting;
+        isAvatarSetting = gameManager.isAvatarSetting;
+        isMixedSetting = gameManager.isMixedSetting;
+        Debug.Log("set condition is called: " + isPractice + isBaseline + isAnimojiSetting + isAvatarSetting + isMixedSetting);
+    }
     private void BystanderShiftZone(string state)
     {
         gameManager.SetTimeStampForAvatarInCriticalZoneWithMessage(state);
-    }
-
-    public void SetGuide()
-    {
-        Debug.Log("setGuide is called");
     }
 
     private void SetRightPauseStamp()

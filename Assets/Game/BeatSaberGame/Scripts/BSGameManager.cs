@@ -12,23 +12,48 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class BSGameManager : MonoBehaviour
 {
+    [Header("User-Study Settings")]
+    public bool isTrialGame;
+    public bool isBaseline;
+    public bool isAnimojiSetting;
+    public bool isAvatarSetting;
+    public bool isMixedSetting;
+    private bool[] settingArray;
+    public int[] audioOrder = { 1, 2, 3 };
+
     [Header("AUDIO")]
     public AudioSource gameEffectAudioSource;
     public AudioSource bgMusicAudioSource;
     public AudioSource lobbyMusicAudioSource;
-    // TODO: Question Audio
     public AudioSource quesitionAudioSource;
-    public AudioClip rightSlice;
+    public AudioClip rightSound;
     public AudioClip missCubeSound;
     public AudioClip sliceSound;
     public AudioClip cheerSound;
-    public AudioClip[] questionAudios;
+    // public AudioClip[] questionAudios;
 
-    [Header("Particle EFFECT")]
+    [Header("TIME INPUT")]
+    public int totalGameTime = 180;  // default
+    public float getReadyTime = 1f;  // default
+    public float BystanderStartTime = 25f; // default
+    public float bystanderInterval = 40f;  // default
+    public float getReadyTimeForTrial = 9f; // default
+
+    [Header("TIME INFO.")]
+    private float gameTimerIgnoringPause, gameCountTimer;
+    int gameTimerToZero; // for timer UI
+    private float timeFromSceneLoading, startTimeForSpawningCubes; // time to show Card images, time to turn backwards again
+    float beforeGameTimer = 0f;
+    [SerializeField]
+    private float BystanderStartTime2, BystanderStartTime3, BystanderStartTime4;
+    private float pausedTime, identificationTimeRound, eyeFocusTime, resumedTime, pauseDuration;
+    private int pauseCounter, pauseInErrorCounter, pauseInInteractionCounter;
+
+    [Header("GAME EFFECT")]
     public GameObject cheerEffect;
     public GameObject blueEffect;
     public GameObject greenEffect;
-    public GameObject yellowEffect;
+   // public GameObject yellowEffect;
 
     [Header("GAME UI")]
     public GameObject lobbyMenuUI;
@@ -42,35 +67,13 @@ public class BSGameManager : MonoBehaviour
     [Header("TRIAL_UI")]
     public GameObject trialLobbyMenuUI;
     public GameObject trialInstructionUI;
-    // public GameObject surveryUI;
     public GameObject trialProcessUI;
     private TMP_Text trialInstructionText;
     private TMP_Text trialLobbyText;
     public GameObject trialStartButton;
 
-    public GameObject[] stopCubes;
-
     [Header("GAME COMPONENTS")]
     public GameObject saberObject;
-
-    [Header("TIME INPUT")]
-    public int totalGameTime;
-    public float getReadyTime;
-    public float BystanderStartTime = 25f;
-    public float bystanderInterval = 40f;
-
-    [Header("TIME INFO.")]
-    [SerializeField]
-    private float gameTimerIgnoringPause, gameCountTimer;
-    int gameTimerToZero;
-    private float timeFromSceneLoading, startTimeForSpawningCubes; // time to show Card images, time to turn backwards again
-    float beforeGameTimer = 0f;
-    [SerializeField]
-    private float BystanderStartTime2, BystanderStartTime3, BystanderStartTime4;
-    private float pausedTime, identificationTime, eyeFocusTime;
-
-    [Header("TRIAL TIME MNG.")]
-    public float getReadyTimeForTrial;
 
     [Header("SCORE")]
     [SerializeField]
@@ -78,36 +81,40 @@ public class BSGameManager : MonoBehaviour
 
     [Header("BOOLEADN FOR GAME")]
     [SerializeField]
-    private bool canStartGame, canPauseGame, gamePaused, gameResumed;
-    [Header("BOOLEADN FOR TRIAL")]
+    private bool canStartGame;
     [SerializeField]
-    private bool canStartTrial, canPauseTrial;
-
-    [Header("TRACKER")]
-    BSRotateTracker bysTracker;
+    private bool canPauseGame;
+    [SerializeField]
+    private bool gamePaused;
+    [SerializeField]
+    private bool gameResumed;
+    [SerializeField]
+    private bool canStartTrial;
+    [SerializeField]
+    private bool canPauseTrial;
+        
     public XRInteractorLineVisual lineVisual;
-    [Header("PARTICIPANT")]
-    [SerializeField]
+
     private string participantID;
-
-    private bool bystanderInteract;
-
-    public bool isPracticeGame;
     public bool isEndScene;
-    private bool recordScore, recordMaxMin, recordStartAxis;
+    private bool recordScoreAndTime, recordMaxMin, recordStartAxis;
     int currentSceneIndex;
     private bool askSpawnCubes;
     //Trial
     private bool pauseInstructed;
-    private bool askSpawnCubesForTrial;
-    private GameObject[] cubes;
-    private GameObject[] trialCubes;
+    private bool trialOncePaused, trialOnceResumed;
+
+    [Header("CUBES")]
     public CubeSpawner cubeSpawner;
     public CubeSpawner trialCubeSpawner;
+    private GameObject[] cubes;
+    private GameObject[] trialCubes;
+    private bool askSpawnCubesForTrial;
 
-    private bool trialOncePaused, trialOnceResumed;
     private string instructionMsg;
 
+    BSRotateTracker bysTracker;
+    private bool bystanderInteract;
     BSBystanderAvatar bystanderAvatar;
     BSLevelManager levelManager;
     UserStudyManager userstudyManager;
@@ -117,26 +124,17 @@ public class BSGameManager : MonoBehaviour
     TimeLog timeLog;
     SocketManager socketManager;
 
-    float testTime;
-    int checkCounter;
-    [SerializeField]
     private float currentYAxis, diffYAxis, previousYAxis;
-    private int num;
     private float checkPointTime = 0.0f;
     public float period = 0.2f;
-    [SerializeField]
     private Vector3 cameraAxis;
-
-    [SerializeField]
     private Vector3 maincameraAxisVector, maxLeftVectorAxis, maxRightVecotorAxis, maxUpVectorAxis, maxDownVectorAxis;
-    [SerializeField]
     private float mainCameraYAxis, mainCameraXAxis, mainCameraZAxis, maxRightAxis, maxLeftAxis, maxDownAxis, maxUpAxis;
-    public bool oneInteruption;
+    private bool oneInteruption;
     private bool bystanderCanHearAnswer;
-    public int[] audioOrder = { 1, 2, 3 };
+
     int questionCounter;
     bool allQuestionAsked, reduceGameTime, calledPushEnd;
-    float pauseDuration;
     bool firstPauseCalled, secondPauseCalled, thirdPauseCalled, fourthPauseCalled, doVisualizing;
 
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
@@ -154,58 +152,9 @@ public class BSGameManager : MonoBehaviour
     public bool GamePaused { get => gamePaused; set => gamePaused = value; }
     public bool DoVisualising { get => doVisualizing; set => doVisualizing = value; }
 
-
-
     /**************************************************************
      * socket code
      **************************************************************/
-
-    //TcpClient mySocket;
-    //NetworkStream theStream;
-    //StreamWriter theWriter;
-    //StreamReader theReader;
-
-    //public bool socketReady = false; //a true/false variable for connection status
-    ////try to initiate connection
-    //public void setupSocket()
-    //{
-    //    try
-    //    {
-    //        mySocket = new TcpClient("localhost", 25001);
-    //        theStream = mySocket.GetStream();
-    //        theWriter = new StreamWriter(theStream);
-    //        theReader = new StreamReader(theStream);
-    //        socketReady = true;
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log("Socket error:" + e);
-    //    }
-    //}
-    ////send message to server
-    //public void writeSocket(string theLine)
-    //{
-    //    if (!socketReady)
-    //        return;
-    //    String tmpString = theLine + "\r\n";
-    //    theWriter.Write(tmpString);
-    //    theWriter.Flush();
-    //}
-    ////disconnect from the socket
-    //public void closeSocket()
-    //{
-    //    if (!socketReady)
-    //        return;
-    //    theWriter.Close();
-    //    theReader.Close();
-    //    mySocket.Close();
-    //    socketReady = false;
-    //}
-    /**************************************************************
-     * socket code ende
-     **************************************************************/
-
-
 
     private void Awake()
     {
@@ -236,7 +185,23 @@ public class BSGameManager : MonoBehaviour
         timeUI.SetActive(false);
         scoreUI.SetActive(false);
 
-        if (!isPracticeGame)
+        // Default setting: Avatar setting
+        if (!(isAnimojiSetting || isMixedSetting || isAvatarSetting || isBaseline || isTrialGame))
+            isTrialGame = true;
+
+        settingArray = new bool[] { isTrialGame, isBaseline, isAnimojiSetting, isAvatarSetting, isMixedSetting };
+
+        bool isOneSettingselected = CheckOneConditionSelected();
+        if (!isOneSettingselected)
+        {
+            isTrialGame = true;
+            isBaseline = false;
+            isAnimojiSetting = false;
+            isAvatarSetting = false;
+            isMixedSetting = false;
+        }
+     
+        if (!isTrialGame)
         {
             trialLobbyMenuUI.SetActive(false);         
         }
@@ -255,7 +220,7 @@ public class BSGameManager : MonoBehaviour
 
     private void Start()
     {
-        
+        bystanderAvatar.SetUserstudyCondition();
         gameTimerToZero = totalGameTime; // set time for the game e.g., 150
         score = 0;
 
@@ -280,7 +245,7 @@ public class BSGameManager : MonoBehaviour
             participantID = "IDNotAssigned";
 
         // TRIAL_GAME
-        if (isPracticeGame)
+        if (isTrialGame)
         {
             trialLobbyText.text = "";
             StartCoroutine(WelcomeInstruction());
@@ -295,11 +260,7 @@ public class BSGameManager : MonoBehaviour
     {
         if (CanStartGame)
         {
-           // Debug.Log("gametimeingnoringpause: " + gameTimerIgnoringPause);
-            //maincameraAxisVector = Camera.main.transform.localEulerAngles;
             maincameraAxisVector = Camera.main.transform.eulerAngles;
-            // Debug.Log("local: " + Camera.main.transform.localEulerAngles);
-            // Debug.Log("no: " + Camera.main.transform.eulerAngles);
 
             if (maincameraAxisVector.y > 180 && maincameraAxisVector.y <= 360) // 360-> 270-> 179 => 0-> -90 -> -179
             {
@@ -325,7 +286,30 @@ public class BSGameManager : MonoBehaviour
             {
                 mainCameraZAxis = maincameraAxisVector.z;
             }
+            // Set Max. & Min. Value
+            if (MaxRightAxis < mainCameraYAxis) // against bystander: 0 <-> 90
+            {
+                MaxRightAxis = mainCameraYAxis;
+                maxRightVecotorAxis = maincameraAxisVector;
+            }
 
+            if (MaxLeftAxis > mainCameraYAxis) // towards bystander: -90 <-> 0
+            {
+                MaxLeftAxis = mainCameraYAxis;
+                maxLeftVectorAxis = maincameraAxisVector;
+            }
+
+            if (MaxDownAxis < mainCameraXAxis) // head down: 0 <-> 90
+            {
+                MaxDownAxis = mainCameraXAxis;
+                maxDownVectorAxis = maincameraAxisVector;
+            }
+
+            if (MaxUpAxis > mainCameraXAxis) // head up: 0 <-> -90
+            {
+                MaxUpAxis = mainCameraXAxis;
+                maxUpVectorAxis = maincameraAxisVector;
+            }
             // Head Movement
             if (!recordStartAxis)
             {
@@ -337,44 +321,45 @@ public class BSGameManager : MonoBehaviour
             if (Time.time >= timeFromSceneLoading && Time.time <= startTimeForSpawningCubes) // Showing Time
             {
                 beforeGameTimer += Time.fixedDeltaTime;
-                // gameTimeText.text = Math.Round(getReadyTime - beforeGameTimer).ToString();
-                gameTimeText.text = ConvertToMinAndSeconds(getReadyTime - beforeGameTimer);
+                 gameTimeText.text = Math.Round(getReadyTime - beforeGameTimer).ToString();
+               // gameTimeText.text = ConvertToMinAndSeconds(getReadyTime - beforeGameTimer);
+
             }
             // GAME TIME
             else if (Time.time > startTimeForSpawningCubes && GameCountTimer <= totalGameTime) // During the Game
             {
                 gameTimerIgnoringPause += Time.fixedDeltaTime;
 
-                // Set Max. & Min. Value
-                if (MaxRightAxis < mainCameraYAxis) // against bystander: 0 <-> 90
-                {
-                    MaxRightAxis = mainCameraYAxis;
-                    maxRightVecotorAxis = maincameraAxisVector;
-                }
+                //// Set Max. & Min. Value
+                //if (MaxRightAxis < mainCameraYAxis) // against bystander: 0 <-> 90
+                //{
+                //    MaxRightAxis = mainCameraYAxis;
+                //    maxRightVecotorAxis = maincameraAxisVector;
+                //}
                    
-                if (MaxLeftAxis > mainCameraYAxis) // towards bystander: -90 <-> 0
-                {
-                    MaxLeftAxis = mainCameraYAxis;
-                    maxLeftVectorAxis = maincameraAxisVector;
-                }                
+                //if (MaxLeftAxis > mainCameraYAxis) // towards bystander: -90 <-> 0
+                //{
+                //    MaxLeftAxis = mainCameraYAxis;
+                //    maxLeftVectorAxis = maincameraAxisVector;
+                //}                
 
-                if (MaxDownAxis < mainCameraXAxis) // head down: 0 <-> 90
-                {
-                    MaxDownAxis = mainCameraXAxis;
-                    maxDownVectorAxis = maincameraAxisVector;               
-                }
+                //if (MaxDownAxis < mainCameraXAxis) // head down: 0 <-> 90
+                //{
+                //    MaxDownAxis = mainCameraXAxis;
+                //    maxDownVectorAxis = maincameraAxisVector;               
+                //}
                    
-                if (MaxUpAxis > mainCameraXAxis) // head up: 0 <-> -90
-                {
-                    MaxUpAxis = mainCameraXAxis;
-                    maxUpVectorAxis = maincameraAxisVector;
-                }
+                //if (MaxUpAxis > mainCameraXAxis) // head up: 0 <-> -90
+                //{
+                //    MaxUpAxis = mainCameraXAxis;
+                //    maxUpVectorAxis = maincameraAxisVector;
+                //}
             
                 if (!gamePaused)
                 {
                     GameCountTimer += Time.fixedDeltaTime;
-                    // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                     gameTimeText.text = Math.Round(gameTimerToZero - GameCountTimer).ToString(); // gameTimer - Math.Round(gameCountTimer)
+                   // gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
                    // gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
 
                     if (!askSpawnCubes)
@@ -400,21 +385,21 @@ public class BSGameManager : MonoBehaviour
                 }
                 else
                 {
-                    // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
-                    gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                     gameTimeText.text = Math.Round(gameTimerToZero - GameCountTimer).ToString();
+                  //  gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
                    // gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
                 }
             }
         }
 
-        if (isPracticeGame && canStartTrial)
+        if (isTrialGame && canStartTrial)
         {
             // Time Before Game Start
             if (Time.time >= timeFromSceneLoading && Time.time <= startTimeForSpawningCubes) // Showing Time
             {
                 beforeGameTimer += Time.fixedDeltaTime;
-                // gameTimeText.text = Math.Round(getReadyTime - beforeGameTimer).ToString();
-                gameTimeText.text = ConvertToMinAndSeconds(getReadyTimeForTrial - beforeGameTimer);
+                gameTimeText.text = Math.Round(getReadyTime - beforeGameTimer).ToString();
+              //  gameTimeText.text = ConvertToMinAndSeconds(getReadyTimeForTrial - beforeGameTimer);
             }
             // GAME TIME
             else if (Time.time > startTimeForSpawningCubes && GameCountTimer <= totalGameTime) // During the Game
@@ -424,7 +409,8 @@ public class BSGameManager : MonoBehaviour
                 if (!gamePaused)
                 {
                     GameCountTimer += Time.fixedDeltaTime;
-                     gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                    gameTimeText.text = Math.Round(gameTimerToZero - GameCountTimer).ToString();
+                   // gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
                   //  gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
 
                     if (askSpawnCubesForTrial == false)
@@ -443,8 +429,8 @@ public class BSGameManager : MonoBehaviour
                 }
                 else
                 {
-                    // gameTimeText.text = Math.Round(gameTimer - GameCountTimer).ToString();
-                     gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
+                     gameTimeText.text = Math.Round(gameTimerToZero - GameCountTimer).ToString();
+                   //  gameTimeText.text = ConvertToMinAndSeconds(gameTimerToZero - GameCountTimer);
                     //gameTimeText.text = ConvertToMinAndSeconds(GameCountTimer);
                 }
             }       
@@ -540,6 +526,7 @@ public class BSGameManager : MonoBehaviour
         bysTracker.IsHeadingToPlayer = true;
         BystanderInteract = true;
         pauseController.OncePausedInSession = false;
+        
         // logManager
         logManager.WriteLogFile("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
         logManager.WriteLogForEyeGaze("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
@@ -564,20 +551,6 @@ public class BSGameManager : MonoBehaviour
         }
     }
 
-    //private void ChangeTotalTime()
-    //{
-    //    float countTime = gameCountTimer;
-    //    float remainTime = totalGameTime - countTime;
-    //    Debug.Log("counttime:" + countTime);
-    //    Debug.Log("remain time:" + remainTime);
-    //    if (remainTime > 30)
-    //    {
-    //        //totalGameTime = 30;
-    //        //Debug.Log(totalGameTime);
-    //        reduceGameTime = true;
-    //    }
-    //}
-
     public void SliceCube(GameObject cube)
     {
         //  Debug.Log(cube.name + " called the Method");
@@ -589,7 +562,7 @@ public class BSGameManager : MonoBehaviour
         }
         else
         {
-            gameEffectAudioSource.PlayOneShot(rightSlice);
+            gameEffectAudioSource.PlayOneShot(rightSound);
         }
 
         if (cube.name.Contains("Blue"))
@@ -608,17 +581,17 @@ public class BSGameManager : MonoBehaviour
             score += 1;
             gameScoreText.text = score.ToString();
         }
-        else if (cube.name.Contains("Yellow"))
-        {
-            gameEffectAudioSource.PlayOneShot(sliceSound);
-            Instantiate(yellowEffect, cube.transform.position, Quaternion.identity);
-            score += 1;
-            gameScoreText.text = score.ToString();
-        }
+        //else if (cube.name.Contains("Yellow"))
+        //{
+        //    gameEffectAudioSource.PlayOneShot(sliceSound);
+        //    Instantiate(yellowEffect, cube.transform.position, Quaternion.identity);
+        //    score += 1;
+        //    gameScoreText.text = score.ToString();
+        //}
 
         if (score % 10 == 0 && score > 0 && score < 30)
         {
-            if(isPracticeGame)
+            if(isTrialGame)
                 ShowPauseHint();
         }
 
@@ -639,23 +612,29 @@ public class BSGameManager : MonoBehaviour
     {
         if (!gamePaused)
         {
-            if (!isPracticeGame)
+            if (!isTrialGame)
             {
                 gamePaused = true;
-                pausedTime = (float)Math.Round(GameCountTimer);
-                identificationTime = (float)Math.Round(gameTimerIgnoringPause);
-                logManager.WriteLogFile("IDENTIFICATION (Paused) TIME: " + identificationTime + " (" + gameTimerIgnoringPause + ")");
-                logManager.WriteLogForYawHeadMovement("IDENTIFICATION (Paused) TIME: " + identificationTime + " (" + gameTimerIgnoringPause + ")");
-                logManager.WriteLogForPitchHeadMovement("IDENTIFICATION (Paused) TIME: " + identificationTime + " (" + gameTimerIgnoringPause + ")");
-                logManager.WriteLogForRollHeadMovement("IDENTIFICATION (Paused) TIME: " + identificationTime + " (" + gameTimerIgnoringPause + ")");
-                logManager.WriteLogForEyeGaze("IDENTIFICATION (Paused) TIME: " + identificationTime + " (" + gameTimerIgnoringPause + ")");
-                logManager.WriteLogForHeadPosition("IDENTIFICATION (Paused) TIME: " + identificationTime + " (" + gameTimerIgnoringPause + ")");
+                pauseCounter++;
+                if (!bystanderAvatar.InVisualization)
+                    pauseInErrorCounter++;
+                else
+                    pauseInInteractionCounter++;
+                //Debug.Log(pauseCounter + " " + pauseInErrorCounter + " " + pauseInInteractionCounter);
+                pausedTime = gameTimerIgnoringPause;
+                identificationTimeRound = (float)Math.Round(gameTimerIgnoringPause);
+                logManager.WriteLogFile("IDENTIFICATION (Paused) TIME: " + identificationTimeRound + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForYawHeadMovement("IDENTIFICATION (Paused) TIME: " + identificationTimeRound + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForPitchHeadMovement("IDENTIFICATION (Paused) TIME: " + identificationTimeRound + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForRollHeadMovement("IDENTIFICATION (Paused) TIME: " + identificationTimeRound + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForEyeGaze("IDENTIFICATION (Paused) TIME: " + identificationTimeRound + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForHeadPosition("IDENTIFICATION (Paused) TIME: " + identificationTimeRound + " (" + gameTimerIgnoringPause + ")");
+                              
                 cubeSpawner.CanSpawn = false;
                 cubeSpawner.StopMoving = true;
                 cubes = GameObject.FindGameObjectsWithTag("Cube");
                 foreach (GameObject cube in cubes)
                 {
-                    // Debug.Log(cube.name);
                     cube.GetComponent<Cube>().StopMove();
                 }
                 StopRayInteractoin();
@@ -664,9 +643,6 @@ public class BSGameManager : MonoBehaviour
             else
             {
                 gamePaused = true;
-                // pausedTime = (float)Math.Round(GameCountTimer);
-                // identificationTime = (float)Math.Round(gameTimerIgnoringPause);
-                // logManager.WriteToLogFile("Identification (Paused) Time: " + identificationTime);
                 trialCubeSpawner.CanSpawn = false;
                 trialCubeSpawner.StopMoving = true;
                 trialCubes = GameObject.FindGameObjectsWithTag("Cube");
@@ -686,31 +662,34 @@ public class BSGameManager : MonoBehaviour
                 {
                     instructionMsg = "You paused the game.\n Try to resume the game!";
                     trialInstructionText.text = instructionMsg;
-                }
-
-               // trialInstructionText.text = instructionMsg;
-                //  StartCoroutine(InstructionForPause());
-                // notificationUI.GetComponentsInChildren<RawImage>()[0].enabled = true;
-                //StartCoroutine(InstructionForPause());              
+                }      
             }
         }
         else
         {
-            if (!isPracticeGame)
+            if (!isTrialGame)
             {
                 gamePaused = false;
+                resumedTime = gameTimerIgnoringPause;
+                pauseDuration = resumedTime - pausedTime;
                 logManager.WriteLogFile("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause +")");
                 logManager.WriteLogForYawHeadMovement("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForPitchHeadMovement("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForRollHeadMovement("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForEyeGaze("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForHeadPosition("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogFile("DURATION: " + pauseDuration);
+                logManager.WriteLogForPitchHeadMovement("DURATION: " + pauseDuration);
+                logManager.WriteLogForRollHeadMovement("DURATION: " + pauseDuration);
+                logManager.WriteLogForYawHeadMovement("DURATION: " + pauseDuration);
+                logManager.WriteLogForHeadPosition("DURATION: " + pauseDuration);
+                logManager.WriteLogForEyeGaze("DURATION: " + pauseDuration);
+
                 cubeSpawner.CanSpawn = true;
                 cubeSpawner.StopMoving = false;
                 cubes = GameObject.FindGameObjectsWithTag("Cube");
                 foreach (GameObject cube in cubes)
                 {
-                    //  Debug.Log(cube.name);
                     cube.GetComponent<Cube>().StartMove();
                 }
                 StartRayInteraction();
@@ -758,8 +737,8 @@ public class BSGameManager : MonoBehaviour
         float totalPlayTime = gameTimerIgnoringPause;
        // Debug.Log("END gametimeingnoringpause: " + totalPlayTime);
 
-        logManager.WriteLogFile("Total Game Time: " + totalPlayTime);
-        if (!isPracticeGame)
+       // logManager.WriteLogFile("Total Game Time: " + totalPlayTime);
+        if (!isTrialGame)
         {
             //writeSocket("endscript");
             //closeSocket();
@@ -793,17 +772,20 @@ public class BSGameManager : MonoBehaviour
             timeUI.SetActive(false);
 
             instructionText.text = "BRAVO!\nYOUR SCORE IS " + score + "!";
-         
-            
 
-            gameTimeText.text = ConvertToMinAndSeconds(0);
+
+            gameTimeText.text = 0.ToString();
+            // gameTimeText.text = ConvertToMinAndSeconds(0);
 
             int totalScore = cubeSpawner.GetCountCubes();
 
-            if (!recordScore)
+            if (!recordScoreAndTime)
             {
+                int missedPause = 4 - pauseInInteractionCounter;
                 logManager.WriteLogFile("Score: " + score + " /" + totalScore);
-                recordScore = true;
+                logManager.WriteLogFile("Total Game Time: " + totalPlayTime);
+                logManager.WriteLogFile("Pause In Total: " + pauseCounter  + ", Pause during Notification: " + pauseInInteractionCounter + ", Error: " + pauseInErrorCounter + ", Missed: " + missedPause);
+                recordScoreAndTime = true;
             }
 
             if (!recordMaxMin)
@@ -837,8 +819,8 @@ public class BSGameManager : MonoBehaviour
             }
 
 
-            GoToNextLevel();
-            //Invoke(nameof(GoToNextLevel), 5f);
+            //GoToNextLevel();
+            Invoke(nameof(GoToNextLevel), 5f);
             // Invoke(nameof(DoSurvey), 1f);
 
             //TODO:
@@ -871,23 +853,25 @@ public class BSGameManager : MonoBehaviour
        // logManager.WriteLogFile("==========================================================");
     }
 
+
+    private bool CheckOneConditionSelected()
+    {
+        int boolCount = 0;
+        bool resultBool;
+        foreach(bool element in settingArray)
+        {
+            if (element)
+                boolCount++;
+        }
+
+        if (boolCount > 1)
+            resultBool = false;
+        else
+            resultBool = true;
+
+        return resultBool;
+    }
   
-    public void GoSurvey()
-    {
-        // surveryUI.SetActive(true);
-    }
-    public void DoSurvey()
-    {
-        // surveryUI.SetActive(true);
-        lineVisual.enabled = true;
-
-        //lineVisual.gameObject.SetActive(true);
-        trialInstructionUI.SetActive(false);
-        //  notificationBGImage.enabled = false;
-        instructionText.enabled = false;
-        // menuUICanvas.SetActive(false);
-    }
-
     public void GoToNextLevel()
     {
         levelManager.LoadNextLevel();
@@ -901,11 +885,6 @@ public class BSGameManager : MonoBehaviour
     void StartRayInteraction()
     {
         lineVisual.enabled = true;
-    }
-
-    public void SubmitSurvey()
-    {
-        Debug.Log("submit survey");
     }
 
     public void EyeFocused(bool focus, string visType)
@@ -950,7 +929,7 @@ public class BSGameManager : MonoBehaviour
 
     public void AskQuestion()
     {
-        Invoke(nameof(PlayQuestionAudio), 1f);
+        Invoke(nameof(PlayQuestionAudio), 2f);
     }
 
     public void PlayQuestionAudio()
@@ -964,7 +943,7 @@ public class BSGameManager : MonoBehaviour
             }
             else
             {
-                int index = audioOrder[questionCounter - 1] - 1;  // 0,1,2
+                int index = audioOrder[questionCounter - 1] - 1;  // counter1,2,3 -> 0,1,2
                 //quesitionAudioSource.PlayOneShot(questionAudios[index]);
 
                 // socket
@@ -1075,8 +1054,9 @@ public class BSGameManager : MonoBehaviour
         trialCubeSpawner.CanSpawn = false;
         saberObject.SetActive(false);
         trialInstructionText.text = "Your Trial Game is finised!";
-       // instructionText.text = "Your Trial Game is finised!";
-        gameTimeText.text = ConvertToMinAndSeconds(0);
+        // instructionText.text = "Your Trial Game is finised!";
+        gameTimeText.text = 0.ToString();
+       // gameTimeText.text = ConvertToMinAndSeconds(0);
         GoToNextLevel();
        // Invoke(nameof(GoToNextLevel), 5f);
     }

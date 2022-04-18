@@ -8,8 +8,6 @@ public class BSLevelManager : MonoBehaviour
     public float sceneLoadDelay = 5f;
     int currentLevelIndex; // practice 0
 
-    [SerializeField]
-   // private int[] studyOrder;
 
     // private static BSLevelManager instance;
 
@@ -19,18 +17,6 @@ public class BSLevelManager : MonoBehaviour
     }
     private void Start()
     {
-        //if (studyOrder == null || studyOrder.Length == 0 || studyOrder.Length < 3)
-        //{
-        //    //Debug.Log("study order array is empty");
-        //    int[] myStudyOrder = new int[3];    
-        //    for (int i = 0; i < myStudyOrder.Length; i++)
-        //    {
-        //        myStudyOrder[i] = i; // 0,1,2,3
-        //    }
-        //    studyOrder = myStudyOrder;
-        //    // Debug.Log(studyOrder.Length);
-        //}
-
         currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
       //  Debug.Log("current scene index: " + currentLevelIndex);
       //  string currentSceneName = SceneManager.GetActiveScene().name;
@@ -41,17 +27,18 @@ public class BSLevelManager : MonoBehaviour
     {
         currentLevelIndex += 1; // 0 -> 1, 1-> 2 ... 
 
-        if (currentLevelIndex < 4) // trial + three conditions = 4 (index -> 0,1,2,3)
-            GoToScene(currentLevelIndex);
-        else
-            //GoToScene("EndScene");
-            LoadGameOver();
+        if (currentLevelIndex < 6 && currentLevelIndex > 1) // trial + four conditions = 5 (index -> 0,1,2,3,4)
+            //GoToScene(currentLevelIndex);
+            GoToScene("RoundOver");
+        else if(currentLevelIndex ==1)
+            GoToScene("TrialOver");
+           // LoadGameOver();
     }
 
-    //public void GoToScene(string nameScene)
-    //{
-    //    SceneManager.LoadScene(nameScene);
-    //}
+    public void GoToScene(string nameScene)
+    {
+        SceneManager.LoadScene(nameScene);
+    }
 
     public void GoToScene(int sceneIndex)
     {

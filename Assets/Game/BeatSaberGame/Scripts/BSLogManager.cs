@@ -167,7 +167,7 @@ public class BSLogManager : MonoBehaviour
             }
             else
             {
-                logFile.Write("[" + timeInEpoch + "] ");
+                logFile.Write(timeInEpoch + ",");
                 logFile.WriteLine(message);
             }         
         }

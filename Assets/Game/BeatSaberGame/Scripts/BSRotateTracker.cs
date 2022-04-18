@@ -8,6 +8,7 @@ public class BSRotateTracker : MonoBehaviour
     public bool useTracker;
     public BSLogManager logManager;
     public BSGameManager gameManager;
+    private BSBystanderAvatar bystanderAvatar;
     // temporary
     public float rotateSpeed = 2;
     [SerializeField]
@@ -16,6 +17,11 @@ public class BSRotateTracker : MonoBehaviour
 
     public bool IsHeadingToPlayer { get => isHeadingToPlayer; set => isHeadingToPlayer = value; }
 
+
+    private void Awake()
+    {
+        bystanderAvatar = FindObjectOfType<BSBystanderAvatar>();
+    }
     private void Start()
     {
         doInteraction = true;
@@ -69,6 +75,7 @@ public class BSRotateTracker : MonoBehaviour
                         }
                         else
                         {
+                            // TODO
                             Invoke(nameof(HeadingBacktoFrontSeat), 8.5f); //12.5
                         }
                     }
@@ -86,6 +93,7 @@ public class BSRotateTracker : MonoBehaviour
                     if (Mathf.Round(transform.eulerAngles.y) == 0)
                     {
                         isHeadingToFrontSeat = false;
+                        Debug.Log("bystander in 90 degrees");
                     }
                 }
             }
