@@ -34,7 +34,7 @@ public class TimeLog : MonoBehaviour
             "Timestamp(s:ms)," 
             + "HeadUpMax(-(deg.))," + " HeadDownMax(deg.)," + " HeadLeft(-(deg.))," + " HeadRight(deg.),"
             + "RotationX(deg.)," + "RotationY(deg.)," + "RotationZ(deg.)," + "PositionX," + " PosítionY," + " PositionZ,"
-            + "GazeX," + "GazeY," + "GazeZ," 
+            + "GazeX," + "GazeY," + "GazeZ," + "GazeAnimoji," + "GazeCubeArea," + "GazeUI,"
             + "Pause(bool)," + "Resume(boo)", true);
     }
 

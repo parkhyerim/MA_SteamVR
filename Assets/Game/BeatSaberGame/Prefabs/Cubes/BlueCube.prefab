@@ -207,6 +207,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'Gaze Cube '
       objectReference: {fileID: 0}
+    - target: {fileID: 6640682561625635491, guid: 4d0b8a6e38c84e840a536566fd333ce6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6640682561625635495, guid: 4d0b8a6e38c84e840a536566fd333ce6, type: 3}
       propertyPath: m_RootOrder
       value: 1

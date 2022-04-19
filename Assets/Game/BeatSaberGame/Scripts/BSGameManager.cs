@@ -12,6 +12,13 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class BSGameManager : MonoBehaviour
 {
+    public GameObject panelForAnimoji;
+    public GameObject panelForTime;
+    public GameObject panelForScore;
+    public GameObject panelForAvatar;
+    public GameObject panelForCubeArea;
+
+
     [Header("User-Study Settings")]
     public bool isTrialGame;
     public bool isBaseline;
@@ -137,6 +144,9 @@ public class BSGameManager : MonoBehaviour
     bool allQuestionAsked, reduceGameTime, calledPushEnd;
     bool firstPauseCalled, secondPauseCalled, thirdPauseCalled, fourthPauseCalled, doVisualizing;
 
+    // Gaze
+    public bool gazeAnimoji, gazeAvatar, gazeScore, gazeTime, gazeCubes;
+
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
     public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
     public bool CanPauseGame { get => canPauseGame; set => canPauseGame = value; }
@@ -254,12 +264,19 @@ public class BSGameManager : MonoBehaviour
         //{
         //    setupSocket();
         //}
+
+        Debug.Log("gaze for animoji position: " + panelForAnimoji.gameObject.transform.position);
+        Debug.Log("gaze for score: " + panelForScore.transform.position);
+        Debug.Log("gaze for timer: " + panelForTime.transform.position);
     }
 
     private void FixedUpdate()
     {
         if (CanStartGame)
         {
+            //Debug.Log("gaze for animoji position: " + panelForGaze.gameObject.transform.position);
+           // Debug.Log("gaze for score: " + panelForScore.transform.position);
+           // Debug.Log("gaze for timer: " + panelForTime.transform.position);
             maincameraAxisVector = Camera.main.transform.eulerAngles;
 
             if (maincameraAxisVector.y > 180 && maincameraAxisVector.y <= 360) // 360-> 270-> 179 => 0-> -90 -> -179
@@ -894,8 +911,22 @@ public class BSGameManager : MonoBehaviour
             eyeFocusTime = (float)Math.Round(gameTimerIgnoringPause);
             if (focus)
             {
-               // logManager.WriteLogFile("[" + visType +"] Receive FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
+                if (visType.Contains("Animoji"))
+                    Debug.Log(visType);
+                else if (visType.Contains("Avatar"))
+                    Debug.Log(visType);
+                else if (visType.Contains("Timer"))
+                    Debug.Log(visType);
+                else if (visType.Contains("Cube"))
+                    Debug.Log(visType);
+                else if (visType.Contains("Score"))
+                    Debug.Log(visType);
+                else if (visType.Contains("Avatar"))
+                    Debug.Log(visType);
+             
+                // logManager.WriteLogFile("[" + visType +"] Receive FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForEyeGaze("[" + visType + "] Receive FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
+                
             }
             else
             {
