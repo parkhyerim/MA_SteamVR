@@ -74,7 +74,7 @@ public class BSBystanderAvatar : MonoBehaviour
     int currentLevelIndex; // practice 0
     int order;
 
-    bool inVisualisation;
+    bool inVisualization;
     public bool LookedOnceSeatedPosition { get => lookedOnceSeatedPosition; set => lookedOnceSeatedPosition = value; }
     public bool IsGuidingFOVToSeatedExceed { get => isGuidingFOVToSeatedExceed; set => isGuidingFOVToSeatedExceed = value; }
     public bool IsAnimojiSetting { get => isAnimojiSetting; set => isAnimojiSetting = value; }
@@ -82,7 +82,7 @@ public class BSBystanderAvatar : MonoBehaviour
     public bool IsMixedSetting { get => isMixedSetting; set => isMixedSetting = value; }
     public bool IsBaseline { get => isBaseline; set => isBaseline = value; }
     public bool IsPractice { get => isPractice; set => isPractice = value; }
-    public bool InVisualization { get => inVisualisation; set => inVisualisation = value; }
+    public bool InVisualization { get => inVisualization; set => inVisualization = value; }
 
     private void Awake()
     {
@@ -108,6 +108,7 @@ public class BSBystanderAvatar : MonoBehaviour
         backsideImage.enabled = false;
         bystanderAvatar.SetActive(false);
         arrowImage.enabled = false;
+        presenceAnimojiBoard.SetActive(false);
 
         trackerTransform = bystanderTracker.transform;
         transform.position = trackerTransform.position;
@@ -152,7 +153,9 @@ public class BSBystanderAvatar : MonoBehaviour
                 //  [Animoji]  CRITICAL ZONE: 30 >= [Bystander's degrees] > 0 to the VR user
                 if (trackerEulerYAxis >= 60 && trackerEulerYAxis < 100)
                 {
+                    InVisualization = true;
                     inCriticalZone = true;
+                    presenceAnimojiBoard.SetActive(true);
                     if (inTransitionZone) // From Transition Zone (60-30 degrees)
                     {
                        // Debug.Log("Enter_CZ");
@@ -181,9 +184,11 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [Animoji] TRANSITION ZONE: 60 >= [Bystander's degrees] > 30
                 else if (trackerEulerYAxis >= 30 && trackerEulerYAxis < 60)
                 {
+                    InVisualization = true;
                     inTransitionZone = true;
                     inNoZone = false;
                     timeElapsedForAnimoji = 0;
+                    presenceAnimojiBoard.SetActive(true);
 
                     if (inCriticalZone) // From Critical Zone : Bigger animoji with FE -> backside
                     {
@@ -211,8 +216,9 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [Animoji] UNCRITICAL ZONE: 85 >= Bystander's degrees > 60
                 else if (trackerEulerYAxis < 30 && trackerEulerYAxis >= 5)
                 {
+                    InVisualization = true;
                     inUncriticalZone = true;
-
+                    presenceAnimojiBoard.SetActive(true);
                     yesInteractionFrontImage.enabled = false;
                     noInteractionFrontImage.enabled = false;
 
@@ -222,7 +228,7 @@ public class BSBystanderAvatar : MonoBehaviour
                         {
                             //Debug.Log("FROM_NZ_to_UCZ");
                             BystanderShiftZone("From_NZ_to_UCZ");
-                            InVisualization = true;
+                          
                             logFlag = true;
                             
                         }                    
@@ -270,6 +276,7 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [Animoji] NO ZONE:  Bystander's degrees > 85
                 else
                 {
+                    InVisualization = false;
                     // Set flags
                     inNoZone = true;
                     if (inUncriticalZone)
@@ -277,13 +284,14 @@ public class BSBystanderAvatar : MonoBehaviour
                         //Debug.Log("From_UCZ_to_NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
                         inUncriticalZone = false;
-                        InVisualization = false;
+                       
                         logFlag = false;
                     }
                     inTransitionZone = false;
                     inCriticalZone = false;
 
                     // No Visualisation
+                    presenceAnimojiBoard.SetActive(false);
                     backsideImage.enabled = false;
                     yesInteractionFrontImage.enabled = false;
                     noInteractionFrontImage.enabled = false;
@@ -299,6 +307,7 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [AVATAR]  CRITICAL ZONE: 30-0 degrees to the VR user
                 if (trackerEulerYAxis >= 60 && trackerEulerYAxis < 100)
                 {
+                    InVisualization = true;
                     inCriticalZone = true;
                     if (inTransitionZone)
                     {
@@ -421,6 +430,7 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [AVATAR] TRANSITION ZONE: 60 >= [Bystander's degrees] > 30
                 else if (trackerEulerYAxis >= 30 && trackerEulerYAxis < 60)
                 {
+                    InVisualization = true;
                     inTransitionZone = true;
                     // From Uncritical Zone to Transition Zone
                     if (inUncriticalZone)
@@ -479,12 +489,13 @@ public class BSBystanderAvatar : MonoBehaviour
                 else if (trackerEulerYAxis < 30 && trackerEulerYAxis >= 5)
                 {
                     inUncriticalZone = true;
+                    InVisualization = true;
                     if (inNoZone)
                     {
                        // Debug.Log("Avatar: From NZ to UCZ");
                         BystanderShiftZone("From_NZ_To_UCZ");
                         SetRightPauseStamp();
-                        inVisualisation = true;
+                       
                         inNoZone = false;                     
                     }
 
@@ -509,13 +520,14 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [AVATAR] NO ZONE:  Bystander's degrees > 85
                 else
                 {
+                    InVisualization = false;
                     // bool flags
                     inNoZone = true;
                     if (inUncriticalZone)
                     {
                         Debug.Log("Avatar: From UCZ To NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
-                        inVisualisation = false;
+                       
                         inUncriticalZone = false;
                     }
                     //inTransitionZone = false;
@@ -535,6 +547,8 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [MIXED] CRITICAL ZONE: 30 >= [Bystander's degrees] > 0 to the VR user
                 if (trackerEulerYAxis >= 60 && trackerEulerYAxis < 100) // 100 <- 90
                 {
+                    InVisualization = true;
+                    presenceAnimojiBoard.SetActive(true);
                     inCriticalZone = true;
                     if (inTransitionZone)
                     {
@@ -603,6 +617,8 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [MIXED] TRANSITION ZONE: 60 >= [Bystander's degrees] > 30
                 else if (trackerEulerYAxis < 60 && trackerEulerYAxis >= 30)
                 {
+                    InVisualization = true;
+                    presenceAnimojiBoard.SetActive(true);
                     inTransitionZone = true;
                     inNoZone = false;
                     timeElapsedForMixedTransition = 0;
@@ -665,6 +681,8 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [MIXED] UNCRITICAL ZONE: 85 >= Bystander's degrees > 60
                 else if (trackerEulerYAxis < 30 && trackerEulerYAxis >= 5)
                 {
+                    InVisualization = true;
+                    presenceAnimojiBoard.SetActive(true);
                     inUncriticalZone = true;
         
                     presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
@@ -734,13 +752,14 @@ public class BSBystanderAvatar : MonoBehaviour
                     // -> avatar in the seated position
                     else if (mainCameraYAxis < 320 && mainCameraYAxis >= 230)
                     {
+                        
                         if (inNoZone)
                         {
                             if (!logFlag)
                             {
                                 BystanderShiftZone("From_NZ_To_UCZ");
                                 SetRightPauseStamp();
-                                inVisualisation = true;
+                              
                                 logFlag = true;
                             }
                            //inNoZone = false;
@@ -773,12 +792,12 @@ public class BSBystanderAvatar : MonoBehaviour
                 else
                 {
                     inNoZone = true;
+                    inVisualization = false;
                     if (inUncriticalZone)
                     {
                        // Debug.Log("Mixed: From UCZ to NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
-                        inUncriticalZone = false;
-                        inVisualisation = false;
+                        inUncriticalZone = false;                     
                         logFlag = false;
                     }                    
                     inTransitionZone = false;
@@ -789,6 +808,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     bystanderAnim.SetBool("isInteracting", false);
 
                     presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position; // set the begin postion of Animoji Panel
+                    presenceAnimojiBoard.SetActive(false);
                     backsideImage.enabled = false;
                     yesInteractionFrontImage.enabled = false;
                     noInteractionFrontImage.enabled = false;

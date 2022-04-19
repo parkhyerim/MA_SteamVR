@@ -18,6 +18,9 @@ public class BSGameManager : MonoBehaviour
     public GameObject panelForAvatar;
     public GameObject panelForCubeArea;
 
+    private Transform animojiGazeTransform;
+    private Transform avatarGazeTransform;
+    private Transform scoreGazeTransform, timerGazeTransform, cubeAreaGazeTransform;
 
     [Header("User-Study Settings")]
     public bool isTrialGame;
@@ -145,7 +148,7 @@ public class BSGameManager : MonoBehaviour
     bool firstPauseCalled, secondPauseCalled, thirdPauseCalled, fourthPauseCalled, doVisualizing;
 
     // Gaze
-    public bool gazeAnimoji, gazeAvatar, gazeScore, gazeTime, gazeCubes;
+    public bool gazeAnimoji, gazeAvatar, gazeUI, gazeScore, gazeTimer, gazeCubes;
 
     public bool CanStartGame { get => canStartGame; set => canStartGame = value; }
     public bool BystanderInteract { get => bystanderInteract; set => bystanderInteract = value; }
@@ -161,6 +164,8 @@ public class BSGameManager : MonoBehaviour
     public float MaxDownAxis { get => maxDownAxis; set => maxDownAxis = value; }
     public bool GamePaused { get => gamePaused; set => gamePaused = value; }
     public bool DoVisualising { get => doVisualizing; set => doVisualizing = value; }
+    public Transform AnimojiGazeTransform { get => animojiGazeTransform; set => animojiGazeTransform = value; }
+    public Transform AvatarGazeTransform { get => avatarGazeTransform; set => avatarGazeTransform = value; }
 
     /**************************************************************
      * socket code
@@ -226,6 +231,11 @@ public class BSGameManager : MonoBehaviour
         participantID = userstudyManager.GetParticipantID();
 
         socketManager.setupSocket();
+        animojiGazeTransform = panelForAnimoji.gameObject.transform;
+        avatarGazeTransform = panelForAnimoji.gameObject.transform;
+        scoreGazeTransform = panelForScore.gameObject.transform;
+        timerGazeTransform = panelForTime.gameObject.transform;
+        cubeAreaGazeTransform = panelForCubeArea.gameObject.transform;
     }
 
     private void Start()
@@ -265,18 +275,23 @@ public class BSGameManager : MonoBehaviour
         //    setupSocket();
         //}
 
-        Debug.Log("gaze for animoji position: " + panelForAnimoji.gameObject.transform.position);
-        Debug.Log("gaze for score: " + panelForScore.transform.position);
-        Debug.Log("gaze for timer: " + panelForTime.transform.position);
+       
+
+        //Debug.Log("gaze for animoji position: " + animojiGazeTransform);
+        //Debug.Log("gaze for avatar position: " + avatarGazeTransform);
+        //Debug.Log("gaze for score: " + scoreGazeTransform);
+        //Debug.Log("gaze for timer: " + timerGazeTransform);
+        //Debug.Log("gaze for cube area: " + cubeAreaGazeTransform);
     }
 
     private void FixedUpdate()
     {
         if (CanStartGame)
         {
-            //Debug.Log("gaze for animoji position: " + panelForGaze.gameObject.transform.position);
-           // Debug.Log("gaze for score: " + panelForScore.transform.position);
-           // Debug.Log("gaze for timer: " + panelForTime.transform.position);
+            animojiGazeTransform = panelForAnimoji.gameObject.transform;
+            avatarGazeTransform = panelForAnimoji.gameObject.transform;
+            
+
             maincameraAxisVector = Camera.main.transform.eulerAngles;
 
             if (maincameraAxisVector.y > 180 && maincameraAxisVector.y <= 360) // 360-> 270-> 179 => 0-> -90 -> -179
@@ -912,25 +927,66 @@ public class BSGameManager : MonoBehaviour
             if (focus)
             {
                 if (visType.Contains("Animoji"))
-                    Debug.Log(visType);
+                {
+                    gazeAnimoji = true;
+                    Debug.Log(visType + " " + gazeAnimoji);
+                }
                 else if (visType.Contains("Avatar"))
-                    Debug.Log(visType);
-                else if (visType.Contains("Timer"))
-                    Debug.Log(visType);
+                {
+                    gazeAvatar = true;
+                    Debug.Log(visType + " " + gazeAvatar);
+                }
                 else if (visType.Contains("Cube"))
-                    Debug.Log(visType);
+                {
+                    gazeCubes = true;
+                    Debug.Log(visType + " " + gazeCubes);
+                }
+                else if (visType.Contains("Timer"))
+                {
+                    gazeTimer = true;
+                    gazeUI = true;
+                    Debug.Log(visType + " " + gazeTimer);
+                }
                 else if (visType.Contains("Score"))
-                    Debug.Log(visType);
-                else if (visType.Contains("Avatar"))
-                    Debug.Log(visType);
-             
+                {
+                    gazeScore = true;
+                    gazeUI = true;
+                    Debug.Log(visType + " " + gazeScore);
+                }
                 // logManager.WriteLogFile("[" + visType +"] Receive FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForEyeGaze("[" + visType + "] Receive FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
                 
             }
             else
             {
-               // logManager.WriteLogFile("[" + visType + "] LOST FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
+                if (visType.Contains("Animoji"))
+                {
+                    gazeAnimoji = false;
+                    Debug.Log(visType + " " + gazeAnimoji);
+                }
+                else if (visType.Contains("Avatar"))
+                {
+                    gazeAvatar = false;
+                    Debug.Log(visType + " " + gazeAvatar);
+                }
+                else if (visType.Contains("Cube"))
+                {
+                    gazeCubes = false;
+                    Debug.Log(visType + " " + gazeCubes);
+                }
+                else if (visType.Contains("Timer"))
+                {
+                    gazeTimer = false;
+                    gazeUI = false;
+                    Debug.Log(visType + " " + gazeTimer);
+                }
+                else if (visType.Contains("Score"))
+                {
+                    gazeScore = false;
+                    gazeUI = false;
+                    Debug.Log(visType + " " + gazeScore);
+                }
+                // logManager.WriteLogFile("[" + visType + "] LOST FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForEyeGaze("[" + visType + "] LOST FOCUS: " + eyeFocusTime + " (" + gameTimerIgnoringPause + ")");
             }
         }     

@@ -18,7 +18,9 @@ public class TimeLog : MonoBehaviour
     float headUpMaxDegrees, headDownDegrees, headLeftDegrees, headRightDegrees;
     float curEulerY, curEulerX, curEulerZ;
     float curPosX, curPosY, curPosZ;
+    float gazeXAni, gazeYAni, gazeZAni, gazeXAva, gazeYAva, gazeZava;
     bool paused, resumed;
+    bool gazeAnimoji, gazeAvatar, gazeUI, gazeScore, gazeTimer, gazeCubearea;
     public bool GameStart { get => gameStart; set => gameStart = value; }
 
     private void Awake()
@@ -31,11 +33,14 @@ public class TimeLog : MonoBehaviour
     private void Start()
     {
         logManager.WriteLogForExcel(
-            "Timestamp(s:ms)," 
-            + "HeadUpMax(-(deg.))," + " HeadDownMax(deg.)," + " HeadLeft(-(deg.))," + " HeadRight(deg.),"
-            + "RotationX(deg.)," + "RotationY(deg.)," + "RotationZ(deg.)," + "PositionX," + " PosítionY," + " PositionZ,"
-            + "GazeX," + "GazeY," + "GazeZ," + "GazeAnimoji," + "GazeCubeArea," + "GazeUI,"
-            + "Pause(bool)," + "Resume(boo)", true);
+         "Timestamp(s:ms),"
+         + "HeadUpMax(-(deg.))," + " HeadDownMax(deg.)," + " HeadLeft(-(deg.))," + " HeadRight(deg.),"
+         + "RotationX(deg.)," + "RotationY(deg.)," + "RotationZ(deg.),"
+         + "PositionX," + " PosítionY," + " PositionZ,"
+         + "GazePosX_Animoji," + "GazePosY_Animoji," + "GazePosZ_Animoji,"
+         + "GazePosX_Avatar," + "GazePosY_Avatar," + "GazePosZ_Avatar,"
+         + "GazeAnimoji(bool)," + "GazeAvatar(bool)," + "GazeCubeArea(bool)," + "GazeUI(bool)," + "GazeScore(bool)," + "GazeTimer(bool),"
+         + "Pause(bool)," + "Resume(bool)", true);
     }
 
     private void FixedUpdate()
@@ -55,6 +60,18 @@ public class TimeLog : MonoBehaviour
             curPosY = headMovement.HeadsetPosY;
             curPosZ = headMovement.HeadsetPosZ;
             paused = gameManager.GamePaused;
+            gazeAnimoji = gameManager.gazeAnimoji;
+            gazeAvatar = gameManager.gazeAvatar;
+            gazeCubearea = gameManager.gazeCubes;
+            gazeScore = gameManager.gazeScore;
+            gazeTimer = gameManager.gazeTimer;
+            gazeUI = gameManager.gazeUI;
+            gazeXAni = gameManager.AnimojiGazeTransform.position.x;
+            gazeYAni = gameManager.AnimojiGazeTransform.position.y;
+            gazeZAni = gameManager.AnimojiGazeTransform.position.z;
+            gazeXAva = gameManager.AvatarGazeTransform.position.x;
+            gazeYAva = gameManager.AvatarGazeTransform.position.y;
+            gazeZava = gameManager.AvatarGazeTransform.position.z;
         }
         else
         {
@@ -72,12 +89,28 @@ public class TimeLog : MonoBehaviour
                 curPosY = headMovement.HeadsetPosY;
                 curPosZ = headMovement.HeadsetPosZ;
                 paused = gameManager.GamePaused;
+                gazeAnimoji = gameManager.gazeAnimoji;
+                gazeAvatar = gameManager.gazeAvatar;
+                gazeCubearea = gameManager.gazeCubes;
+                gazeScore = gameManager.gazeScore;
+                gazeTimer = gameManager.gazeTimer;
+                gazeUI = gameManager.gazeUI;
+                gazeXAni = gameManager.AnimojiGazeTransform.position.x;
+                gazeYAni = gameManager.AnimojiGazeTransform.position.y;
+                gazeZAni = gameManager.AnimojiGazeTransform.position.z;
+                gazeXAva = gameManager.AvatarGazeTransform.position.x;
+                gazeYAva = gameManager.AvatarGazeTransform.position.y;
+                gazeZava = gameManager.AvatarGazeTransform.position.z;
+
 
                 // logManager.WriteLogForExcel(checkTimer + " check", false);
-                logManager.WriteLogForExcel(headUpMaxDegrees + ", " + headDownDegrees + ", " + headLeftDegrees + ", " + headRightDegrees + ", "
-                    + curEulerX + ", " + curEulerY + ", " + curEulerZ + ", "
-                    + curPosX + ", " + curPosY + ", " + curPosZ + ", "
-                    + "GAZEX" + ", " + "GAZEY" + ", " + "GAZEZ" + ", "
+                logManager.WriteLogForExcel(
+                    headUpMaxDegrees + "," + headDownDegrees + "," + headLeftDegrees + "," + headRightDegrees + ","
+                    + curEulerX + "," + curEulerY + "," + curEulerZ + ","
+                    + curPosX + "," + curPosY + "," + curPosZ + ","
+                    + gazeXAni + "," + gazeYAni + "," + gazeZAni + ","
+                     + gazeXAva + "," + gazeYAva + "," + gazeZava + ","
+                    + gazeAnimoji +","+ gazeAvatar +"," + gazeCubearea +"," + gazeUI+"," + gazeScore +"," + gazeTimer +","
                     + paused + ", "
                     , false);
 

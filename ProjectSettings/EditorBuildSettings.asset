@@ -7,7 +7,7 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Game/BeatSaberGame/Scenes/TrialGame.unity
-    guid: af9dd3b61c3d36048bdea6611f35875e
+    guid: 171e2d0d4e91d7c4581494f8b0e818e7
   - enabled: 1
     path: Assets/Game/BeatSaberGame/Scenes/Baseline.unity
     guid: e524017dc52165449911ca4c8867c579
