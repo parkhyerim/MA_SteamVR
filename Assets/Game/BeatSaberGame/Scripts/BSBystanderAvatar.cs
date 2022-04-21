@@ -75,6 +75,8 @@ public class BSBystanderAvatar : MonoBehaviour
     int order;
 
     bool inVisualization;
+    bool notif_On;
+    bool questionOn;
     public bool LookedOnceSeatedPosition { get => lookedOnceSeatedPosition; set => lookedOnceSeatedPosition = value; }
     public bool IsGuidingFOVToSeatedExceed { get => isGuidingFOVToSeatedExceed; set => isGuidingFOVToSeatedExceed = value; }
     public bool IsAnimojiSetting { get => isAnimojiSetting; set => isAnimojiSetting = value; }
@@ -83,6 +85,8 @@ public class BSBystanderAvatar : MonoBehaviour
     public bool IsBaseline { get => isBaseline; set => isBaseline = value; }
     public bool IsPractice { get => isPractice; set => isPractice = value; }
     public bool InVisualization { get => inVisualization; set => inVisualization = value; }
+    public bool Notif_On { get => notif_On; set => notif_On = value; }
+    public bool QuestionOn { get => questionOn; set => questionOn = value; }
 
     private void Awake()
     {
@@ -122,9 +126,12 @@ public class BSBystanderAvatar : MonoBehaviour
         lowTransparency = backsideImage.color;
         noTransparency.a = 1f;
         lowTransparency.a = 0f;
+
+        Notif_On = false;
+        QuestionOn = false;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // transform.position = trackerTrans.position;
         trackerEulerYAxis = trackerTransform.eulerAngles.y;
@@ -218,6 +225,7 @@ public class BSBystanderAvatar : MonoBehaviour
                 {
                     InVisualization = true;
                     inUncriticalZone = true;
+
                     presenceAnimojiBoard.SetActive(true);
                     yesInteractionFrontImage.enabled = false;
                     noInteractionFrontImage.enabled = false;
@@ -228,9 +236,8 @@ public class BSBystanderAvatar : MonoBehaviour
                         {
                             //Debug.Log("FROM_NZ_to_UCZ");
                             BystanderShiftZone("From_NZ_to_UCZ");
-                          
-                            logFlag = true;
-                            
+                            Notif_On = true;                        
+                            logFlag = true;                         
                         }                    
                         timeElapsedForAnimoji += Time.deltaTime;
 
@@ -276,19 +283,20 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [Animoji] NO ZONE:  Bystander's degrees > 85
                 else
                 {
+                    // No Visualisation
                     InVisualization = false;
-                    // Set flags
+                    // Set flags for each zone
                     inNoZone = true;
                     if (inUncriticalZone)
                     {
                         //Debug.Log("From_UCZ_to_NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
-                        inUncriticalZone = false;
-                       
-                        logFlag = false;
+                        Notif_On = false;
+                        inUncriticalZone = false;                      
                     }
                     inTransitionZone = false;
                     inCriticalZone = false;
+                    logFlag = false;
 
                     // No Visualisation
                     presenceAnimojiBoard.SetActive(false);
@@ -307,6 +315,7 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [AVATAR]  CRITICAL ZONE: 30-0 degrees to the VR user
                 if (trackerEulerYAxis >= 60 && trackerEulerYAxis < 100)
                 {
+                    presenceAnimojiBoard.SetActive(true);
                     InVisualization = true;
                     inCriticalZone = true;
                     if (inTransitionZone)
@@ -430,6 +439,7 @@ public class BSBystanderAvatar : MonoBehaviour
                 // [AVATAR] TRANSITION ZONE: 60 >= [Bystander's degrees] > 30
                 else if (trackerEulerYAxis >= 30 && trackerEulerYAxis < 60)
                 {
+                    presenceAnimojiBoard.SetActive(false);
                     InVisualization = true;
                     inTransitionZone = true;
                     // From Uncritical Zone to Transition Zone
@@ -495,7 +505,7 @@ public class BSBystanderAvatar : MonoBehaviour
                        // Debug.Log("Avatar: From NZ to UCZ");
                         BystanderShiftZone("From_NZ_To_UCZ");
                         SetRightPauseStamp();
-                       
+                        Notif_On = true;
                         inNoZone = false;                     
                     }
 
@@ -521,17 +531,18 @@ public class BSBystanderAvatar : MonoBehaviour
                 else
                 {
                     InVisualization = false;
+
                     // bool flags
                     inNoZone = true;
                     if (inUncriticalZone)
                     {
-                        Debug.Log("Avatar: From UCZ To NZ");
+                       // Debug.Log("Avatar: From UCZ To NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
-                       
+                        Notif_On = false;                      
                         inUncriticalZone = false;
                     }
-                    //inTransitionZone = false;
-                    //inCriticalZone = false;
+                     inTransitionZone = false;
+                    inCriticalZone = false;
 
                     // Nothing is visualisized
                     transform.position = bystanderTracker.transform.position;
@@ -705,6 +716,7 @@ public class BSBystanderAvatar : MonoBehaviour
                             if (!logFlag)
                             {
                                 BystanderShiftZone("From_NZ_To_UCZ");
+                                Notif_On = true;
                                 SetRightPauseStamp();
                                 logFlag = true;
                             }
@@ -758,8 +770,8 @@ public class BSBystanderAvatar : MonoBehaviour
                             if (!logFlag)
                             {
                                 BystanderShiftZone("From_NZ_To_UCZ");
-                                SetRightPauseStamp();
-                              
+                                Notif_On = true;
+                                SetRightPauseStamp();                              
                                 logFlag = true;
                             }
                            //inNoZone = false;
@@ -797,6 +809,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     {
                        // Debug.Log("Mixed: From UCZ to NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
+                        Notif_On = false;
                         inUncriticalZone = false;                     
                         logFlag = false;
                     }                    
@@ -934,7 +947,7 @@ public class BSBystanderAvatar : MonoBehaviour
         isAnimojiSetting = gameManager.isAnimojiSetting;
         isAvatarSetting = gameManager.isAvatarSetting;
         isMixedSetting = gameManager.isMixedSetting;
-        Debug.Log("set condition is called: " + isPractice + isBaseline + isAnimojiSetting + isAvatarSetting + isMixedSetting);
+      // Debug.Log("set condition is called: " + isPractice + isBaseline + isAnimojiSetting + isAvatarSetting + isMixedSetting);
     }
     private void BystanderShiftZone(string state)
     {

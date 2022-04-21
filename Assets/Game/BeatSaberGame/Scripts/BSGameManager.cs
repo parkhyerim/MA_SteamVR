@@ -142,6 +142,7 @@ public class BSGameManager : MonoBehaviour
     private float mainCameraYAxis, mainCameraXAxis, mainCameraZAxis, maxRightAxis, maxLeftAxis, maxDownAxis, maxUpAxis;
     private bool oneInteruption;
     private bool bystanderCanHearAnswer;
+    bool questionStart;
 
     int questionCounter;
     bool allQuestionAsked, reduceGameTime, calledPushEnd;
@@ -166,6 +167,7 @@ public class BSGameManager : MonoBehaviour
     public bool DoVisualising { get => doVisualizing; set => doVisualizing = value; }
     public Transform AnimojiGazeTransform { get => animojiGazeTransform; set => animojiGazeTransform = value; }
     public Transform AvatarGazeTransform { get => avatarGazeTransform; set => avatarGazeTransform = value; }
+    public bool QuestionStart { get => questionStart; set => questionStart = value; }
 
     /**************************************************************
      * socket code
@@ -231,11 +233,7 @@ public class BSGameManager : MonoBehaviour
         participantID = userstudyManager.GetParticipantID();
 
         socketManager.setupSocket();
-        animojiGazeTransform = panelForAnimoji.gameObject.transform;
-        avatarGazeTransform = panelForAnimoji.gameObject.transform;
-        scoreGazeTransform = panelForScore.gameObject.transform;
-        timerGazeTransform = panelForTime.gameObject.transform;
-        cubeAreaGazeTransform = panelForCubeArea.gameObject.transform;
+       
     }
 
     private void Start()
@@ -275,23 +273,58 @@ public class BSGameManager : MonoBehaviour
         //    setupSocket();
         //}
 
-       
+        if (isAnimojiSetting)
+        {
+            panelForAvatar.SetActive(false);
+            animojiGazeTransform = panelForAnimoji.gameObject.transform;
+            
+        }
+        else if (isAvatarSetting)
+        {
+            panelForAnimoji.SetActive(false);
+            avatarGazeTransform = panelForAnimoji.gameObject.transform;
+        }
+        else if (isMixedSetting)
+        {
+            animojiGazeTransform = panelForAnimoji.gameObject.transform;
+            avatarGazeTransform = panelForAnimoji.gameObject.transform;
+        }
+        else if (isBaseline)
+        {
+            panelForAvatar.SetActive(false);
+            panelForAnimoji.SetActive(false);
+        }
+             
+        scoreGazeTransform = panelForScore.gameObject.transform;
+        timerGazeTransform = panelForTime.gameObject.transform;
+        cubeAreaGazeTransform = panelForCubeArea.gameObject.transform;
 
-        //Debug.Log("gaze for animoji position: " + animojiGazeTransform);
-        //Debug.Log("gaze for avatar position: " + avatarGazeTransform);
-        //Debug.Log("gaze for score: " + scoreGazeTransform);
-        //Debug.Log("gaze for timer: " + timerGazeTransform);
-        //Debug.Log("gaze for cube area: " + cubeAreaGazeTransform);
+        //Debug.Log("gaze for animoji position: " + animojiGazeTransform.position);
+        //Debug.Log("gaze for avatar position: " + avatarGazeTransform.position);
+        //Debug.Log("gaze for score: " + scoreGazeTransform.position);
+        //Debug.Log("gaze for timer: " + timerGazeTransform.position);
+        //Debug.Log("gaze for cube area: " + cubeAreaGazeTransform.position);
     }
 
     private void FixedUpdate()
     {
         if (CanStartGame)
         {
-            animojiGazeTransform = panelForAnimoji.gameObject.transform;
-            avatarGazeTransform = panelForAnimoji.gameObject.transform;
-            
 
+            if (isAnimojiSetting)
+            {
+                animojiGazeTransform = panelForAnimoji.gameObject.transform;
+            }
+            else if (isAvatarSetting)
+            {
+                avatarGazeTransform = panelForAnimoji.gameObject.transform;
+            }
+            else if (isMixedSetting)
+            {
+                animojiGazeTransform = panelForAnimoji.gameObject.transform;
+                avatarGazeTransform = panelForAnimoji.gameObject.transform;
+            }
+          
             maincameraAxisVector = Camera.main.transform.eulerAngles;
 
             if (maincameraAxisVector.y > 180 && maincameraAxisVector.y <= 360) // 360-> 270-> 179 => 0-> -90 -> -179
@@ -943,13 +976,13 @@ public class BSGameManager : MonoBehaviour
                 }
                 else if (visType.Contains("Timer"))
                 {
-                    gazeTimer = true;
+                   // gazeTimer = true;
                     gazeUI = true;
                     Debug.Log(visType + " " + gazeTimer);
                 }
                 else if (visType.Contains("Score"))
                 {
-                    gazeScore = true;
+                   // gazeScore = true;
                     gazeUI = true;
                     Debug.Log(visType + " " + gazeScore);
                 }
@@ -976,13 +1009,13 @@ public class BSGameManager : MonoBehaviour
                 }
                 else if (visType.Contains("Timer"))
                 {
-                    gazeTimer = false;
+                   // gazeTimer = false;
                     gazeUI = false;
                     Debug.Log(visType + " " + gazeTimer);
                 }
                 else if (visType.Contains("Score"))
                 {
-                    gazeScore = false;
+                   // gazeScore = false;
                     gazeUI = false;
                     Debug.Log(visType + " " + gazeScore);
                 }
@@ -1036,7 +1069,9 @@ public class BSGameManager : MonoBehaviour
                 // socket
                 Debug.Log(index+ "question is called");
                 socketManager.writeSocket("question" + index);
-               // Debug.Log(index + "question is called: " + (float)Math.Round(gameTimerIgnoringPause));
+                // Debug.Log(index + "question is called: " + (float)Math.Round(gameTimerIgnoringPause));
+                // QuestionStart = true;
+                timeLog.TimeStampForMoment();
                 logManager.WriteLogFile("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForEyeGaze("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForYawHeadMovement("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
