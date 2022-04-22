@@ -47,6 +47,8 @@ public class TimeLog : MonoBehaviour
             + "GazeAnimoji(bool)," + "GazeAvatar(bool)," + "GazeCubeArea(bool)," + "GazeUI(bool),"
             + "Pause(bool),"
             + "Notification,"
+            + "Notif_Start,"
+            + "Notif_End,"
             + "Question_Start,"
             //+ "Notif_Start0," + "Notif_End0,"
             //+ "Notif_Start1," + "Question1," + "Notif_End1,"
@@ -174,6 +176,8 @@ public class TimeLog : MonoBehaviour
                     + paused + ", "
                     + notif_On + ","
                     + "-" + ","
+                    + "-" + ","
+                    + "-" + ","
                     , false);
 
                 //logManager.WriteLogForExcel(
@@ -192,7 +196,7 @@ public class TimeLog : MonoBehaviour
     }
 
 
-    public void TimeStampForMoment()
+    public void TimeStampForQuestionMoment()
     {
         logManager.WriteLogForExcel(
                     curEulerX + "," + curEulerY + "," + curEulerZ + ","
@@ -202,7 +206,41 @@ public class TimeLog : MonoBehaviour
                    + gazeAnimoji + "," + gazeAvatar + "," + gazeCubearea + "," + gazeUI + ","
                    + paused + ", "
                    + notif_On + ","
+                   + "-" + ","
+                   + "-" + ","
                    + "Yes" + ","
                    , false);
+    }
+
+    public void TimeStampForVisualisationOnMoment()
+    {
+        logManager.WriteLogForExcel(
+                   curEulerX + "," + curEulerY + "," + curEulerZ + ","
+                  + curPosX + "," + curPosY + "," + curPosZ + ","
+                  + gazeXAni + "," + gazeYAni + "," + gazeZAni + ","
+                   + gazeXAva + "," + gazeYAva + "," + gazeZAva + ","
+                  + gazeAnimoji + "," + gazeAvatar + "," + gazeCubearea + "," + gazeUI + ","
+                  + paused + ", "
+                  + notif_On + ","
+                  + "Yes" + ","
+                  + "-" + ","
+                  + "Yes" + ","
+                  , false);
+    }
+
+    public void TimeStampForVisualisationOffMoment()
+    {
+        logManager.WriteLogForExcel(
+                   curEulerX + "," + curEulerY + "," + curEulerZ + ","
+                  + curPosX + "," + curPosY + "," + curPosZ + ","
+                  + gazeXAni + "," + gazeYAni + "," + gazeZAni + ","
+                   + gazeXAva + "," + gazeYAva + "," + gazeZAva + ","
+                  + gazeAnimoji + "," + gazeAvatar + "," + gazeCubearea + "," + gazeUI + ","
+                  + paused + ", "
+                  + notif_On + ","
+                  + "-" + ","
+                  + "Yes" + ","
+                  + "Yes" + ","
+                  , false);
     }
 }

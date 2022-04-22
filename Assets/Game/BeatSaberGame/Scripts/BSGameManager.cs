@@ -1071,7 +1071,7 @@ public class BSGameManager : MonoBehaviour
                 socketManager.writeSocket("question" + index);
                 // Debug.Log(index + "question is called: " + (float)Math.Round(gameTimerIgnoringPause));
                 // QuestionStart = true;
-                timeLog.TimeStampForMoment();
+                timeLog.TimeStampForQuestionMoment();
                 logManager.WriteLogFile("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForEyeGaze("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForYawHeadMovement("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");

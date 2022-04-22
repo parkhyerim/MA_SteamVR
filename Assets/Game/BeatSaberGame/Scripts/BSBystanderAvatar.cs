@@ -11,6 +11,7 @@ public class BSBystanderAvatar : MonoBehaviour
     BSGameManager gameManager;
     BSLogManager logManager;
     UserStudyManager userstudyManager;
+    TimeLog timeLog;
     private float trackerEulerYAxis;  // bystander's euler y-axis -> tracker y
     public GameObject bystanderAvatar;
     public Animator bystanderAnim;
@@ -93,6 +94,7 @@ public class BSBystanderAvatar : MonoBehaviour
         gameManager = FindObjectOfType<BSGameManager>();
         logManager = FindObjectOfType<BSLogManager>();
         userstudyManager = FindObjectOfType<UserStudyManager>();
+        timeLog = FindObjectOfType<TimeLog>();
     }
     // Start is called before the first frame update
     void Start()
@@ -236,7 +238,8 @@ public class BSBystanderAvatar : MonoBehaviour
                         {
                             //Debug.Log("FROM_NZ_to_UCZ");
                             BystanderShiftZone("From_NZ_to_UCZ");
-                            Notif_On = true;                        
+                            Notif_On = true;
+                            timeLog.TimeStampForVisualisationOnMoment();
                             logFlag = true;                         
                         }                    
                         timeElapsedForAnimoji += Time.deltaTime;
@@ -291,6 +294,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     {
                         //Debug.Log("From_UCZ_to_NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
+                        timeLog.TimeStampForVisualisationOffMoment();
                         Notif_On = false;
                         inUncriticalZone = false;                      
                     }
@@ -504,6 +508,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     {
                        // Debug.Log("Avatar: From NZ to UCZ");
                         BystanderShiftZone("From_NZ_To_UCZ");
+                        timeLog.TimeStampForVisualisationOnMoment();
                         SetRightPauseStamp();
                         Notif_On = true;
                         inNoZone = false;                     
@@ -538,7 +543,8 @@ public class BSBystanderAvatar : MonoBehaviour
                     {
                        // Debug.Log("Avatar: From UCZ To NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
-                        Notif_On = false;                      
+                        Notif_On = false;
+                        timeLog.TimeStampForVisualisationOffMoment();
                         inUncriticalZone = false;
                     }
                      inTransitionZone = false;
@@ -718,6 +724,7 @@ public class BSBystanderAvatar : MonoBehaviour
                                 BystanderShiftZone("From_NZ_To_UCZ");
                                 Notif_On = true;
                                 SetRightPauseStamp();
+                                timeLog.TimeStampForVisualisationOnMoment();
                                 logFlag = true;
                             }
 
@@ -770,6 +777,7 @@ public class BSBystanderAvatar : MonoBehaviour
                             if (!logFlag)
                             {
                                 BystanderShiftZone("From_NZ_To_UCZ");
+                                timeLog.TimeStampForVisualisationOnMoment();
                                 Notif_On = true;
                                 SetRightPauseStamp();                              
                                 logFlag = true;
@@ -809,6 +817,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     {
                        // Debug.Log("Mixed: From UCZ to NZ");
                         BystanderShiftZone("From_UCZ_To_NZ");
+                        timeLog.TimeStampForVisualisationOffMoment();
                         Notif_On = false;
                         inUncriticalZone = false;                     
                         logFlag = false;
