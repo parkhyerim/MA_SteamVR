@@ -180,15 +180,6 @@ public class TimeLog : MonoBehaviour
                     + "-" + ","
                     , false);
 
-                //logManager.WriteLogForExcel(
-                //headUpMaxDegrees + "," + headDownDegrees + "," + headLeftDegrees + "," + headRightDegrees + ","
-                //+ curEulerX + "," + curEulerY + "," + curEulerZ + ","
-                //+ curPosX + "," + curPosY + "," + curPosZ + ","
-                //+ gazeXAni + "," + gazeYAni + "," + gazeZAni + ","
-                // + gazeXAva + "," + gazeYAva + "," + gazeZava + ","
-                //+ gazeAnimoji + "," + gazeAvatar + "," + gazeCubearea + "," + gazeUI + "," + gazeScore + "," + gazeTimer + ","
-                //+ paused + ", "
-                //, false);
 
                 checkTimer = 0f;
             }
@@ -224,7 +215,7 @@ public class TimeLog : MonoBehaviour
                   + notif_On + ","
                   + "Yes" + ","
                   + "-" + ","
-                  + "Yes" + ","
+                  + "-" + ","
                   , false);
     }
 
@@ -240,7 +231,7 @@ public class TimeLog : MonoBehaviour
                   + notif_On + ","
                   + "-" + ","
                   + "Yes" + ","
-                  + "Yes" + ","
+                  + "-" + ","
                   , false);
     }
 }

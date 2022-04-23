@@ -29,7 +29,7 @@ public class BSGameManager : MonoBehaviour
     public bool isAvatarSetting;
     public bool isMixedSetting;
     private bool[] settingArray;
-    public int[] audioOrder = { 1, 2, 3 };
+    public int[] audioOrder = { 1, 2, 3, 4 };
 
     [Header("AUDIO")]
     public AudioSource gameEffectAudioSource;
@@ -885,7 +885,7 @@ public class BSGameManager : MonoBehaviour
 
 
             //GoToNextLevel();
-            Invoke(nameof(GoToNextLevel), 5f);
+            Invoke(nameof(GoToNextLevel), 2f);
             // Invoke(nameof(DoSurvey), 1f);
 
             //TODO:
@@ -1055,19 +1055,22 @@ public class BSGameManager : MonoBehaviour
     public void PlayQuestionAudio()
     {
         // default. counter = 0
-        if (questionCounter < 4)
+        if (questionCounter < 5 )
         {
-            if (questionCounter == 0)
-            {
-                // no question(1st visualisation)
-            }
-            else
-            {
-                int index = audioOrder[questionCounter - 1] - 1;  // counter1,2,3 -> 0,1,2
+            questionCounter++; // 0-> 1,/ 1-> 2 /2-> 3/ 3->4   end
+
+
+            //if (questionCounter == 0)
+            //{
+            //    // no question(1st visualisation)
+            //}
+            //else
+            //{
+            int index = audioOrder[questionCounter - 1] - 1;  // counter1,2,3 -> 0,1,2
                 //quesitionAudioSource.PlayOneShot(questionAudios[index]);
 
                 // socket
-                Debug.Log(index+ "question is called");
+                Debug.Log(index+ " question is called");
                 socketManager.writeSocket("question" + index);
                 // Debug.Log(index + "question is called: " + (float)Math.Round(gameTimerIgnoringPause));
                 // QuestionStart = true;
@@ -1078,8 +1081,8 @@ public class BSGameManager : MonoBehaviour
                 logManager.WriteLogForPitchHeadMovement("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForRollHeadMovement("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForHeadPosition("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
-            }
-            questionCounter++; // 1, 2, 3, 4  end
+            //}
+          
         }
     }
 
