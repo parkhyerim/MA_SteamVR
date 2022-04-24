@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class BSLevelManager : MonoBehaviour
 {
-    public float sceneLoadDelay = 5f;
+    public float sceneLoadDelay = 0f;
     int currentLevelIndex; // practice 0
 
 

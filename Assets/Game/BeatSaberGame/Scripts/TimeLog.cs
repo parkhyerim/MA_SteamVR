@@ -187,7 +187,7 @@ public class TimeLog : MonoBehaviour
     }
 
 
-    public void TimeStampForQuestionMoment()
+    public void TimeStampForQuestionMoment(string num)
     {
         logManager.WriteLogForExcel(
                     curEulerX + "," + curEulerY + "," + curEulerZ + ","
@@ -199,7 +199,7 @@ public class TimeLog : MonoBehaviour
                    + notif_On + ","
                    + "-" + ","
                    + "-" + ","
-                   + "Yes" + ","
+                   + "Yes " + num + ","
                    , false);
     }
 

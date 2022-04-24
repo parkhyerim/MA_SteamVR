@@ -638,6 +638,7 @@ public class BSBystanderAvatar : MonoBehaviour
                     presenceAnimojiBoard.SetActive(true);
                     inTransitionZone = true;
                     inNoZone = false;
+                    logFlag = false;
                     timeElapsedForMixedTransition = 0;
                     presenceAnimojiBoard.transform.position = originalAnimojiPanelPos.transform.position;
                     // VR user is looking at the game
@@ -837,6 +838,25 @@ public class BSBystanderAvatar : MonoBehaviour
 
                     arrowImage.enabled = false;
                     timeElapsedForMixedTransition = 0;
+                }
+            }
+            else if (isBaseline)
+            {
+                if (trackerEulerYAxis >= 60 && trackerEulerYAxis < 100)
+                {
+                    InVisualization = true;                
+                }
+                else if (trackerEulerYAxis >= 30 && trackerEulerYAxis < 60)
+                {
+                    InVisualization = true;                
+                }
+                else if (trackerEulerYAxis < 30 && trackerEulerYAxis >= 5)
+                {
+                    InVisualization = true;                
+                }
+                else
+                {
+                    InVisualization = false;                 
                 }
             }
         }

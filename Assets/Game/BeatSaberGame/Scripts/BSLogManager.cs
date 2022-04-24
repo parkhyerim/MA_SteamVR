@@ -6,32 +6,24 @@ using System.IO;
 public class BSLogManager : MonoBehaviour
 {
     UserStudyManager userstudyManager;
+
     private string participantID;
     private string currentDateAndTime;
     private string currentTime;
     private string currentTimeinMilliseconds;
-    private string fullPath, filename, extension, newfullpath, path;
     int count = 1;
-    private double timeInEpoch;
+    private double currentTimeInEpoch;
 
     private void Awake()
     {
         userstudyManager = FindObjectOfType<UserStudyManager>();
-
         participantID = userstudyManager.GetParticipantID();
         currentDateAndTime = GetCurrentDateAndTime();
-        //fullPath = Path.GetDirectoryName(@"C:\Users\ru35qac\Desktop\LogFiles\");
-        //filename = Path.GetFileNameWithoutExtension(fullPath);
-        //extension = Path.GetExtension(fullPath);
-        //path = Path.GetDirectoryName(fullPath);
-        //newfullpath = fullPath;
-
-        //Debug.Log(filename);
     }
 
     void Start()
     {    
-        WriteLogFile("====================GAME LOG==============================" +
+        WriteLogForOverview("====================GAME LOG==============================" +
            "\n                    ID: " + participantID +
            ", LOG STRAT (Date & Time): " + currentDateAndTime);
 
@@ -57,17 +49,17 @@ public class BSLogManager : MonoBehaviour
     }
 
     // For the overview logfile
-    public void WriteLogFile(string message)
+    public void WriteLogForOverview(string message)
     {        
         using (System.IO.StreamWriter logFile =
-            new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + ".txt", append: true))
+            new System.IO.StreamWriter(@"C:\Users\ru35qac\Desktop\LogFiles\LogFile_" + participantID + "_Overview.txt", append: true))
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            timeInEpoch = GetTimeFromEpoch();
+            currentTimeInEpoch = GetTimeFromEpoch();
            // logFile.Write("[" + currentTimeinMilliseconds + "] ");
           //  logFile.Write("[" + currentTime + "] ");
-            logFile.Write("[" + timeInEpoch + "] ");           
+            logFile.Write("[" + currentTimeInEpoch + "] ");           
             logFile.WriteLine(message);
         }
     }
@@ -80,10 +72,10 @@ public class BSLogManager : MonoBehaviour
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            timeInEpoch = GetTimeFromEpoch();
+            currentTimeInEpoch = GetTimeFromEpoch();
            // logFile.Write("[" + currentTimeinMilliseconds + "] ");
          //   logFile.Write("[" + currentTime + "] ");
-            logFile.Write("[" + timeInEpoch + "] ");
+            logFile.Write("[" + currentTimeInEpoch + "] ");
             logFile.WriteLine(message);
         }
     }
@@ -95,10 +87,10 @@ public class BSLogManager : MonoBehaviour
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            timeInEpoch = GetTimeFromEpoch();
+            currentTimeInEpoch = GetTimeFromEpoch();
            // logFile.Write("[" + currentTimeinMilliseconds + "] ");
          //   logFile.Write("[" + currentTime + "] ");
-            logFile.Write("[" + timeInEpoch + "] ");
+            logFile.Write("[" + currentTimeInEpoch + "] ");
             logFile.WriteLine(message);
         }
     }
@@ -110,10 +102,10 @@ public class BSLogManager : MonoBehaviour
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            timeInEpoch = GetTimeFromEpoch();
+            currentTimeInEpoch = GetTimeFromEpoch();
             //logFile.Write("[" + currentTimeinMilliseconds + "] ");
           //  logFile.Write("[" + currentTime + "] ");
-            logFile.Write("[" + timeInEpoch + "] ");
+            logFile.Write("[" + currentTimeInEpoch + "] ");
             logFile.WriteLine(message);
         }
     }
@@ -127,10 +119,10 @@ public class BSLogManager : MonoBehaviour
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            timeInEpoch = GetTimeFromEpoch();
+            currentTimeInEpoch = GetTimeFromEpoch();
             //logFile.Write("[" + currentTimeinMilliseconds + "] ");
            // logFile.Write("[" + currentTime + "] ");
-            logFile.Write("[" + timeInEpoch + "] ");
+            logFile.Write("[" + currentTimeInEpoch + "] ");
             logFile.WriteLine(message);
         }
     }
@@ -142,10 +134,10 @@ public class BSLogManager : MonoBehaviour
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            timeInEpoch = GetTimeFromEpoch();
+            currentTimeInEpoch = GetTimeFromEpoch();
           //  logFile.Write("[" + currentTimeinMilliseconds + "] ");
           //  logFile.Write("[" + currentTime + "] ");
-            logFile.Write("[" + timeInEpoch + "] ");
+            logFile.Write("[" + currentTimeInEpoch + "] ");
             logFile.WriteLine(message);
         }
     }
@@ -157,7 +149,7 @@ public class BSLogManager : MonoBehaviour
         {
             currentTime = GetCurrentTime();
             currentTimeinMilliseconds = GetCurrentTimeMilliseconds(); // For more correct measurement
-            timeInEpoch = GetTimeFromEpoch();
+            currentTimeInEpoch = GetTimeFromEpoch();
             //  logFile.Write("[" + currentTimeinMilliseconds + "] ");
             // logFile.Write("[" + currentTime + "] ");
             if (init)
@@ -167,7 +159,7 @@ public class BSLogManager : MonoBehaviour
             }
             else
             {
-                logFile.Write(timeInEpoch + ",");
+                logFile.Write(currentTimeInEpoch + ",");
                 logFile.WriteLine(message);
             }         
         }

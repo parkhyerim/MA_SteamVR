@@ -49,22 +49,6 @@ public class HeadMovement : MonoBehaviour
     void Start()
     {
         count = -1;
-
-        //// MainCamera's Euler Angles
-        //headsetEulerAngles = Camera.main.transform.eulerAngles;       
-        //curEulerY = headsetEulerAngles.y;
-        //curEulerX = headsetEulerAngles.x;
-        //curEulerZ = headsetEulerAngles.z;
-
-        //// Rotation Angles
-        //headsetRotationAngles = Camera.main.transform.rotation;
-        //curRotY = headsetRotationAngles.y;
-        //curRotX = headsetRotationAngles.x;
-        //curRotZ = headsetRotationAngles.z;
-        
-        //// Position
-        //headsetOriginPos = Camera.main.transform.localPosition;
-        //headsetLocalPosition = Camera.main.transform.localPosition;
     }
 
     void FixedUpdate()
@@ -125,7 +109,7 @@ public class HeadMovement : MonoBehaviour
 
         if (!GameStart) // Before game Start
         {
-            if (!GameEnd)
+            if (!GameEnd) // Until game End
             {
                 prevEulerY = curEulerY;
                 prevEulerX = curEulerX;
@@ -216,7 +200,7 @@ public class HeadMovement : MonoBehaviour
                         ", x:" + headsetPosX+
                         ", y: " + headsetPosY +
                         ", z: " + headsetPosZ +                    
-                        ", Vector3: " + headsetLocalPosition;
+                        ", Vector3: (" + headsetLocalPosition.x +"," + headsetLocalPosition.y +","+ headsetLocalPosition.z +")";
 
                     conv_prevEulerY = conv_curEulerY;
                     conv_prevEulerX = conv_curEulerX;
@@ -232,7 +216,6 @@ public class HeadMovement : MonoBehaviour
 
                 checkTimer = 0f;
             }
-          //  prevEulerY = curEulerY;
         }
     }
 

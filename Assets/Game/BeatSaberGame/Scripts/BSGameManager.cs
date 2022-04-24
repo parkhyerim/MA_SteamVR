@@ -529,25 +529,25 @@ public class BSGameManager : MonoBehaviour
         string currentSceneName = SceneManager.GetActiveScene().name;
 
         // Logging Game-Start
-        logManager.WriteLogFile("GAME START");
+        logManager.WriteLogForOverview("GAME START");
         logManager.WriteLogForYawHeadMovement("GAME START");
         logManager.WriteLogForPitchHeadMovement("GAME START");
         logManager.WriteLogForRollHeadMovement("GAME START");
         logManager.WriteLogForEyeGaze("GAME START");
         logManager.WriteLogForHeadPosition("GAME START");
 
-        logManager.WriteLogFile("CONDITION: " + currentSceneName + ", ORDER: " + (currentSceneIndex));
-        logManager.WriteLogForYawHeadMovement("CONDITION: " + currentSceneName + ", ORDER: " + (currentSceneIndex));        
-        logManager.WriteLogForPitchHeadMovement("CONDITION: " + currentSceneName + ", ORDER: " + (currentSceneIndex));
-        logManager.WriteLogForRollHeadMovement("CONDITION: " + currentSceneName + ", ORDER: " + (currentSceneIndex));
-        logManager.WriteLogForEyeGaze("CONDITION: " + currentSceneName + ", ORDER: " + (currentSceneIndex));
-        logManager.WriteLogForHeadPosition("CONDITION: " + currentSceneName + ", ORDER: " + (currentSceneIndex));
+        logManager.WriteLogForOverview("CONDITION: " + currentSceneName);// + ", ORDER: " + (currentSceneIndex));
+        logManager.WriteLogForYawHeadMovement("CONDITION: " + currentSceneName);// + ", ORDER: " + (currentSceneIndex));        
+        logManager.WriteLogForPitchHeadMovement("CONDITION: " + currentSceneName);// + ", ORDER: " + (currentSceneIndex));
+        logManager.WriteLogForRollHeadMovement("CONDITION: " + currentSceneName);// + ", ORDER: " + (currentSceneIndex));
+        logManager.WriteLogForEyeGaze("CONDITION: " + currentSceneName);// + ", ORDER: " + (currentSceneIndex));
+        logManager.WriteLogForHeadPosition("CONDITION: " + currentSceneName);// + ", ORDER: " + (currentSceneIndex));
     }
 
     public void SetTimeStampForAvatarInCriticalZoneWithMessage(string state)
     {
         Debug.Log("BYSTANDER: " + state + " " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
-        logManager.WriteLogFile("BYSTANDER " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogForOverview("BYSTANDER " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
         logManager.WriteLogForYawHeadMovement("BYSTANDER " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) +" (" + gameTimerIgnoringPause + ")");
         logManager.WriteLogForPitchHeadMovement("BYSTANDER " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
         logManager.WriteLogForRollHeadMovement("BYSTANDER " + state + ": " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
@@ -558,12 +558,11 @@ public class BSGameManager : MonoBehaviour
     private void LogCameraAxisAtStart()
     {
         Vector3 cameraLocalPos = Camera.main.transform.localPosition;
-        logManager.WriteLogFile("HEAD INFORMATION [ORIGIN]: " + "Yaw(Y): " + mainCameraYAxis + ", Pitch(X): " + mainCameraXAxis + ", Roll(Z)" + mainCameraZAxis+ ", Vector3:" + maincameraAxisVector);
-        logManager.WriteLogForHeadPosition("Head Movement [ORIGIN]: " + "X: " + cameraLocalPos.x + ", Y: " + cameraLocalPos.y + ", Z: " + cameraLocalPos.z  + ", Vector3:" + cameraLocalPos);
-        // TODO: Head Movement Start Value
-        logManager.WriteLogForYawHeadMovement("HEAD INFORMATION [ORIGIN]: " + "Yaw(Y): " + mainCameraYAxis + ", Pitch(X): " + mainCameraXAxis + ", Roll(Z)" + mainCameraZAxis + ", Vector3:" + maincameraAxisVector);
-        logManager.WriteLogForPitchHeadMovement("HEAD INFORMATION [ORIGIN]: " + "Yaw(Y): " + mainCameraYAxis + ", Pitch(X): " + mainCameraXAxis + ", Roll(Z)" + mainCameraZAxis + ", Vector3:" + maincameraAxisVector);
-        logManager.WriteLogForRollHeadMovement("HEAD INFORMATION [ORIGIN]: " + "Yaw(Y): " + mainCameraYAxis + ", Pitch(X): " + mainCameraXAxis + ", Roll(Z)" + mainCameraZAxis + ", Vector3:" + maincameraAxisVector);
+        logManager.WriteLogForOverview("HEAD INFORMATION [ORIGIN]: " + "Yaw(Y): " + mainCameraYAxis + ", Pitch(X): " + mainCameraXAxis + ", Roll(Z)" + mainCameraZAxis+ ", Vector3: (" + maincameraAxisVector.x + " ," + maincameraAxisVector.y +" ," + maincameraAxisVector.z +")");
+        logManager.WriteLogForYawHeadMovement("HEAD INFORMATION [ORIGIN]: " + "Yaw(Y): " + mainCameraYAxis + ", Pitch(X): " + mainCameraXAxis + ", Roll(Z)" + mainCameraZAxis + ", Vector3: (" + maincameraAxisVector.x + " ," + maincameraAxisVector.y + " ," + maincameraAxisVector.z + ")");
+        logManager.WriteLogForPitchHeadMovement("HEAD INFORMATION [ORIGIN]: " + "Yaw(Y): " + mainCameraYAxis + ", Pitch(X): " + mainCameraXAxis + ", Roll(Z)" + mainCameraZAxis + ", Vector3: (" + maincameraAxisVector.x + " ," + maincameraAxisVector.y + " ," + maincameraAxisVector.z + ")");
+        logManager.WriteLogForRollHeadMovement("HEAD INFORMATION [ORIGIN]: " + "Yaw(Y): " + mainCameraYAxis + ", Pitch(X): " + mainCameraXAxis + ", Roll(Z)" + mainCameraZAxis + ", Vector3: (" + maincameraAxisVector.x + " ," + maincameraAxisVector.y + " ," + maincameraAxisVector.z + ")");
+        logManager.WriteLogForHeadPosition("Head Movement [ORIGIN]: " + "X: " + cameraLocalPos.x + ", Y: " + cameraLocalPos.y + ", Z: " + cameraLocalPos.z + ", Vector3:" + cameraLocalPos);
     }
  
     public void SpawnCubes()
@@ -593,7 +592,7 @@ public class BSGameManager : MonoBehaviour
         pauseController.OncePausedInSession = false;
         
         // logManager
-        logManager.WriteLogFile("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
+        logManager.WriteLogForOverview("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
         logManager.WriteLogForEyeGaze("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
         logManager.WriteLogForYawHeadMovement("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
         logManager.WriteLogForPitchHeadMovement("BYSTANDER starts turning towards VR user: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
@@ -688,7 +687,7 @@ public class BSGameManager : MonoBehaviour
                 //Debug.Log(pauseCounter + " " + pauseInErrorCounter + " " + pauseInInteractionCounter);
                 pausedTime = gameTimerIgnoringPause;
                 identificationTimeRound = (float)Math.Round(gameTimerIgnoringPause);
-                logManager.WriteLogFile("IDENTIFICATION (Paused) TIME: " + identificationTimeRound + " (" + gameTimerIgnoringPause + ")");
+                logManager.WriteLogForOverview("IDENTIFICATION (Paused) TIME: " + identificationTimeRound + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForYawHeadMovement("IDENTIFICATION (Paused) TIME: " + identificationTimeRound + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForPitchHeadMovement("IDENTIFICATION (Paused) TIME: " + identificationTimeRound + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForRollHeadMovement("IDENTIFICATION (Paused) TIME: " + identificationTimeRound + " (" + gameTimerIgnoringPause + ")");
@@ -737,13 +736,13 @@ public class BSGameManager : MonoBehaviour
                 gamePaused = false;
                 resumedTime = gameTimerIgnoringPause;
                 pauseDuration = resumedTime - pausedTime;
-                logManager.WriteLogFile("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause +")");
+                logManager.WriteLogForOverview("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause +")");
                 logManager.WriteLogForYawHeadMovement("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForPitchHeadMovement("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForRollHeadMovement("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForEyeGaze("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForHeadPosition("RESUME TIME: " + (float)Math.Round(gameTimerIgnoringPause) + " (" + gameTimerIgnoringPause + ")");
-                logManager.WriteLogFile("DURATION: " + pauseDuration);
+                logManager.WriteLogForOverview("DURATION: " + pauseDuration);
                 logManager.WriteLogForPitchHeadMovement("DURATION: " + pauseDuration);
                 logManager.WriteLogForRollHeadMovement("DURATION: " + pauseDuration);
                 logManager.WriteLogForYawHeadMovement("DURATION: " + pauseDuration);
@@ -836,7 +835,7 @@ public class BSGameManager : MonoBehaviour
             scoreUI.SetActive(false);
             timeUI.SetActive(false);
 
-            instructionText.text = "BRAVO!\nYOUR SCORE IS " + score + "!";
+            instructionText.text = "BRAVO!\nYOUR SCORE IS " + score + "!\n Please take off your heaset  and fill out a questionnaire.";
 
 
             gameTimeText.text = 0.ToString();
@@ -847,9 +846,9 @@ public class BSGameManager : MonoBehaviour
             if (!recordScoreAndTime)
             {
                 int missedPause = 4 - pauseInInteractionCounter;
-                logManager.WriteLogFile("Score: " + score + " /" + totalScore);
-                logManager.WriteLogFile("Total Game Time: " + totalPlayTime);
-                logManager.WriteLogFile("Pause In Total: " + pauseCounter  + ", Pause during Notification: " + pauseInInteractionCounter + ", Error: " + pauseInErrorCounter + ", Missed: " + missedPause);
+                logManager.WriteLogForOverview("Score: " + score + " /" + totalScore);
+                logManager.WriteLogForOverview("Total Game Time: " + totalPlayTime);
+                logManager.WriteLogForOverview("Pause In Total: " + pauseCounter  + ", Pause during Notification: " + pauseInInteractionCounter + ", Error: " + pauseInErrorCounter + ", Missed: " + missedPause);
                 recordScoreAndTime = true;
             }
 
@@ -861,31 +860,29 @@ public class BSGameManager : MonoBehaviour
                 //logManager.WriteLogFile("Min X Axis: " + minXAxis + " Vector: " + minXVectorAxis);
                 //logManager.WriteLogFile("================================\n=================");
                 LogVRHeadsetAxis();
-                logManager.WriteLogFile("Yaw(Y) Head Movement Avg. (every 0.20s): " + avgYawHMValue);
-                logManager.WriteLogFile("Pitch(X) Head Movement Avg. (every 0.20s): " + avgPitchHMValue);
-                logManager.WriteLogFile("Roll(Z) Head Movement Avg. (every 0.20s): " + avgRollValue);
+                logManager.WriteLogForOverview("Yaw(Y) Head Movement Avg. (every 0.20s): " + avgYawHMValue);
+                logManager.WriteLogForOverview("Pitch(X) Head Movement Avg. (every 0.20s): " + avgPitchHMValue);
+                logManager.WriteLogForOverview("Roll(Z) Head Movement Avg. (every 0.20s): " + avgRollValue);
                 logManager.WriteLogForYawHeadMovement("Yaw(Y) Head Movement Avg. (every 0.20s): " + avgYawHMValue);
                 logManager.WriteLogForPitchHeadMovement("Pitch(X) Head Movement Avg. (every 0.20s): " + avgPitchHMValue);
                 logManager.WriteLogForRollHeadMovement("Roll(Z) Head Movement Avg. (every 0.20s): " + avgRollValue);
 
-                logManager.WriteLogFile("END GAME");
+                logManager.WriteLogForOverview("END GAME");
                 logManager.WriteLogForYawHeadMovement("END GAME");
                 logManager.WriteLogForPitchHeadMovement("END GAME");
                 logManager.WriteLogForRollHeadMovement("END GAME");
                 logManager.WriteLogForHeadPosition("END GAME");
                 logManager.WriteLogForEyeGaze("END GAME");
-                logManager.WriteLogFile("=================================\n");
-                logManager.WriteLogForYawHeadMovement("=================================\n");
-                logManager.WriteLogForPitchHeadMovement("=================================\n");
-                logManager.WriteLogForRollHeadMovement("=================================\n");
-                logManager.WriteLogForHeadPosition("=================================\n");
-                logManager.WriteLogForEyeGaze("=================================\n");
+                logManager.WriteLogForOverview("============================================\n");
+                logManager.WriteLogForYawHeadMovement("====================================================\n");
+                logManager.WriteLogForPitchHeadMovement("===========================================\n");
+                logManager.WriteLogForRollHeadMovement("=============================================\n");
+                logManager.WriteLogForHeadPosition("============================================\n");
+                logManager.WriteLogForEyeGaze("=============================================\n");
                 recordMaxMin = true;
             }
-
-
             //GoToNextLevel();
-            Invoke(nameof(GoToNextLevel), 2f);
+            Invoke(nameof(GoToNextLevel), 4f);
             // Invoke(nameof(DoSurvey), 1f);
 
             //TODO:
@@ -911,10 +908,10 @@ public class BSGameManager : MonoBehaviour
 
     private void LogVRHeadsetAxis()
     {
-        logManager.WriteLogFile("Head Movement [END]: Max Left(Y) (Toward Bystander): " + MaxLeftAxis + " Vector: (" + maxLeftVectorAxis.x +", " + maxLeftVectorAxis.y+ ", " + maxLeftVectorAxis.z+")");
-        logManager.WriteLogFile("Head Movement [END]: Max Right(Y) (Against Bystander): " + MaxRightAxis + " Vector: (" + maxRightVecotorAxis.x + ", " + maxRightVecotorAxis.y + ", " + maxRightVecotorAxis.z + ")");
-        logManager.WriteLogFile("Head Movement [END]: Max Up(X): " + MaxUpAxis + " Vector: (" + maxUpVectorAxis.x + ", " + maxUpVectorAxis.y + ", " + maxUpVectorAxis.z + ")");
-        logManager.WriteLogFile("Head Movement [END]: Max Down(X): " + MaxDownAxis + " Vector: (" + maxDownVectorAxis.x + ", " + maxDownVectorAxis.y + ", " + maxDownVectorAxis.z + ")");
+        logManager.WriteLogForOverview("Head Movement [END]: Max Left(Y) (Toward Bystander): " + MaxLeftAxis + " Vector: (" + maxLeftVectorAxis.x +", " + maxLeftVectorAxis.y+ ", " + maxLeftVectorAxis.z+")");
+        logManager.WriteLogForOverview("Head Movement [END]: Max Right(Y) (Against Bystander): " + MaxRightAxis + " Vector: (" + maxRightVecotorAxis.x + ", " + maxRightVecotorAxis.y + ", " + maxRightVecotorAxis.z + ")");
+        logManager.WriteLogForOverview("Head Movement [END]: Max Up(X): " + MaxUpAxis + " Vector: (" + maxUpVectorAxis.x + ", " + maxUpVectorAxis.y + ", " + maxUpVectorAxis.z + ")");
+        logManager.WriteLogForOverview("Head Movement [END]: Max Down(X): " + MaxDownAxis + " Vector: (" + maxDownVectorAxis.x + ", " + maxDownVectorAxis.y + ", " + maxDownVectorAxis.z + ")");
        // logManager.WriteLogFile("==========================================================");
     }
 
@@ -1072,10 +1069,11 @@ public class BSGameManager : MonoBehaviour
                 // socket
                 Debug.Log(index+ " question is called");
                 socketManager.writeSocket("question" + index);
-                // Debug.Log(index + "question is called: " + (float)Math.Round(gameTimerIgnoringPause));
-                // QuestionStart = true;
-                timeLog.TimeStampForQuestionMoment();
-                logManager.WriteLogFile("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
+            // Debug.Log(index + "question is called: " + (float)Math.Round(gameTimerIgnoringPause));
+            // QuestionStart = true;
+           
+                timeLog.TimeStampForQuestionMoment((index+1).ToString());
+                logManager.WriteLogForOverview("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForEyeGaze("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForYawHeadMovement("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
                 logManager.WriteLogForPitchHeadMovement("ASK A QUESTIOM " + audioOrder[questionCounter - 1] + ": " + (float)Math.Round(gameTimerIgnoringPause) + "(" + gameTimerIgnoringPause + ")");
