@@ -228,6 +228,29 @@ public class BSGameManager : MonoBehaviour
             // trialStartButton.SetActive(false);
         }
 
+        if (isAnimojiSetting)
+        {
+            panelForAvatar.SetActive(false);
+            animojiGazeTransform = panelForAnimoji.gameObject.transform;
+
+
+        }
+        else if (isAvatarSetting)
+        {
+            panelForAnimoji.SetActive(false);
+            avatarGazeTransform = panelForAnimoji.gameObject.transform;
+        }
+        else if (isMixedSetting)
+        {
+            animojiGazeTransform = panelForAnimoji.gameObject.transform;
+            avatarGazeTransform = panelForAnimoji.gameObject.transform;
+        }
+        else if (isBaseline)
+        {
+            panelForAvatar.SetActive(false);
+            panelForAnimoji.SetActive(false);
+        }
+
         saberObject.SetActive(false);
 
         participantID = userstudyManager.GetParticipantID();
@@ -277,6 +300,7 @@ public class BSGameManager : MonoBehaviour
         {
             panelForAvatar.SetActive(false);
             animojiGazeTransform = panelForAnimoji.gameObject.transform;
+           
             
         }
         else if (isAvatarSetting)

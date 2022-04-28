@@ -105,7 +105,7 @@ public class TimeLog : MonoBehaviour
             }
             else if (isMixedSetting)
             {
-                gazeXAni = gameManager.AnimojiGazeTransform.position.x;
+                gazeXAni = gameManager.AnimojiGazeTransform.position.x; // check
                 gazeYAni = gameManager.AnimojiGazeTransform.position.y;
                 gazeZAni = gameManager.AnimojiGazeTransform.position.z;
                 gazeXAva = gameManager.AvatarGazeTransform.position.x;
